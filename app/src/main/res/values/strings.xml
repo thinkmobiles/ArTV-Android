@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ArTV</string>
+    <string name="device_id">Device ID</string>
+    <string name="master_device_ip">Master Device IP \n(Blank if Master Device)</string>
+    <string name="user">USER</string>
+    <string name="password">PASSWORD</string>
+    <string name="save">SAVE</string>
 </resources>
