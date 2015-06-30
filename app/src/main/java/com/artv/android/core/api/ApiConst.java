@@ -1,0 +1,22 @@
+package com.artv.android.core.api;
+
+/**
+ * Created by ZOG on 6/30/2015.
+ */
+abstract class ApiConst {
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DEFAULTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public static final int CONN_TIMEOUT					= 10 * 1000;			//10 seconds
+    public static final int READ_TIMEOUT					= 30 * 1000;			//30 seconds
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END DEFAULTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SERVER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public static final String PROTOCOL						= "http";
+    public static final String SERVER_AUTHORITY 			= "tvm.hasbrain.ru";
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END SERVER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public static final String PATH_GET_TOKEN		        = "api/GetToken.xml";
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+}
