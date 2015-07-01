@@ -11,7 +11,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         AllApiTests.class,
-        ApplicationLogicTest.class
+        ApplicationLogicTest.class,
+        GetTokenRequestObjectTest.class
 })
 public final class AllCoreTests {
 }

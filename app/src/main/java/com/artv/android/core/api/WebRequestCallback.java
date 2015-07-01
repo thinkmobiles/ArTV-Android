@@ -1,7 +1,7 @@
 package com.artv.android.core.api;
 
-import com.artv.android.core.api.model.BaseResponseObject;
-import com.artv.android.core.api.model.ErrorResponseObject;
+import com.artv.android.core.api.api_model.BaseResponseObject;
+import com.artv.android.core.api.api_model.ErrorResponseObject;
 
 /**
  * Created by ZOG on 6/30/2015.

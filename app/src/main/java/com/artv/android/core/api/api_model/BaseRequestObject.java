@@ -1,4 +1,4 @@
-package com.artv.android.core.api.model;
+package com.artv.android.core.api.api_model;
 
 import com.artv.android.core.api.ApiType;
 
