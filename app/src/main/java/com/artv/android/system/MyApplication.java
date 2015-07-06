@@ -3,8 +3,8 @@ package com.artv.android.system;
 import android.app.Application;
 
 import com.artv.android.core.ApplicationLogic;
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+//import com.crashlytics.android.Crashlytics;
+//import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by ZOG on 6/30/2015.
@@ -16,7 +16,7 @@ public final class MyApplication extends Application {
     @Override
     public final void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
         mApplicationLogic = new ApplicationLogic(getApplicationContext());
     }

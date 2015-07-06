@@ -1,5 +1,7 @@
-package com.artv.android.core.api;
+package com.artv.android.core.api.rest_client;
 
+
+import com.artv.android.core.api.ApiConst;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;

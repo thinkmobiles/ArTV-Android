@@ -1,4 +1,4 @@
-package com.artv.android.core.api;
+package com.artv.android.core.api.rest_client;
 
 import com.squareup.okhttp.OkHttpClient;
 

@@ -1,4 +1,4 @@
-package com.artv.android.core.api;
+package com.artv.android.core.api.rest_client;
 
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 

@@ -1,7 +1,8 @@
-package com.artv.android.core.api;
+package com.artv.android.core.api.rest_client;
 
 import android.provider.SyncStateContract;
 
+import com.artv.android.core.api.ApiConst;
 import com.squareup.okhttp.OkHttpClient;
 
 import java.util.concurrent.TimeUnit;
