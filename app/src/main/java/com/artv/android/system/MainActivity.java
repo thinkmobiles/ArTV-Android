@@ -1,18 +1,17 @@
 package com.artv.android.system;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.artv.android.R;
+import com.artv.android.core.ArTvState;
 import com.artv.android.core.api.Temp;
-import com.artv.android.system.fragments.MediaPlayerFragment;
+import com.artv.android.system.fragments.ConfigsFragment;
 
 public class MainActivity extends Activity {
     private FrameLayout mFragmentContainer;
@@ -24,8 +23,7 @@ public class MainActivity extends Activity {
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_MA);
 
-        getFragmentManager().beginTransaction().
-                add(R.id.flFragmentContainer_MA,new MediaPlayerFragment()).commit();
+        handleAppState();
     }
 
     private void getDeviceId() {
@@ -38,6 +36,12 @@ public class MainActivity extends Activity {
     private void checkTestApi() {
         Temp temp = new Temp();
         temp.example();
+    }
+
+    private final void handleAppState() {
+        if (ArTvState.STATE_APP_START == MyApplication.getApplicationLogic().getArTvState()) {
+            getFragmentManager().beginTransaction().add(R.id.flFragmentContainer_MA, new ConfigsFragment()).commit();
+        }
     }
 
 }
