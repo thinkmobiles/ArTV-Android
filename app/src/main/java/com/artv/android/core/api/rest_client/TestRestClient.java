@@ -1,5 +1,6 @@
 package com.artv.android.core.api.rest_client;
 
+import com.artv.android.core.api.ApiConst;
 import com.squareup.okhttp.OkHttpClient;
 
 import retrofit.RestAdapter;
@@ -13,7 +14,7 @@ import retrofit.converter.SimpleXMLConverter;
 public abstract class TestRestClient {
 
     private static MainTVApi REST_CLIENT;
-    public static final String API_URL = "http://tvm.hasbrain.ru/api";
+    public static final String API_URL = ApiConst.PROTOCOL + "://" + ApiConst.SERVER_AUTHORITY;
 
     static {
         setupRestClient();

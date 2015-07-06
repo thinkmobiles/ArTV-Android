@@ -3,7 +3,7 @@ package com.artv.android.core.api;
 /**
  * Created by ZOG on 6/30/2015.
  */
-abstract class ApiConst {
+public abstract class ApiConst {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DEFAULTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public static final int CONN_TIMEOUT					= 10 * 1000;			//10 seconds
@@ -16,7 +16,10 @@ abstract class ApiConst {
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END SERVER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public static final String PATH_GET_TOKEN		        = "api/GetToken.xml";
+    public static final String PATH_GET_TOKEN		        = "/api/GetToken.xml";
+    public static final String PATH_GET_CAMPAIGN	        = "/api/GetCampaign.xml";
+    public static final String PATH_GET_GLOBAL_CONFIG       = "/api/GetGlobalConfig.xml";
+    public static final String PATH_GET_DEVICE_CONFIG       = "/api/GetDeviceConfig.xml";
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 }
