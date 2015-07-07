@@ -4,7 +4,6 @@ import com.artv.android.core.api.ApiType;
 import com.artv.android.core.api.api_model.BaseResponseObject;
 import com.artv.android.core.model.Entry;
 
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 

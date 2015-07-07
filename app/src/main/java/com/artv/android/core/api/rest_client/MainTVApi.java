@@ -1,15 +1,12 @@
 package com.artv.android.core.api.rest_client;
 
 import com.artv.android.core.api.ApiConst;
-import com.artv.android.core.api.api_model.request.GetGlobalConfigRequestObject;
-import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 
 import retrofit.Callback;
-import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Headers;
 

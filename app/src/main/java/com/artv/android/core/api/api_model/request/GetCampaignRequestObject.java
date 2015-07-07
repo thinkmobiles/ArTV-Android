@@ -1,7 +1,6 @@
 package com.artv.android.core.api.api_model.request;
 
 import com.artv.android.core.api.ApiType;
-import com.artv.android.core.api.api_model.BaseRequestObject;
 
 /**
  * Created by

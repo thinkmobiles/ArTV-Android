@@ -10,7 +10,7 @@ import android.widget.FrameLayout;
 import com.artv.android.R;
 import com.artv.android.core.IArTvStateChangeListener;
 import com.artv.android.core.api.Temp;
-import com.artv.android.system.fragments.ConfigsFragment;
+import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;
 
 public class MainActivity extends Activity implements IArTvStateChangeListener {
@@ -60,7 +60,7 @@ public class MainActivity extends Activity implements IArTvStateChangeListener {
     private final void handleAppState() {
         switch (MyApplication.getApplicationLogic().getArTvState()) {
             case STATE_APP_START:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_MA, new ConfigsFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_MA, new ConfigInfoFragment()).commit();
                 break;
 
             case STATE_APP_START_WITH_CONFIG_INFO:

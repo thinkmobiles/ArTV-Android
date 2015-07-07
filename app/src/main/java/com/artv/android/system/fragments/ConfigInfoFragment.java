@@ -15,7 +15,7 @@ import com.artv.android.system.MyApplication;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class ConfigsFragment extends Fragment implements View.OnClickListener {
+public final class ConfigInfoFragment extends Fragment implements View.OnClickListener {
 
     private EditText etDeviceId;
     private EditText etMasterDeviceIp;
@@ -24,14 +24,14 @@ public final class ConfigsFragment extends Fragment implements View.OnClickListe
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
-        final View view = _inflater.inflate(R.layout.fragment_configs, null);
+        final View view = _inflater.inflate(R.layout.fragment_config_info, null);
 
-        etDeviceId = (EditText) view.findViewById(R.id.etDeviceId_FC);
-        etMasterDeviceIp = (EditText) view.findViewById(R.id.etMasterDeviceIp_FC);
-        etUserName = (EditText) view.findViewById(R.id.etUserName_FC);
-        etPassword = (EditText) view.findViewById(R.id.etPassword_FC);
+        etDeviceId = (EditText) view.findViewById(R.id.etDeviceId_FCI);
+        etMasterDeviceIp = (EditText) view.findViewById(R.id.etMasterDeviceIp_FCI);
+        etUserName = (EditText) view.findViewById(R.id.etUserName_FCI);
+        etPassword = (EditText) view.findViewById(R.id.etPassword_FCI);
 
-        view.findViewById(R.id.btnSave_FC).setOnClickListener(this);
+        view.findViewById(R.id.btnSave_FCI).setOnClickListener(this);
 
         return view;
     }
@@ -39,7 +39,7 @@ public final class ConfigsFragment extends Fragment implements View.OnClickListe
     @Override
     public final void onClick(final View _v) {
         switch (_v.getId()) {
-            case R.id.btnSave_FC:
+            case R.id.btnSave_FCI:
                 saveState();
                 break;
         }

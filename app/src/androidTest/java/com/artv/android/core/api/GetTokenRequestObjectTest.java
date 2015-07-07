@@ -1,4 +1,4 @@
-package com.artv.android.core;
+package com.artv.android.core.api;
 
 import android.support.test.runner.AndroidJUnit4;
 

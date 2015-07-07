@@ -1,6 +1,5 @@
 package com.artv.android.system;
 
-import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 

@@ -10,10 +10,6 @@ import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
-
 /**
  * Created by ZOG on 6/30/2015.
  */

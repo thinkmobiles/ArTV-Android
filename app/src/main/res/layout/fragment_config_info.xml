@@ -30,7 +30,7 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/etDeviceId_FC" />
+                    android:id="@+id/etDeviceId_FCI" />
             </LinearLayout>
 
             <LinearLayout
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned"
                     android:ems="10"
-                    android:id="@+id/etMasterDeviceIp_FC" />
+                    android:id="@+id/etMasterDeviceIp_FCI" />
             </LinearLayout>
         </LinearLayout>
 
@@ -82,7 +82,7 @@
                         android:inputType="textPersonName"
                         android:text="Name"
                         android:ems="10"
-                        android:id="@+id/etUserName_FC" />
+                        android:id="@+id/etUserName_FCI" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -100,7 +100,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/etPassword_FC" />
+                        android:id="@+id/etPassword_FCI" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -110,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
-        android:id="@+id/btnSave_FC"
+        android:id="@+id/btnSave_FCI"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 </RelativeLayout>
