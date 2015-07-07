@@ -28,7 +28,7 @@ public final class SplashScreenFragment extends Fragment {
         btnClearConfigInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public final void onClick(final View _v) {
-                MyApplication.getApplicationLogic().getConfigInfoListener().onNeedClearConfigInfo();
+                MyApplication.getApplicationLogic().getConfigInfoListener().onNeedRemoveConfigInfo();
             }
         });
 

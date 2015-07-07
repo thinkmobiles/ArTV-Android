@@ -37,9 +37,16 @@ public final class SpHelperTest {
     }
 
     @Test
-    public final void SetGetString_ValueEqual() {
+    public final void PutGetString_ValueEqual() {
         mSpHelper.putString("key", "value");
         Assert.assertTrue(mSpHelper.getString("key").equals("value"));
+    }
+
+    @Test
+    public final void RemoveString() {
+        mSpHelper.putString("key", "value");
+        mSpHelper.removeString("key");
+        Assert.assertFalse("value".equals(mSpHelper.getString("key")));
     }
 
     @Test

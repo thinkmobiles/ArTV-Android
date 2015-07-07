@@ -44,10 +44,10 @@ public final class ConfigInfo {
 
         final boolean idE = String.valueOf(mDeviceId).equals(String.valueOf(((ConfigInfo) _o).getDeviceId()));
         final boolean ipE = String.valueOf(mMasterDeviceIp).equals(String.valueOf(((ConfigInfo) _o).getMasterDeviceIp()));
-        final boolean userE = String.valueOf(mUser).equals(String.valueOf(((ConfigInfo) _o).getUser()));
-        final boolean passwordE = String.valueOf(mPassword).equals(String.valueOf(((ConfigInfo) _o).getPassword()));
+        final boolean uE = String.valueOf(mUser).equals(String.valueOf(((ConfigInfo) _o).getUser()));
+        final boolean pE = String.valueOf(mPassword).equals(String.valueOf(((ConfigInfo) _o).getPassword()));
 
-        return idE && ipE && userE && passwordE;
+        return idE && ipE && uE && pE;
     }
 
     @Override

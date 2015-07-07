@@ -43,7 +43,8 @@ public final class ConfigInfoWorker {
                 .build();
     }
 
-    public final void clearConfigInfo() {
+    public final void removeConfigInfo() {
+        mConfigInfo = null;
         mSpHelper.removeString(KEY_DEVICE_ID);
         mSpHelper.removeString(KEY_MASTER_DEVICE_IP);
         mSpHelper.removeString(KEY_USER);

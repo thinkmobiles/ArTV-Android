@@ -91,8 +91,8 @@ public final class ApplicationLogic implements IConfigInfoListener {
     }
 
     @Override
-    public final void onNeedClearConfigInfo() {
-        mConfigInfoWorker.clearConfigInfo();
+    public final void onNeedRemoveConfigInfo() {
+        mConfigInfoWorker.removeConfigInfo();
 
         mState = ArTvState.STATE_APP_START;
         notifyStateChangeListeners();

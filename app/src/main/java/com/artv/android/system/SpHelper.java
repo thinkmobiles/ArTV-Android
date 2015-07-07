@@ -18,7 +18,7 @@ public final class SpHelper {
     }
 
     public final void putString(final String _key, final String _value) {
-        mSp.edit().putString(_key, _value).commit();
+        mSp.edit().putString(_key, _value).apply();
     }
 
     public final String getString(final String _key) {
@@ -26,11 +26,11 @@ public final class SpHelper {
     }
 
     public final void removeString(final String _key) {
-        mSp.edit().remove(_key).commit();
+        mSp.edit().remove(_key).apply();
     }
 
     public final void clearAll() {
-        mSp.edit().clear().commit();
+        mSp.edit().clear().apply();
     }
 
 }
