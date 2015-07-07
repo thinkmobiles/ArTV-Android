@@ -1,6 +1,5 @@
 package com.artv.android.system;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -8,7 +7,7 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.artv.android.R;
-import com.artv.android.core.IArTvStateChangeListener;
+import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.api.Temp;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;

@@ -6,6 +6,9 @@ import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.config_info.IConfigInfoListener;
+import com.artv.android.core.state.ArTvState;
+import com.artv.android.core.state.IArTvStateChangeListener;
+import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.SpHelper;
 
 import java.util.HashSet;
@@ -18,50 +21,33 @@ public final class ApplicationLogic implements IConfigInfoListener {
 
     private Context mContext;
 
-    private ArTvState mState = ArTvState.STATE_APP_START;
     private SpHelper mSpHelper;
     private ConfigInfoWorker mConfigInfoWorker;
+    private StateWorker mStateWorker;
     private ApiWorker mApiWorker;
-
-    private Set<IArTvStateChangeListener> mStateChangeListeners;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
 
-        mApiWorker = new ApiWorker(mContext);
         mSpHelper = new SpHelper(mContext);
         mConfigInfoWorker = new ConfigInfoWorker();
         mConfigInfoWorker.setSpHelper(mSpHelper);
-
-        mStateChangeListeners = new HashSet<>();
+        mStateWorker = new StateWorker();
+        mApiWorker = new ApiWorker(mContext);
 
         determineStateWhenAppStart();
-    }
-
-    public final ArTvState getArTvState() {
-        return mState;
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
         return mConfigInfoWorker;
     }
 
+    public final StateWorker getStateWorker() {
+        return mStateWorker;
+    }
+
     public final ApiWorker getApiWorker() {
         return mApiWorker;
-    }
-
-    public final boolean addStateChangeListener(final IArTvStateChangeListener _listener) {
-        return mStateChangeListeners.add(_listener);
-    }
-
-    public final boolean removeStateChangeListener(final IArTvStateChangeListener _listener) {
-        return mStateChangeListeners.remove(_listener);
-    }
-
-    private final void notifyStateChangeListeners() {
-        for (final IArTvStateChangeListener listener : mStateChangeListeners) {
-            listener.onArTvStateChanged();
-        }
     }
 
     public final IConfigInfoListener getConfigInfoListener() {
@@ -75,9 +61,9 @@ public final class ApplicationLogic implements IConfigInfoListener {
         mConfigInfoWorker.loadConfigInfo();
 
         if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()) {
-            mState = ArTvState.STATE_APP_START;
+            mStateWorker.setState(ArTvState.STATE_APP_START);
         } else {
-            mState = ArTvState.STATE_APP_START_WITH_CONFIG_INFO;
+            mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
         }
     }
 
@@ -86,15 +72,13 @@ public final class ApplicationLogic implements IConfigInfoListener {
         mConfigInfoWorker.setConfigInfo(_configInfo);
         mConfigInfoWorker.saveConfigInfo();
 
-        mState = ArTvState.STATE_APP_START_WITH_CONFIG_INFO;
-        notifyStateChangeListeners();
+        mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
     }
 
     @Override
     public final void onNeedRemoveConfigInfo() {
         mConfigInfoWorker.removeConfigInfo();
 
-        mState = ArTvState.STATE_APP_START;
-        notifyStateChangeListeners();
+        mStateWorker.setState(ArTvState.STATE_APP_START);
     }
 }

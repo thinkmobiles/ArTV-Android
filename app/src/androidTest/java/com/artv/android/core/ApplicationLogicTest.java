@@ -5,6 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.artv.android.ReflectionHelper;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.state.ArTvState;
+import com.artv.android.core.state.IArTvStateChangeListener;
 
 import junit.framework.Assert;
 
