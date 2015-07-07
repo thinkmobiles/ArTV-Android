@@ -35,7 +35,7 @@ public class Temp {
 //        MyApplication.getApplicationLogic().getApiWorker().doGetToken(requestObject, callback);
 //        MyApplication.getApplicationLogic().getApiWorker().doGetCampaign(campaignRequestObject, callback1);
 //        MyApplication.getApplicationLogic().getApiWorker().doGetGlobalConfig("ASDFASWQER@!#$!@#$WEQWER", callback2);
-        MyApplication.getApplicationLogic().getApiWorker().doGetDeviceConfig(deviceConfigRequestObject, callback2);
+//        MyApplication.getApplicationLogic().getApiWorker().doGetDeviceConfig(deviceConfigRequestObject, callback2);
     }
 
 

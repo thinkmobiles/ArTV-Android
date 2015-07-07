@@ -14,7 +14,7 @@ import com.artv.android.system.MyApplication;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends Fragment {
+public final class SplashScreenFragment extends BaseFragment {
     private ProgressBar mLoadingProgressBar;
     private Button btnClearConfigInfo;
 
@@ -28,7 +28,7 @@ public final class SplashScreenFragment extends Fragment {
         btnClearConfigInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public final void onClick(final View _v) {
-                MyApplication.getApplicationLogic().getConfigInfoListener().onNeedRemoveConfigInfo();
+                getMyApplication().getApplicationLogic().getConfigInfoListener().onNeedRemoveConfigInfo();
             }
         });
 

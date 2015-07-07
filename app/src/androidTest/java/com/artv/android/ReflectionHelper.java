@@ -56,6 +56,13 @@ public abstract class ReflectionHelper {
 		field.set(_obj, _value);
 	}
 
+	public static final void setField(final Class _class, final String _name, final Object _value)
+			throws NoSuchFieldException, IllegalAccessException {
+		final Field field = _class.getDeclaredField(_name);
+		field.setAccessible(true);
+		field.set(_class, _value);
+	}
+
 	public static final Object invoke(final Object _obj, final String _name)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		return invoke(_obj, _name, null, null);

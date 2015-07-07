@@ -15,7 +15,7 @@ import com.artv.android.system.MyApplication;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class ConfigInfoFragment extends Fragment implements View.OnClickListener {
+public final class ConfigInfoFragment extends BaseFragment implements View.OnClickListener {
 
     private EditText etDeviceId;
     private EditText etMasterDeviceIp;
@@ -63,6 +63,6 @@ public final class ConfigInfoFragment extends Fragment implements View.OnClickLi
             return;
         }
 
-        MyApplication.getApplicationLogic().getConfigInfoListener().onEnteredConfigInfo(configInfo);
+        getMyApplication().getApplicationLogic().getConfigInfoListener().onEnteredConfigInfo(configInfo);
     }
 }

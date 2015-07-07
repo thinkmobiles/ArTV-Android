@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        MainActivityTest.class,
         SpHelperTest.class
 })
 public final class AllSystemTests {

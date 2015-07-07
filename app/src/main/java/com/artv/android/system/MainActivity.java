@@ -13,7 +13,7 @@ import com.artv.android.core.api.Temp;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;
 
-public class MainActivity extends Activity implements IArTvStateChangeListener {
+public class MainActivity extends BaseActivity implements IArTvStateChangeListener {
     private FrameLayout mFragmentContainer;
 
     @Override
@@ -21,7 +21,9 @@ public class MainActivity extends Activity implements IArTvStateChangeListener {
         super.onCreate(_savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_MA);
+        getMyApplication().createApplicationLogic();
+
+        mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
         handleAppState();
     }
@@ -30,14 +32,14 @@ public class MainActivity extends Activity implements IArTvStateChangeListener {
     protected final void onStart() {
         super.onStart();
 
-        MyApplication.getApplicationLogic().addStateChangeListener(this);
+        getMyApplication().getApplicationLogic().addStateChangeListener(this);
     }
 
     @Override
     protected final void onStop() {
         super.onStop();
 
-        MyApplication.getApplicationLogic().removeStateChangeListener(this);
+        getMyApplication().getApplicationLogic().removeStateChangeListener(this);
     }
 
     private void getDeviceId() {
@@ -58,13 +60,13 @@ public class MainActivity extends Activity implements IArTvStateChangeListener {
     }
 
     private final void handleAppState() {
-        switch (MyApplication.getApplicationLogic().getArTvState()) {
+        switch (getMyApplication().getApplicationLogic().getArTvState()) {
             case STATE_APP_START:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_MA, new ConfigInfoFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
                 break;
 
             case STATE_APP_START_WITH_CONFIG_INFO:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_MA, new SplashScreenFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
                 break;
         }
     }
