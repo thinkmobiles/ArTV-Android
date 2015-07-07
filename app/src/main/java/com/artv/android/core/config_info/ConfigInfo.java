@@ -10,40 +10,32 @@ public final class ConfigInfo {
     private String mUser;
     private String mPassword;
 
+    /**
+     * Construct with Builder.
+     */
+    private ConfigInfo() {}
+
     public final String getDeviceId() {
         return mDeviceId;
-    }
-
-    public final void setDeviceId(final String _deviceId) {
-        mDeviceId = _deviceId;
     }
 
     public final String getMasterDeviceIp() {
         return mMasterDeviceIp;
     }
 
-    public final void setMasterDeviceIp(final String _masterDeviceIp) {
-        mMasterDeviceIp = _masterDeviceIp;
-    }
-
     public final String getUser() {
         return mUser;
-    }
-
-    public final void setUser(final String _user) {
-        mUser = _user;
     }
 
     public final String getPassword() {
         return mPassword;
     }
 
-    public final void setPassword(final String _password) {
-        mPassword = _password;
-    }
-
     public final boolean hasConfigInfo() {
-        return mDeviceId != null && mMasterDeviceIp != null && mUser != null && mPassword != null;
+        return mDeviceId != null && !mDeviceId.isEmpty()
+                && mMasterDeviceIp != null && !mMasterDeviceIp.isEmpty()
+                && mUser != null && !mUser.isEmpty()
+                && mPassword != null && !mPassword.isEmpty();
     }
 
     @Override
@@ -61,5 +53,40 @@ public final class ConfigInfo {
     @Override
     public final int hashCode() {
         return 32423 * 4324 << 22;
+    }
+
+
+    public static class Builder {
+
+        private ConfigInfo mConfigInfo;
+
+        public Builder() {
+            mConfigInfo = new ConfigInfo();
+        }
+
+        public final Builder setDeviceId(final String _deviceId) {
+            mConfigInfo.mDeviceId = _deviceId;
+            return this;
+        }
+
+        public final Builder setMasterDeviceIp(final String _masterDeviceIp) {
+            mConfigInfo.mMasterDeviceIp = _masterDeviceIp;
+            return this;
+        }
+
+        public final Builder setUser(final String _user) {
+            mConfigInfo.mUser = _user;
+            return this;
+        }
+
+        public final Builder setPassword(final String _password) {
+            mConfigInfo.mPassword = _password;
+            return this;
+        }
+
+        public final ConfigInfo build() {
+            return mConfigInfo;
+        }
+
     }
 }

@@ -6,14 +6,14 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.artv.android.R;
-import com.artv.android.core.ArTvState;
+import com.artv.android.core.IArTvStateChangeListener;
 import com.artv.android.core.api.Temp;
 import com.artv.android.system.fragments.ConfigsFragment;
+import com.artv.android.system.fragments.SplashScreenFragment;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements IArTvStateChangeListener {
     private FrameLayout mFragmentContainer;
 
     @Override
@@ -24,6 +24,20 @@ public class MainActivity extends Activity {
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_MA);
 
         handleAppState();
+    }
+
+    @Override
+    protected final void onStart() {
+        super.onStart();
+
+        MyApplication.getApplicationLogic().addStateChangeListener(this);
+    }
+
+    @Override
+    protected final void onStop() {
+        super.onStop();
+
+        MyApplication.getApplicationLogic().removeStateChangeListener(this);
     }
 
     private void getDeviceId() {
@@ -38,10 +52,20 @@ public class MainActivity extends Activity {
         temp.example();
     }
 
-    private final void handleAppState() {
-        if (ArTvState.STATE_APP_START == MyApplication.getApplicationLogic().getArTvState()) {
-            getFragmentManager().beginTransaction().add(R.id.flFragmentContainer_MA, new ConfigsFragment()).commit();
-        }
+    @Override
+    public final void onArTvStateChanged() {
+        handleAppState();
     }
 
+    private final void handleAppState() {
+        switch (MyApplication.getApplicationLogic().getArTvState()) {
+            case STATE_APP_START:
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_MA, new ConfigsFragment()).commit();
+                break;
+
+            case STATE_APP_START_WITH_CONFIG_INFO:
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_MA, new SplashScreenFragment()).commit();
+                break;
+        }
+    }
 }

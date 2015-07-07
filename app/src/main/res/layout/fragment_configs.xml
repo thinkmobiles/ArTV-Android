@@ -30,7 +30,7 @@
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/etDeviceID_FC" />
+                    android:id="@+id/etDeviceId_FC" />
             </LinearLayout>
 
             <LinearLayout
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned"
                     android:ems="10"
-                    android:id="@+id/etMasterDeviceIP_FC" />
+                    android:id="@+id/etMasterDeviceIp_FC" />
             </LinearLayout>
         </LinearLayout>
 

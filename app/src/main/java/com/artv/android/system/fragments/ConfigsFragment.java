@@ -6,23 +6,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.artv.android.R;
+import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.system.MyApplication;
 
 /**
  * Created by Misha on 6/30/2015.
  */
-public class ConfigsFragment extends Fragment implements View.OnClickListener {
-    private EditText mDeviceID, mUserName, mMasterDevIP, mPassword;
+public final class ConfigsFragment extends Fragment implements View.OnClickListener {
+
+    private EditText etDeviceId;
+    private EditText etMasterDeviceIp;
+    private EditText etUserName;
+    private EditText etPassword;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_configs, null);
+    public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
+        final View view = _inflater.inflate(R.layout.fragment_configs, null);
 
-        mDeviceID = (EditText) view.findViewById(R.id.etDeviceID_FC);
-        mUserName = (EditText) view.findViewById(R.id.etUserName_FC);
-        mMasterDevIP = (EditText) view.findViewById(R.id.etMasterDeviceIP_FC);
-        mPassword = (EditText) view.findViewById(R.id.etPassword_FC);
+        etDeviceId = (EditText) view.findViewById(R.id.etDeviceId_FC);
+        etMasterDeviceIp = (EditText) view.findViewById(R.id.etMasterDeviceIp_FC);
+        etUserName = (EditText) view.findViewById(R.id.etUserName_FC);
+        etPassword = (EditText) view.findViewById(R.id.etPassword_FC);
 
         view.findViewById(R.id.btnSave_FC).setOnClickListener(this);
 
@@ -30,11 +37,32 @@ public class ConfigsFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public final void onClick(final View _v) {
+        switch (_v.getId()) {
             case R.id.btnSave_FC:
-                //todo saving
+                saveState();
                 break;
         }
+    }
+
+    private final void saveState() {
+        final String deviceId = etDeviceId.getText().toString();
+        final String masterDeviceIp = etMasterDeviceIp.getText().toString();
+        final String userName = etUserName.getText().toString();
+        final String password = etPassword.getText().toString();
+
+        final ConfigInfo configInfo = new ConfigInfo.Builder()
+                .setDeviceId(deviceId)
+                .setMasterDeviceIp(masterDeviceIp)
+                .setUser(userName)
+                .setPassword(password)
+                .build();
+
+        if (!configInfo.hasConfigInfo()) {
+            Toast.makeText(getActivity().getApplicationContext(), "Fill all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        MyApplication.getApplicationLogic().getConfigInfoListener().onEnteredConfigInfo(configInfo);
     }
 }

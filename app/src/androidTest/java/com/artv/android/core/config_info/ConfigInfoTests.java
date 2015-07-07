@@ -61,15 +61,15 @@ public final class ConfigInfoTests {
 
     @Test
     public final void ConfigInfoProviders_AddAndRemove() {
-        final IConfigInfoProvider cip1 = new IConfigInfoProvider() {
+        final IConfigInfoListener cip1 = new IConfigInfoListener() {
             @Override
-            public final void createdConfigInfo(final ConfigInfo _configInfo) {
+            public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
 
             }
         };
-        final IConfigInfoProvider cip2 = new IConfigInfoProvider() {
+        final IConfigInfoListener cip2 = new IConfigInfoListener() {
             @Override
-            public final void createdConfigInfo(final ConfigInfo _configInfo) {
+            public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
 
             }
         };

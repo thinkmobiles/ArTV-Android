@@ -2,9 +2,6 @@ package com.artv.android.core.config_info;
 
 import com.artv.android.system.SpHelper;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by ZOG on 7/6/2015.
  */
@@ -17,11 +14,6 @@ public final class ConfigInfoWorker {
 
     private SpHelper mSpHelper;
     private ConfigInfo mConfigInfo;
-    private Set<IConfigInfoProvider> mConfigInfoProviders;
-
-    public ConfigInfoWorker() {
-        mConfigInfoProviders = new HashSet<>();
-    }
 
     public final void setSpHelper(final SpHelper _helper) {
         mSpHelper = _helper;
@@ -43,19 +35,19 @@ public final class ConfigInfoWorker {
     }
 
     public final void loadConfigInfo() {
-        mConfigInfo = new ConfigInfo();
-        mConfigInfo.setDeviceId(mSpHelper.getString(KEY_DEVICE_ID));
-        mConfigInfo.setMasterDeviceIp(mSpHelper.getString(KEY_MASTER_DEVICE_IP));
-        mConfigInfo.setUser(mSpHelper.getString(KEY_USER));
-        mConfigInfo.setPassword(mSpHelper.getString(KEY_PASSWORD));
+        mConfigInfo = new ConfigInfo.Builder()
+                .setDeviceId(mSpHelper.getString(KEY_DEVICE_ID))
+                .setMasterDeviceIp(mSpHelper.getString(KEY_MASTER_DEVICE_IP))
+                .setUser(mSpHelper.getString(KEY_USER))
+                .setPassword(mSpHelper.getString(KEY_PASSWORD))
+                .build();
     }
 
-    public final boolean addConfigInfoProvider(final IConfigInfoProvider _provider) {
-        return mConfigInfoProviders.add(_provider);
-    }
-
-    public final boolean removeConfigInfoProvider(final IConfigInfoProvider _provider) {
-        return mConfigInfoProviders.remove(_provider);
+    public final void clearConfigInfo() {
+        mSpHelper.removeString(KEY_DEVICE_ID);
+        mSpHelper.removeString(KEY_MASTER_DEVICE_IP);
+        mSpHelper.removeString(KEY_USER);
+        mSpHelper.removeString(KEY_PASSWORD);
     }
 
 }

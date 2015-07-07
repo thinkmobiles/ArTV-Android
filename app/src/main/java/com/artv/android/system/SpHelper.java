@@ -25,6 +25,10 @@ public final class SpHelper {
         return mSp.getString(_key, DEF_STRING_VAL);
     }
 
+    public final void removeString(final String _key) {
+        mSp.edit().remove(_key).commit();
+    }
+
     public final void clearAll() {
         mSp.edit().clear().commit();
     }

@@ -5,21 +5,32 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.artv.android.R;
+import com.artv.android.system.MyApplication;
 
 /**
  * Created by Misha on 6/30/2015.
  */
-public class SplashScreenFragment extends Fragment {
+public final class SplashScreenFragment extends Fragment {
     private ProgressBar mLoadingProgressBar;
+    private Button btnClearConfigInfo;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_splash_screen, null);
+    public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
+        final View view = _inflater.inflate(R.layout.fragment_splash_screen, null);
 
         mLoadingProgressBar = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
+        btnClearConfigInfo = (Button) view.findViewById(R.id.btnClearConfigInfo_FSS);
+
+        btnClearConfigInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public final void onClick(final View _v) {
+                MyApplication.getApplicationLogic().getConfigInfoListener().onNeedClearConfigInfo();
+            }
+        });
 
         return view;
     }
