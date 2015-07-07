@@ -1,5 +1,6 @@
 package com.artv.android.system;
 
+import android.app.Fragment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
@@ -33,7 +34,6 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-//        ReflectionHelper.setField(MyApplication.class, "mApplicationLogic", new ApplicationLogic(InstrumentationRegistry.getTargetContext()));
         mMainActivity = getActivity();
     }
 
@@ -58,7 +58,30 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
     }
 
     @Test
-    public final void SetConfigInfo_StateAppStartWithConfigInfo_SplashScreenFragmentIsShown() throws Throwable {
+    public final void ActivityStart_StateAppStartWithConfigInfo_SplashScreenFragmentIsShown() {
+        final ConfigInfo ci = new ConfigInfo.Builder()
+                .setDeviceId("id")
+                .setMasterDeviceIp("ip")
+                .setUser("user")
+                .setPassword("password")
+                .build();
+
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoListener().onEnteredConfigInfo(ci);
+        Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getMyApplication().getApplicationLogic().getArTvState());
+
+        mMainActivity.finish();
+        setActivity(null);
+        mMainActivity = getActivity();
+
+        Fragment fragment = (SplashScreenFragment) mMainActivity
+                .getFragmentManager()
+                .findFragmentById(R.id.flFragmentContainer_AM);
+
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().removeConfigInfo();
+    }
+
+    @Test
+    public final void SetAndRemoveConfigInfo_FragmentsChangeProperly() throws Throwable {
         final ConfigInfo ci = new ConfigInfo.Builder()
                 .setDeviceId("id")
                 .setMasterDeviceIp("ip")
@@ -74,10 +97,21 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
             }
         });
 
-        final SplashScreenFragment fragment = (SplashScreenFragment) mMainActivity
+        Fragment fragment = (SplashScreenFragment) mMainActivity
                 .getFragmentManager()
                 .findFragmentById(R.id.flFragmentContainer_AM);
 
         mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoListener().onNeedRemoveConfigInfo();
+        runTestOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMainActivity.getFragmentManager().executePendingTransactions();
+            }
+        });
+
+        fragment = (ConfigInfoFragment) mMainActivity
+                .getFragmentManager()
+                .findFragmentById(R.id.flFragmentContainer_AM);
     }
+
 }
