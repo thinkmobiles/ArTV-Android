@@ -6,6 +6,7 @@ package com.artv.android.core.init;
 public interface InitCallback {
 
     void onInitSuccess(final InitResult _result);
+    void onProgress(final InitResult _result);
     void onInitFail(final InitResult _result);
 
 }

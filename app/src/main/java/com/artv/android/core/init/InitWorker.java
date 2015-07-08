@@ -52,17 +52,13 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
                 mInitData.setToken(_respObj.mToken);
-
+                mCallback.onProgress(buildInitResult(true, "GetToken : success"));
                 getGlobalConfig();
             }
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
-                final InitResult result  = new InitResult.Builder()
-                        .setSuccess(false)
-                        .setMessage(_errorResp.apiType + ": " + _errorResp.error)
-                        .build();
-                mCallback.onInitFail(result);
+                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
             }
         });
     }
@@ -76,17 +72,13 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetGlobalConfigResponseObject _respObj) {
                 mInitData.setGlobalConfig(new ArrayList<>(_respObj.list));
-
+                mCallback.onProgress(buildInitResult(true, "GetGlobalConfig : success"));
                 getDeviceConfig();
             }
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
-                final InitResult result  = new InitResult.Builder()
-                        .setSuccess(false)
-                        .setMessage(_errorResp.apiType + ": " + _errorResp.error)
-                        .build();
-                mCallback.onInitFail(result);
+                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
             }
         });
     }
@@ -101,23 +93,22 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetDeviceConfigResponseObject _respObj) {
                 mInitData.setDeviceConfig(_respObj.getDeviceConfig());
-
-                final InitResult result  = new InitResult.Builder()
-                        .setSuccess(true)
-                        .setMessage("success")
-                        .build();
-                mCallback.onInitSuccess(result);
+                mCallback.onProgress(buildInitResult(true, "GetDeviceConfig : success"));
+                mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
             }
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
-                final InitResult result  = new InitResult.Builder()
-                        .setSuccess(false)
-                        .setMessage(_errorResp.apiType + ": " + _errorResp.error)
-                        .build();
-                mCallback.onInitFail(result);
+                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
             }
         });
+    }
+
+    private final InitResult buildInitResult(final boolean _success, final String _message) {
+        return new InitResult.Builder()
+                .setSuccess(_success)
+                .setMessage(_message)
+                .build();
     }
 
 }
