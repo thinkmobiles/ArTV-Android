@@ -1,6 +1,7 @@
 package com.artv.android.system.fragments;
 
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public final class SplashScreenFragment extends BaseFragment {
         mLoadingProgressBar = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
         btnClearConfigInfo = (Button) view.findViewById(R.id.btnClearConfigInfo_FSS);
         tvLog = (TextView) view.findViewById(R.id.tvLog_FSS);
+        tvLog.setMovementMethod(new ScrollingMovementMethod());
 
         btnClearConfigInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,17 +55,17 @@ public final class SplashScreenFragment extends BaseFragment {
                 new InitCallback() {
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
-                        tvLog.append(_result.getMessage());
+                        tvLog.append("\n" + _result.getMessage());
                     }
 
                     @Override
                     public final void onProgress(final InitResult _result) {
-                        tvLog.append(_result.getMessage());
+                        tvLog.append("\n" + _result.getMessage());
                     }
 
                     @Override
                     public final void onInitFail(final InitResult _result) {
-                        tvLog.append(_result.getMessage());
+                        tvLog.append("\n" + _result.getMessage());
                     }
                 }
         );

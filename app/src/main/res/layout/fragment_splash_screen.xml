@@ -19,7 +19,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Splash Screen"
         android:id="@+id/textView5"
-        android:layout_centerInParent="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btnClearConfigInfo_FSS"
+        android:layout_marginTop="20dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -31,8 +33,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="some log"
         android:id="@+id/tvLog_FSS"
         android:layout_below="@+id/pbLoading_FSS"
-        android:layout_marginTop="15dp" />
+        android:layout_marginTop="15dp"
+        android:scrollbars="vertical"
+        android:text="Log:" />
 </RelativeLayout>
