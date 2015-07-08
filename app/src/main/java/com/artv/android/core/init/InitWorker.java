@@ -25,6 +25,7 @@ public final class InitWorker {
     private ApiWorker mApiWorker;
     private InitData mInitData;
     private InitCallback mCallback;
+    private static final boolean IGNORE_IF_FAIL = true;
 
     public InitWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -59,6 +60,7 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
+                if (IGNORE_IF_FAIL) getGlobalConfig();
             }
         });
     }
@@ -79,6 +81,7 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
+                if (IGNORE_IF_FAIL) getDeviceConfig();
             }
         });
     }

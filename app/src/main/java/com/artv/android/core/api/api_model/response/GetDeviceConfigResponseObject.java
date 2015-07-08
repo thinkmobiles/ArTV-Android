@@ -4,9 +4,6 @@ import com.artv.android.core.api.ApiType;
 import com.artv.android.core.api.api_model.BaseResponseObject;
 import com.artv.android.core.model.DeviceConfig;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
 /**
  * Created by
  * Rogach on 30.06.2015.

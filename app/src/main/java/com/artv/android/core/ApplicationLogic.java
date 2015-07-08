@@ -3,18 +3,11 @@ package com.artv.android.core;
 import android.content.Context;
 
 import com.artv.android.core.api.ApiWorker;
-import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
-import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
-import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
-import com.artv.android.system.MainActivity;
 import com.artv.android.system.SpHelper;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by ZOG on 6/30/2015.

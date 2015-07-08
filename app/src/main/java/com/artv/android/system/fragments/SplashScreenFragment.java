@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.artv.android.R;
 import com.artv.android.core.init.InitCallback;
 import com.artv.android.core.init.InitResult;
-import com.artv.android.core.state.ArTvState;
 
 /**
  * Created by Misha on 6/30/2015.

@@ -3,7 +3,6 @@ package com.artv.android.core.config_info;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.SpHelper;
 
 import junit.framework.Assert;

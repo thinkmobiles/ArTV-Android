@@ -6,17 +6,12 @@ import android.support.test.runner.AndroidJUnit4;
 import com.artv.android.ReflectionHelper;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.state.ArTvState;
-import com.artv.android.core.state.IArTvStateChangeListener;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ZOG on 6/30/2015.

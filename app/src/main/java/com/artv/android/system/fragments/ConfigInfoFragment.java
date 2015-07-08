@@ -1,6 +1,5 @@
 package com.artv.android.system.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.Toast;
 
 import com.artv.android.R;
 import com.artv.android.core.config_info.ConfigInfo;
-import com.artv.android.system.MyApplication;
 
 /**
  * Created by Misha on 6/30/2015.

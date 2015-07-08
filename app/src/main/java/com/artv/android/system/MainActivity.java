@@ -7,8 +7,8 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.artv.android.R;
-import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.api.Temp;
+import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;
 
@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
-        handleAppState();
+        if (_savedInstanceState == null) handleAppState();
     }
 
     @Override

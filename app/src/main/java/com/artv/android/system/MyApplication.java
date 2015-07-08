@@ -1,8 +1,6 @@
 package com.artv.android.system;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.Log;
 
 import com.artv.android.core.ApplicationLogic;
 //import com.crashlytics.android.Crashlytics;
