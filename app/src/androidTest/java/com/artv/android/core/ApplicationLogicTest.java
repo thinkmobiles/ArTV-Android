@@ -37,6 +37,7 @@ public final class ApplicationLogicTest {
         Assert.assertNotNull(mApplicationLogic.getStateWorker());
         Assert.assertNotNull(mApplicationLogic.getConfigInfoWorker());
         Assert.assertNotNull(mApplicationLogic.getApiWorker());
+        Assert.assertNotNull(mApplicationLogic.getInitWorker());
     }
 
     @Test

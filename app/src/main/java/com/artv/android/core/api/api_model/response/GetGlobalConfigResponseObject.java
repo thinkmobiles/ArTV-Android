@@ -18,7 +18,7 @@ import java.util.List;
 public final class GetGlobalConfigResponseObject extends BaseResponseObject {
 
     @ElementList (entry = "Entry", inline = true)
-    private List<Entry> list;
+    public List<Entry> list;
 
     public GetGlobalConfigResponseObject() {
         apiType = ApiType.GET_GLOBAL_GONFIG;
