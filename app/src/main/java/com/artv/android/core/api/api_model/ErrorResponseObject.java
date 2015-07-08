@@ -26,6 +26,11 @@ public final class ErrorResponseObject {
             return this;
         }
 
+        public final Builder setApiType(final ApiType _apiType) {
+            mErrorResponseObject.apiType = _apiType;
+            return this;
+        }
+
         public final ErrorResponseObject build() {
             return mErrorResponseObject;
         }

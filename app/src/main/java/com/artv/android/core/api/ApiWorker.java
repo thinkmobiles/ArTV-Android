@@ -38,7 +38,10 @@ public final class ApiWorker {
 
             @Override
             public void failure(RetrofitError _error) {
-                final ErrorResponseObject error = new ErrorResponseObject.Builder().setError(_error.getMessage()).build();
+                final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                        .setApiType(_requestObject.apiType)
+                        .setError(_error.getMessage())
+                        .build();
                 _callback.onFailure(error);
             }
         });
@@ -57,7 +60,10 @@ public final class ApiWorker {
             @Override
             public void failure(RetrofitError _error) {
                 if (_error != null) {
-                    final ErrorResponseObject error = new ErrorResponseObject.Builder().setError(_error.getMessage()).build();
+                    final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                            .setApiType(_requestObject.apiType)
+                            .setError(_error.getMessage())
+                            .build();
                     _callback.onFailure(error);
                 }
             }
@@ -77,7 +83,10 @@ public final class ApiWorker {
             @Override
             public void failure(RetrofitError _error) {
                 if (_error != null) {
-                    final ErrorResponseObject error = new ErrorResponseObject.Builder().setError(_error.getMessage()).build();
+                    final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                            .setApiType(_requestObject.apiType)
+                            .setError(_error.getMessage())
+                            .build();
                     _callback.onFailure(error);
                 }
             }
@@ -97,7 +106,10 @@ public final class ApiWorker {
             @Override
             public void failure(RetrofitError _error) {
                 if (_error != null) {
-                    final ErrorResponseObject error = new ErrorResponseObject.Builder().setError(_error.getMessage()).build();
+                    final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                            .setApiType(_requestObject.apiType)
+                            .setError(_error.getMessage())
+                            .build();
                     _callback.onFailure(error);
                 }
             }
