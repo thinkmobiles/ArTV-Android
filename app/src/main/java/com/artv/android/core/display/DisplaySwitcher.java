@@ -3,7 +3,7 @@ package com.artv.android.core.display;
 /**
  * Created by ZOG on 7/8/2015.
  */
-public final class TempDisplaySwitcher implements IDisplaySwitcher {
+public final class DisplaySwitcher implements IDisplaySwitcher {
 
     @Override
     public final boolean isDisplayTurnedOn() {

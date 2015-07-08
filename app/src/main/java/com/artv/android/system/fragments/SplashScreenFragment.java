@@ -48,8 +48,10 @@ public final class SplashScreenFragment extends BaseFragment {
     }
 
     private final void beginInitializing() {
+        getMyApplication().getApplicationLogic().getInitWorker().setConfigInfo(
+                getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfo());
+
         getMyApplication().getApplicationLogic().getInitWorker().startInitializing(
-                getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfo(),
                 new InitCallback() {
                     @Override
                     public final void onInitSuccess(final InitResult _result) {

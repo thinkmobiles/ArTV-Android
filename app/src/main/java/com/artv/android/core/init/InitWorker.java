@@ -10,6 +10,8 @@ import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.display.DisplaySwitcher;
+import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
 
 import java.util.ArrayList;
 
@@ -21,25 +23,59 @@ import java.util.ArrayList;
  */
 public final class InitWorker {
 
-    private ConfigInfo mConfigInfo;
-    private ApiWorker mApiWorker;
-    private InitData mInitData;
-    private InitCallback mCallback;
     private static final boolean IGNORE_IF_FAIL = true;
 
-    public InitWorker(final ApiWorker _apiWorker) {
-        mApiWorker = _apiWorker;
+    private DisplaySwitcher mDisplaySwitcher;
+    private ConfigInfo mConfigInfo;
+    private ApiWorker mApiWorker;
+
+    private InitData mInitData;
+    private InitCallback mCallback;
+
+    public InitWorker() {
         mInitData = new InitData();
     }
 
-    public final void startInitializing(final ConfigInfo _configInfo, final InitCallback _callback) {
+    public final void setDisplaySwitcher(final DisplaySwitcher _displaySwitcher) {
+        mDisplaySwitcher = _displaySwitcher;
+    }
+
+    public final void setConfigInfo(final ConfigInfo _configInfo) {
         mConfigInfo = _configInfo;
+    }
+
+    public final void setApiWorker(final ApiWorker _apiWorker) {
+        mApiWorker = _apiWorker;
+    }
+
+    public final void startInitializing(final InitCallback _callback) {
         mCallback = _callback;
-        getToken(); //begin
+        turnOnDisplayIfNeed(); //begin
     }
 
     public final InitData getInitData() {
         return mInitData;
+    }
+
+    public final void turnOnDisplayIfNeed() {
+        if (mDisplaySwitcher.isDisplayTurnedOn()) {
+            mCallback.onProgress(buildInitResult(true, "Display already turned on"));
+            getToken();
+        } else {
+            mDisplaySwitcher.turnOn(new DisplaySwitcherAdapterCallback() {
+
+                @Override
+                public final void turnedOn() {
+                    mCallback.onProgress(buildInitResult(true, "Turned on display"));
+                    getToken();
+                }
+
+                @Override
+                public final void switchFailed() {
+                    mCallback.onInitFail(buildInitResult(false, "Failed to turn on display"));
+                }
+            });
+        }
     }
 
     private final void getToken() {

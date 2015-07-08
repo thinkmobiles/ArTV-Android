@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
@@ -21,6 +22,7 @@ public final class ApplicationLogic {
     private ConfigInfoWorker mConfigInfoWorker;
     private ApiWorker mApiWorker;
     private InitWorker mInitWorker;
+    private DisplaySwitcher mDisplaySwitcher;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -35,7 +37,12 @@ public final class ApplicationLogic {
 
         mApiWorker = new ApiWorker(mContext);
 
-        mInitWorker = new InitWorker(mApiWorker);
+        mInitWorker = new InitWorker();
+
+        mDisplaySwitcher = new DisplaySwitcher();
+
+        mInitWorker.setApiWorker(mApiWorker);
+        mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
         determineStateWhenAppStart();
     }
@@ -54,6 +61,10 @@ public final class ApplicationLogic {
 
     public final InitWorker getInitWorker() {
         return mInitWorker;
+    }
+
+    public final DisplaySwitcher getDisplaySwitcher() {
+        return mDisplaySwitcher;
     }
 
     /**
