@@ -10,7 +10,7 @@ public final class GetCampaignRequestObject extends GetDeviceConfigRequestObject
 
     private long mCampaignID;
 
-    public GetCampaignRequestObject() {
+    private GetCampaignRequestObject() {
         apiType = ApiType.GET_CAMPAIGN;
     }
 

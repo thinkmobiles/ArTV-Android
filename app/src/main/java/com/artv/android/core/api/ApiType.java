@@ -5,6 +5,6 @@ package com.artv.android.core.api;
  */
 public enum ApiType {
 
-    GET_TOKEN, GET_GLOBAL_GONFIG, GET_DEVICE_CONFIG, GET_CAMPAIGN
+    GET_TOKEN, GET_GLOBAL_GONFIG, GET_DEVICE_CONFIG, GET_CAMPAIGN, ERROR
 
 }
