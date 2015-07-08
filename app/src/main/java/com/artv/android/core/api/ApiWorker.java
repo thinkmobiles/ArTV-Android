@@ -9,6 +9,7 @@ import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
+import com.artv.android.core.api.rest_client.TestRestClient;
 
 /**
  * Created by ZOG on 6/30/2015.

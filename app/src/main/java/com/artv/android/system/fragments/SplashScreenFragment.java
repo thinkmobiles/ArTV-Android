@@ -34,4 +34,13 @@ public final class SplashScreenFragment extends BaseFragment {
 
         return view;
     }
+
+    @Override
+    public final void onActivityCreated(final Bundle _savedInstanceState) {
+        super.onActivityCreated(_savedInstanceState);
+    }
+
+    private final void beginInitializing() {
+
+    }
 }
