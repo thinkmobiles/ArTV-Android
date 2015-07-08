@@ -2,6 +2,7 @@ package com.artv.android.core.api.api_model.response;
 
 import com.artv.android.core.api.ApiType;
 import com.artv.android.core.api.api_model.BaseResponseObject;
+import com.artv.android.core.model.DeviceConfig;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -46,5 +47,21 @@ public final class GetDeviceConfigResponseObject extends BaseResponseObject {
 
     public GetDeviceConfigResponseObject() {
         apiType = ApiType.GET_DEVICE_CONFIG;
+    }
+
+    //todo: rework to root element
+    public final DeviceConfig getDeviceConfig() {
+        final DeviceConfig deviceConfig = new DeviceConfig();
+        deviceConfig.tagID = mTagID;
+        deviceConfig.fTPUsr = mFTPUsr;
+        deviceConfig.fTPPwd = mFTPPwd;
+        deviceConfig.homeFolder = mHomeFolder;
+        deviceConfig.serialNo = mSerialNo;
+        deviceConfig.latitude = mLatitude;
+        deviceConfig.longitude = mLongitude;
+        deviceConfig.turnOnDisp = mTurnOnDisp;
+        deviceConfig.turnOffDisp = mTurnOffDisp;
+        deviceConfig.devGroup = mDevGroup;
+        return deviceConfig;
     }
 }
