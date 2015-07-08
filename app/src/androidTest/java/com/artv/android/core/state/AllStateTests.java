@@ -8,7 +8,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-
+        StateWorkerTest.class
 })
 public final class AllStateTests {
 }

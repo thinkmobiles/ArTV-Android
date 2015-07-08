@@ -33,55 +33,15 @@ public final class ApplicationLogicTest {
 
     @Test
     public final void Create_FieldsInitialized() throws NoSuchFieldException, IllegalAccessException {
-        Assert.assertNotNull(mApplicationLogic.getApiWorker());
         Assert.assertNotNull(ReflectionHelper.getField(mApplicationLogic, "mSpHelper"));
-        Assert.assertNotNull(ReflectionHelper.getField(mApplicationLogic, "mConfigInfoWorker"));
-        Assert.assertNotNull(ReflectionHelper.getField(mApplicationLogic, "mStateChangeListeners"));
-    }
-
-    @Test
-    public final void IArTvStateChangeListeners_AddAndRemoveSuccessfully() {
-        final IArTvStateChangeListener l1 = new IArTvStateChangeListener() {
-            @Override
-            public final void onArTvStateChanged() {
-
-            }
-        };
-        final IArTvStateChangeListener l2 = new IArTvStateChangeListener() {
-            @Override
-            public final void onArTvStateChanged() {
-
-            }
-        };
-
-        Assert.assertTrue(mApplicationLogic.addStateChangeListener(l1));
-        Assert.assertTrue(mApplicationLogic.addStateChangeListener(l2));
-        Assert.assertFalse(mApplicationLogic.addStateChangeListener(l2));
-        Assert.assertFalse(mApplicationLogic.addStateChangeListener(l2));
-        Assert.assertTrue(mApplicationLogic.removeStateChangeListener(l1));
-        Assert.assertTrue(mApplicationLogic.removeStateChangeListener(l2));
-        Assert.assertFalse(mApplicationLogic.removeStateChangeListener(l1));
-        Assert.assertFalse(mApplicationLogic.removeStateChangeListener(l2));
-    }
-
-    @Test
-    public final void IArTvStateChangeListener_Notifying() throws InterruptedException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
-        final IArTvStateChangeListener l1 = new IArTvStateChangeListener() {
-            @Override
-            public final void onArTvStateChanged() {
-                countDownLatch.countDown();
-            }
-        };
-        mApplicationLogic.addStateChangeListener(l1);
-        ReflectionHelper.invoke(mApplicationLogic, "notifyStateChangeListeners");
-        final boolean interrupted = !countDownLatch.await(1, TimeUnit.SECONDS);
-        Assert.assertFalse(interrupted);
+        Assert.assertNotNull(mApplicationLogic.getStateWorker());
+        Assert.assertNotNull(mApplicationLogic.getConfigInfoWorker());
+        Assert.assertNotNull(mApplicationLogic.getApiWorker());
     }
 
     @Test
     public final void Create_StateAppStart() {
-        Assert.assertEquals(mApplicationLogic.getArTvState(), ArTvState.STATE_APP_START);
+        Assert.assertEquals(mApplicationLogic.getStateWorker().getArTvState(), ArTvState.STATE_APP_START);
     }
 
     @Test
@@ -96,12 +56,12 @@ public final class ApplicationLogicTest {
         mApplicationLogic.getConfigInfoWorker().setConfigInfo(ci1);
         mApplicationLogic.getConfigInfoWorker().saveConfigInfo();
 
-        Assert.assertEquals(new ApplicationLogic(InstrumentationRegistry.getTargetContext()).getArTvState(),
+        Assert.assertEquals(new ApplicationLogic(InstrumentationRegistry.getTargetContext()).getStateWorker().getArTvState(),
                 ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
 
         mApplicationLogic.getConfigInfoWorker().removeConfigInfo();
 
-        Assert.assertEquals(new ApplicationLogic(InstrumentationRegistry.getTargetContext()).getArTvState(),
+        Assert.assertEquals(new ApplicationLogic(InstrumentationRegistry.getTargetContext()).getStateWorker().getArTvState(),
                 ArTvState.STATE_APP_START);
     }
 
@@ -114,11 +74,11 @@ public final class ApplicationLogicTest {
                 .setPassword("password")
                 .build();
 
-        mApplicationLogic.onEnteredConfigInfo(ci1);
+        mApplicationLogic.getConfigInfoWorker().onEnteredConfigInfo(ci1);
         mApplicationLogic.getConfigInfoWorker().loadConfigInfo();
 
         Assert.assertEquals(mApplicationLogic.getConfigInfoWorker().getConfigInfo(), ci1);
-        Assert.assertEquals(mApplicationLogic.getArTvState(), ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
+        Assert.assertEquals(mApplicationLogic.getStateWorker().getArTvState(), ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
 
         mApplicationLogic.getConfigInfoWorker().removeConfigInfo();
     }
@@ -132,11 +92,11 @@ public final class ApplicationLogicTest {
                 .setPassword("password")
                 .build();
 
-        mApplicationLogic.onEnteredConfigInfo(ci1);
-        mApplicationLogic.onNeedRemoveConfigInfo();
+        mApplicationLogic.getConfigInfoWorker().onEnteredConfigInfo(ci1);
+        mApplicationLogic.getConfigInfoWorker().onNeedRemoveConfigInfo();
 
         mApplicationLogic.getConfigInfoWorker().loadConfigInfo();
         Assert.assertFalse(mApplicationLogic.getConfigInfoWorker().getConfigInfo().hasConfigInfo());
-        Assert.assertEquals(mApplicationLogic.getArTvState(), ArTvState.STATE_APP_START);
+        Assert.assertEquals(mApplicationLogic.getStateWorker().getArTvState(), ArTvState.STATE_APP_START);
     }
 }

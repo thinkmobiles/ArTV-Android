@@ -63,6 +63,6 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
             return;
         }
 
-        getMyApplication().getApplicationLogic().getConfigInfoListener().onEnteredConfigInfo(configInfo);
+        getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onEnteredConfigInfo(configInfo);
     }
 }

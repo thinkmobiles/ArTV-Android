@@ -3,6 +3,7 @@ package com.artv.android.core.config_info;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.SpHelper;
 
 import junit.framework.Assert;
@@ -23,13 +24,12 @@ public final class ConfigInfoWorkerTest {
     @Before
     public final void Init() {
         mCiWorker = new ConfigInfoWorker();
+        mSpHelper = new SpHelper(InstrumentationRegistry.getTargetContext());
+        mCiWorker.setSpHelper(mSpHelper);
     }
 
     @Test
     public final void SaveAndLoadConfigInfo_ObjectsEquals() {
-        mSpHelper = new SpHelper(InstrumentationRegistry.getTargetContext());
-        mCiWorker.setSpHelper(mSpHelper);
-
         final ConfigInfo ci1 = new ConfigInfo.Builder()
                 .setDeviceId("id")
                 .setMasterDeviceIp("ip")

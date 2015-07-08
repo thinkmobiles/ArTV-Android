@@ -17,22 +17,23 @@ import java.util.Set;
 /**
  * Created by ZOG on 6/30/2015.
  */
-public final class ApplicationLogic implements IConfigInfoListener {
+public final class ApplicationLogic {
 
     private Context mContext;
 
     private SpHelper mSpHelper;
-    private ConfigInfoWorker mConfigInfoWorker;
     private StateWorker mStateWorker;
+    private ConfigInfoWorker mConfigInfoWorker;
     private ApiWorker mApiWorker;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
 
         mSpHelper = new SpHelper(mContext);
+        mStateWorker = new StateWorker();
         mConfigInfoWorker = new ConfigInfoWorker();
         mConfigInfoWorker.setSpHelper(mSpHelper);
-        mStateWorker = new StateWorker();
+        mConfigInfoWorker.setStateWorker(mStateWorker);
         mApiWorker = new ApiWorker(mContext);
 
         determineStateWhenAppStart();
@@ -50,10 +51,6 @@ public final class ApplicationLogic implements IConfigInfoListener {
         return mApiWorker;
     }
 
-    public final IConfigInfoListener getConfigInfoListener() {
-        return this;
-    }
-
     /**
      * Determine state when application start. Next steps will be triggered from UI.
      */
@@ -67,18 +64,4 @@ public final class ApplicationLogic implements IConfigInfoListener {
         }
     }
 
-    @Override
-    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
-        mConfigInfoWorker.setConfigInfo(_configInfo);
-        mConfigInfoWorker.saveConfigInfo();
-
-        mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
-    }
-
-    @Override
-    public final void onNeedRemoveConfigInfo() {
-        mConfigInfoWorker.removeConfigInfo();
-
-        mStateWorker.setState(ArTvState.STATE_APP_START);
-    }
 }

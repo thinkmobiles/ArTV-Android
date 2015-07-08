@@ -31,14 +31,14 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     protected final void onStart() {
         super.onStart();
 
-        getMyApplication().getApplicationLogic().addStateChangeListener(this);
+        getMyApplication().getApplicationLogic().getStateWorker().addStateChangeListener(this);
     }
 
     @Override
     protected final void onStop() {
         super.onStop();
 
-        getMyApplication().getApplicationLogic().removeStateChangeListener(this);
+        getMyApplication().getApplicationLogic().getStateWorker().removeStateChangeListener(this);
     }
 
     private void getDeviceId() {
@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     private final void handleAppState() {
-        switch (getMyApplication().getApplicationLogic().getArTvState()) {
+        switch (getMyApplication().getApplicationLogic().getStateWorker().getArTvState()) {
             case STATE_APP_START:
                 getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
                 break;

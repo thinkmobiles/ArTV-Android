@@ -50,7 +50,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
 
     @Test
     public final void ActivityStart_StateAppStart_ConfigsFragmentIsShown() {
-        Assert.assertEquals(ArTvState.STATE_APP_START, mMainActivity.getMyApplication().getApplicationLogic().getArTvState());
+        Assert.assertEquals(ArTvState.STATE_APP_START, mMainActivity.getMyApplication().getApplicationLogic().getStateWorker().getArTvState());
 
         final ConfigInfoFragment fragment = (ConfigInfoFragment) mMainActivity
                 .getFragmentManager()
@@ -66,8 +66,8 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .setPassword("password")
                 .build();
 
-        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoListener().onEnteredConfigInfo(ci);
-        Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getMyApplication().getApplicationLogic().getArTvState());
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onEnteredConfigInfo(ci);
+        Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getMyApplication().getApplicationLogic().getStateWorker().getArTvState());
 
         mMainActivity.finish();
         setActivity(null);
@@ -89,7 +89,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .setPassword("password")
                 .build();
 
-        mMainActivity.getMyApplication().getApplicationLogic().onEnteredConfigInfo(ci);
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().onEnteredConfigInfo(ci);
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -101,7 +101,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .getFragmentManager()
                 .findFragmentById(R.id.flFragmentContainer_AM);
 
-        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoListener().onNeedRemoveConfigInfo();
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onNeedRemoveConfigInfo();
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
