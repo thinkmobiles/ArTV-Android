@@ -13,6 +13,10 @@ import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.api.rest_client.TestRestClient;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 /**
  * Created by ZOG on 6/30/2015.
  */
@@ -26,7 +30,6 @@ public final class ApiWorker {
 
     public final void doGetToken(final GetTokenRequestObject _requestObject,
                                  final WebRequestCallback<GetTokenResponseObject> _callback) {
-        //todo: implement
         TestRestClient.getApiService().getToken(new Callback<GetTokenResponseObject>() {
             @Override
             public void success(GetTokenResponseObject getTokenResponseObject, Response response) {
@@ -43,7 +46,6 @@ public final class ApiWorker {
 
     public final void doGetGlobalConfig(final GetGlobalConfigRequestObject _requestObject,
                                  final WebRequestCallback<GetGlobalConfigResponseObject> _callback) {
-        //todo: implement
         TestRestClient.getApiService().getGlobalConfig(new Callback<GetGlobalConfigResponseObject>() {
 
             @Override
@@ -64,7 +66,6 @@ public final class ApiWorker {
 
     public final void doGetDeviceConfig(final GetDeviceConfigRequestObject _requestObject,
                                         final WebRequestCallback<GetDeviceConfigResponseObject> _callback) {
-        //todo: implement
         TestRestClient.getApiService().getDeviceConfig(new Callback<GetDeviceConfigResponseObject>() {
 
             @Override
@@ -85,8 +86,6 @@ public final class ApiWorker {
 
     public final void doGetCampaign(final GetCampaignRequestObject _requestObject,
                                         final WebRequestCallback<GetCampaignResponseObject> _callback) {
-        //todo: implement
-
         TestRestClient.getApiService().getCampaign(new Callback<GetCampaignResponseObject>() {
 
             @Override
