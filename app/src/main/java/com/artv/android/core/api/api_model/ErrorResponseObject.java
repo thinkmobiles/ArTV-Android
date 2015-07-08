@@ -11,7 +11,6 @@ public final class ErrorResponseObject {
     public String error;
 
     private ErrorResponseObject() {
-        apiType = ApiType.ERROR;
     }
     public static final class Builder {
 
