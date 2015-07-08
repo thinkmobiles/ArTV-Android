@@ -32,8 +32,16 @@ public final class ApiWorker {
                                  final WebRequestCallback<GetTokenResponseObject> _callback) {
         TestRestClient.getApiService().getToken(new Callback<GetTokenResponseObject>() {
             @Override
-            public void success(GetTokenResponseObject getTokenResponseObject, Response response) {
-                _callback.onSuccess(getTokenResponseObject);
+            public void success(GetTokenResponseObject getTokenResponseObject, Response _response) {
+                if (_response != null) {
+                    if(getTokenResponseObject.mErrorNumber == 0) {
+                        _callback.onSuccess(getTokenResponseObject);
+                    } else
+                        _callback.onFailure(new ErrorResponseObject.Builder()
+                                .setApiType(_requestObject.apiType)
+                                .setError(getTokenResponseObject.mErrorDescription)
+                                .build());
+                }
             }
 
             @Override
