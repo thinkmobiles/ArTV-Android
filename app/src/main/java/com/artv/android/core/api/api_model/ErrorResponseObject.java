@@ -10,4 +10,25 @@ public final class ErrorResponseObject {
     public ApiType apiType;
     public String error;
 
+    private ErrorResponseObject() {
+        apiType = ApiType.ERROR;
+    }
+    public static final class Builder {
+
+        private ErrorResponseObject mErrorResponseObject;
+
+        public Builder() {
+            mErrorResponseObject = new ErrorResponseObject();
+        }
+
+        public final Builder setError(final String _error) {
+            mErrorResponseObject.error = _error;
+            return this;
+        }
+
+        public final ErrorResponseObject build() {
+            return mErrorResponseObject;
+        }
+    }
+
 }

@@ -11,7 +11,7 @@ public class GetGlobalConfigRequestObject extends BaseRequestObject {
 
     private String mToken;
 
-    public GetGlobalConfigRequestObject() {
+    private GetGlobalConfigRequestObject() {
         apiType = ApiType.GET_GLOBAL_GONFIG;
     }
 

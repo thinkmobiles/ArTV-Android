@@ -12,7 +12,7 @@ public class GetDeviceConfigRequestObject extends BaseRequestObject {
     protected String mToken;
     protected String mTagID;
 
-    public GetDeviceConfigRequestObject() {
+    protected GetDeviceConfigRequestObject() {
         apiType = ApiType.GET_DEVICE_CONFIG;
     }
 

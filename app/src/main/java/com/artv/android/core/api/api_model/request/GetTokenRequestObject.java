@@ -12,7 +12,7 @@ public final class GetTokenRequestObject extends BaseRequestObject {
     private String mPassword;
     private String mTagID;
 
-    public GetTokenRequestObject() {
+    private GetTokenRequestObject() {
         apiType = ApiType.GET_TOKEN;
 
     }

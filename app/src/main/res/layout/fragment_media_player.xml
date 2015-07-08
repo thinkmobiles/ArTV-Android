@@ -22,7 +22,13 @@
                 android:layout_height="match_parent"
                 android:id="@+id/flVideoContainer_FMP"
                 android:layout_weight="1"
-                android:background="#ffff6d53"></FrameLayout>
+                android:background="#ffff6d53">
+                <VideoView
+                    android:id="@+id/video_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
 
             <LinearLayout
                 android:orientation="vertical"

@@ -1,6 +1,7 @@
 package com.artv.android.core.api.rest_client;
 
 import com.artv.android.core.api.ApiConst;
+import com.artv.android.core.api.api_model.request.GetDeviceConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetGlobalConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
