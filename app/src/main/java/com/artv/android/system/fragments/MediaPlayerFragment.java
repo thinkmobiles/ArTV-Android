@@ -42,18 +42,10 @@ public class MediaPlayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_media_player, null);
 
-        mVideoContainer = (FrameLayout) view.findViewById(R.id.flVideoContainer_FMP);
-        mBottomContainer = (LinearLayout) view.findViewById(R.id.llBottomContainer_FMP);
-        mRightContainer = (LinearLayout) view.findViewById(R.id.llRightContainer_FMP);
-
-        mRightText = (TextView) view.findViewById(R.id.tvRightText_FMP);
-        mBottomText = (TextView) view.findViewById(R.id.tvBottomText_FMP);
+        findViews(view);
 
 
-        mVideoWindow = (VideoView) view.findViewById(R.id.vvPlayerWindow_FMP);
         mSurfaceHolder = mVideoWindow.getHolder();
-
-
         CustomMediaController mediaController = new CustomMediaController(getActivity());
         mediaController.setAnchorView(mVideoWindow);
         mVideoWindow.setMediaController(mediaController);
@@ -81,6 +73,14 @@ public class MediaPlayerFragment extends Fragment {
     }
 
 
+    private void findViews(View _view) {
+        mVideoContainer = (FrameLayout) _view.findViewById(R.id.flVideoContainer_FMP);
+        mBottomContainer = (LinearLayout) _view.findViewById(R.id.llBottomContainer_FMP);
+        mRightContainer = (LinearLayout) _view.findViewById(R.id.llRightContainer_FMP);
+        mRightText = (TextView) _view.findViewById(R.id.tvRightText_FMP);
+        mBottomText = (TextView) _view.findViewById(R.id.tvBottomText_FMP);
+        mVideoWindow = (VideoView) _view.findViewById(R.id.vvPlayerWindow_FMP);
+    }
 
     @Override
     public void onDestroy() {
@@ -101,33 +101,33 @@ public class MediaPlayerFragment extends Fragment {
         Picasso.with(getActivity()).load(_msgBoardCampaign.mBottomBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                mBottomContainer.setBackground(new BitmapDrawable(getResources(),bitmap));
+                mBottomContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
             }
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                mBottomContainer.setBackground(null);
+                mBottomContainer.setBackgroundDrawable(null);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                mBottomContainer.setBackground(null);
+                mBottomContainer.setBackgroundDrawable(null);
             }
         });
         Picasso.with(getActivity()).load(_msgBoardCampaign.mRightBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                mRightContainer.setBackground(new BitmapDrawable(getResources(),bitmap));
+                mRightContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
             }
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                mRightContainer.setBackground(null);
+                mRightContainer.setBackgroundDrawable(null);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                mRightContainer.setBackground(null);
+                mRightContainer.setBackgroundDrawable(null);
             }
         });
 
