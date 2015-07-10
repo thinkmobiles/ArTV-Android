@@ -21,8 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/flVideoContainer_FMP"
-                android:background="#ffff6d53"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="#000">
 
                 <com.artv.android.system.custom_views.VideoViewCustom
                     android:id="@+id/vvPlayerWindow_FMP"
