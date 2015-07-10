@@ -13,30 +13,30 @@ import java.util.List;
 public final class MsgBoardCampaign {
 
     @Element(name = "MsgBoardID")
-    private long mMsgBoardID;
+    public long mMsgBoardID;
 
     @Element(name = "CRCVersion")
-    private int mCRCVersion;
+    public int mCRCVersion;
 
     @Element(name = "StartDate")
-    private String mStartDate;
+    public String mStartDate;
 
     @Element(name = "EndDate")
-    private String mEndDate;
+    public String mEndDate;
 
     @Element(name = "PlayDay")
-    private String mPlayDay;
+    public String mPlayDay;
 
     @Element(name = "TextColor")
-    private String mTextColor;
+    public String mTextColor;
 
     @Element(name = "RightBkgURL")
-    private String mRightBkgURL;
+    public String mRightBkgURL;
 
     @Element(name = "BottomBkgURL")
-    private String mBottomBkgURL;
+    public String mBottomBkgURL;
 
     @ElementList(name = "Messages")
-    private List<Message> mMessages;
+    public List<Message> mMessages;
 
 }
