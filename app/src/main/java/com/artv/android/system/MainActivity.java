@@ -1,20 +1,18 @@
 package com.artv.android.system;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.artv.android.R;
 import com.artv.android.core.api.Temp;
-import com.artv.android.system.fragments.MediaPlayerFragment;
+import com.artv.android.core.state.IArTvStateChangeListener;
+import com.artv.android.system.fragments.ConfigInfoFragment;
+import com.artv.android.system.fragments.SplashScreenFragment;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity implements IArTvStateChangeListener {
     private FrameLayout mFragmentContainer;
 
     @Override
@@ -22,10 +20,25 @@ public class MainActivity extends Activity {
         super.onCreate(_savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_MA);
+        getMyApplication().createApplicationLogic();
 
-        getFragmentManager().beginTransaction().
-                add(R.id.flFragmentContainer_MA,new MediaPlayerFragment()).commit();
+        mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
+
+        if (_savedInstanceState == null) handleAppState();
+    }
+
+    @Override
+    protected final void onStart() {
+        super.onStart();
+
+        getMyApplication().getApplicationLogic().getStateWorker().addStateChangeListener(this);
+    }
+
+    @Override
+    protected final void onStop() {
+        super.onStop();
+
+        getMyApplication().getApplicationLogic().getStateWorker().removeStateChangeListener(this);
     }
 
     private void getDeviceId() {
@@ -40,4 +53,20 @@ public class MainActivity extends Activity {
         temp.example();
     }
 
+    @Override
+    public final void onArTvStateChanged() {
+        handleAppState();
+    }
+
+    private final void handleAppState() {
+        switch (getMyApplication().getApplicationLogic().getStateWorker().getArTvState()) {
+            case STATE_APP_START:
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
+                break;
+
+            case STATE_APP_START_WITH_CONFIG_INFO:
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
+                break;
+        }
+    }
 }

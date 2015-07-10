@@ -2,13 +2,17 @@ package com.artv.android.core.api;
 
 import android.content.Context;
 
+import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.request.GetDeviceConfigRequestObject;
+import com.artv.android.core.api.api_model.request.GetGlobalConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
+import com.artv.android.core.api.rest_client.TestRestClient;
+import com.artv.android.core.model.DeviceConfig;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -27,27 +31,99 @@ public final class ApiWorker {
 
     public final void doGetToken(final GetTokenRequestObject _requestObject,
                                  final WebRequestCallback<GetTokenResponseObject> _callback) {
-        //todo: implement
-//        TestRestClient.getApiService().getToken(mytestCallback);
+        TestRestClient.getApiService().getToken(_requestObject.getQuery(), new Callback<GetTokenResponseObject>() {
+            @Override
+            public void success(GetTokenResponseObject getTokenResponseObject, Response _response) {
+                if (_response != null) {
+                    if(getTokenResponseObject.mErrorNumber == 0) {
+                        _callback.onSuccess(getTokenResponseObject);
+                    } else
+                        _callback.onFailure(new ErrorResponseObject.Builder()
+                                .setApiType(_requestObject.apiType)
+                                .setError(getTokenResponseObject.mErrorDescription)
+                                .build());
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError _error) {
+                final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                        .setApiType(_requestObject.apiType)
+                        .setError(_error.getMessage())
+                        .build();
+                _callback.onFailure(error);
+            }
+        });
     }
 
-    public final void doGetGlobalConfig(final String _tokent,
+    public final void doGetGlobalConfig(final GetGlobalConfigRequestObject _requestObject,
                                  final WebRequestCallback<GetGlobalConfigResponseObject> _callback) {
-        //todo: implement
-//        TestRestClient.getApiService().getGlobalConfig(callback2);
+        TestRestClient.getApiService().getGlobalConfig(_requestObject.getQuery(), new Callback<GetGlobalConfigResponseObject>() {
+
+            @Override
+            public void success(GetGlobalConfigResponseObject _getGlobalConfigResponseObject, Response _response) {
+                if (_response != null) {
+                    _callback.onSuccess(_getGlobalConfigResponseObject);
+                }
+            }
+            @Override
+            public void failure(RetrofitError _error) {
+                if (_error != null) {
+                    final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                            .setApiType(_requestObject.apiType)
+                            .setError(_error.getMessage())
+                            .build();
+                    _callback.onFailure(error);
+                }
+            }
+        });
     }
 
     public final void doGetDeviceConfig(final GetDeviceConfigRequestObject _requestObject,
                                         final WebRequestCallback<GetDeviceConfigResponseObject> _callback) {
-        //todo: implement
-//        TestRestClient.getApiService().getDeviceConfig(callback3);
+        TestRestClient.getApiService().getDeviceConfig(_requestObject.getQuery(), new Callback<DeviceConfig>() {
+
+            @Override
+            public void success(DeviceConfig _deviceConfig, Response _response) {
+                if (_response != null) {
+                    final GetDeviceConfigResponseObject response = new GetDeviceConfigResponseObject();
+                    response.setDeviceConfig(_deviceConfig);
+                    _callback.onSuccess(response);
+                }
+            }
+            @Override
+            public void failure(RetrofitError _error) {
+                if (_error != null) {
+                    final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                            .setApiType(_requestObject.apiType)
+                            .setError(_error.getMessage())
+                            .build();
+                    _callback.onFailure(error);
+                }
+            }
+        });
     }
 
     public final void doGetCampaign(final GetCampaignRequestObject _requestObject,
                                         final WebRequestCallback<GetCampaignResponseObject> _callback) {
-        //todo: implement
+        TestRestClient.getApiService().getCampaign(new Callback<GetCampaignResponseObject>() {
 
-//        TestRestClient.getApiService().getCampaign(mytestCallback1);
+            @Override
+            public void success(GetCampaignResponseObject _getCampaignResponseObject, Response _response) {
+                if (_response != null) {
+                    _callback.onSuccess(_getCampaignResponseObject);
+                }
+            }
+            @Override
+            public void failure(RetrofitError _error) {
+                if (_error != null) {
+                    final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                            .setApiType(_requestObject.apiType)
+                            .setError(_error.getMessage())
+                            .build();
+                    _callback.onFailure(error);
+                }
+            }
+        });
     }
-
 }

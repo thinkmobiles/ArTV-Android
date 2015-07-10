@@ -23,9 +23,9 @@ public final class ModelTest {
 
     @Test
     public final void CreateModels_ApiTypeSetRight() {
-        final GetTokenRequestObject getTokenRequest                 = new GetTokenRequestObject();
-        final GetDeviceConfigRequestObject getDeviceConfigRequest   = new GetDeviceConfigRequestObject();
-        final GetCampaignRequestObject getCampaignRequest           = new GetCampaignRequestObject();
+        final GetTokenRequestObject getTokenRequest                 = new GetTokenRequestObject.Builder().build();
+        final GetDeviceConfigRequestObject getDeviceConfigRequest   = new GetDeviceConfigRequestObject.Builder().build();
+        final GetCampaignRequestObject getCampaignRequest           = new GetCampaignRequestObject.Builder().build();
         final GetTokenResponseObject getTokenResponse               = new GetTokenResponseObject();
         final GetDeviceConfigResponseObject getDeviceConfigResponse = new GetDeviceConfigResponseObject();
         final GetCampaignResponseObject getCampaignResponse         = new GetCampaignResponseObject();

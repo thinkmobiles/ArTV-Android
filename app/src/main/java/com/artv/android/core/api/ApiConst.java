@@ -22,4 +22,11 @@ public abstract class ApiConst {
     public static final String PATH_GET_DEVICE_CONFIG       = "/api/GetDeviceConfig.xml";
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public static final String KEY_USERNAME = "Username";
+    public static final String KEY_PASSWORD = "Password";
+    public static final String KEY_TAG_ID = "TagID";
+    public static final String KEY_TOKEN = "Token";
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 }

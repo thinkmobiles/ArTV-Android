@@ -4,7 +4,6 @@ import com.artv.android.core.api.ApiType;
 import com.artv.android.core.api.api_model.BaseResponseObject;
 import com.artv.android.core.model.Entry;
 
-import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -19,7 +18,7 @@ import java.util.List;
 public final class GetGlobalConfigResponseObject extends BaseResponseObject {
 
     @ElementList (entry = "Entry", inline = true)
-    private List<Entry> list;
+    public List<Entry> list;
 
     public GetGlobalConfigResponseObject() {
         apiType = ApiType.GET_GLOBAL_GONFIG;

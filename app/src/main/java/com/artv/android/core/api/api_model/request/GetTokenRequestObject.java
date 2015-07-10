@@ -1,18 +1,23 @@
 package com.artv.android.core.api.api_model.request;
 
+import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.api.ApiType;
 import com.artv.android.core.api.api_model.BaseRequestObject;
+import com.artv.android.core.api.api_model.IQueryCreator;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ZOG on 6/30/2015.
  */
-public final class GetTokenRequestObject extends BaseRequestObject {
+public final class GetTokenRequestObject extends BaseRequestObject implements IQueryCreator {
 
     private String mUserName;
     private String mPassword;
     private String mTagID;
 
-    public GetTokenRequestObject() {
+    private GetTokenRequestObject() {
         apiType = ApiType.GET_TOKEN;
 
     }
@@ -27,6 +32,15 @@ public final class GetTokenRequestObject extends BaseRequestObject {
 
     public String getTagID() {
         return mTagID;
+    }
+
+    @Override
+    public final Map<String, String> getQuery() {
+        final Map<String, String> query = new HashMap<>(3);
+        query.put(ApiConst.KEY_USERNAME, mUserName);
+        query.put(ApiConst.KEY_PASSWORD, mPassword);
+        query.put(ApiConst.KEY_TAG_ID, mTagID);
+        return query;
     }
 
     public static final class Builder {

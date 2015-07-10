@@ -1,6 +1,9 @@
 package com.artv.android.core;
 
 import com.artv.android.core.api.AllApiTests;
+import com.artv.android.core.config_info.AllConfigInfoTests;
+import com.artv.android.core.init.AllInitTests;
+import com.artv.android.core.state.AllStateTests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -11,8 +14,10 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         AllApiTests.class,
-        ApplicationLogicTest.class,
-        GetTokenRequestObjectTest.class
+        AllConfigInfoTests.class,
+        AllInitTests.class,
+        AllStateTests.class,
+        ApplicationLogicTest.class
 })
 public final class AllCoreTests {
 }

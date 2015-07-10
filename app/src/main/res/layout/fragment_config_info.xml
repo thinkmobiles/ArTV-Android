@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rlDevice_FCI"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/device_id"
+                android:id="@+id/tvDeviceId_FCI"
+                android:layout_toLeftOf="@+id/etDeviceId_FCI"
+                android:layout_marginRight="10dp" />
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etDeviceId_FCI"
+                android:layout_alignParentRight="true"
+                android:text="1"
+                android:layout_marginRight="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/master_device_ip"
+                android:id="@+id/tvMasterDeviceIp_FCI"
+                android:layout_below="@+id/etDeviceId_FCI"
+                android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
+                android:layout_marginRight="10dp" />
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etMasterDeviceIp_FCI"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/tvMasterDeviceIp_FCI"
+                android:layout_marginRight="5dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rlUser_FCI"
+            android:layout_toRightOf="@+id/rlDevice_FCI"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/user"
+                android:id="@+id/tvUserName_FCI"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp" />
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etUserName_FCI"
+                android:text="testdev"
+                android:layout_toRightOf="@+id/tvUserName_FCI" />
+
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/password"
+                android:id="@+id/tvPassword_FCI"
+                android:layout_below="@+id/etUserName_FCI"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp" />
+
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etPassword_FCI"
+                android:layout_alignTop="@+id/tvPassword_FCI"
+                android:text="testdev123"
+                android:layout_toRightOf="@+id/tvPassword_FCI" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/btnSave_FCI"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

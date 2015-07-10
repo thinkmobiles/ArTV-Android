@@ -1,17 +1,21 @@
 package com.artv.android.core.api.rest_client;
 
 import com.artv.android.core.api.ApiConst;
-import com.artv.android.core.api.api_model.request.GetGlobalConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
+import com.artv.android.core.model.DeviceConfig;
+
+import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Headers;
+import retrofit.http.Query;
+import retrofit.http.QueryMap;
 
 
 /**
@@ -26,23 +30,23 @@ public interface MainTVApi {
             "Content-Type: application/xml"})
     @GET(ApiConst.PATH_GET_TOKEN)
     void getToken(
-//            @Body GetTokenRequestObject _request,
+            @QueryMap() Map<String, String> _query,
             Callback<GetTokenResponseObject> _callback);
 
     @GET(ApiConst.PATH_GET_CAMPAIGN)
     void getCampaign(
-//            @Body GetTokenRequestObject _request,
+//            @QueryMap() Map<String, String> _query,
             Callback<GetCampaignResponseObject> _callback);
 
     @GET(ApiConst.PATH_GET_GLOBAL_CONFIG)
     void getGlobalConfig(
-//            @Body GetGlobalConfigRequestObject _request,
+            @QueryMap() Map<String, String> _query,
             Callback<GetGlobalConfigResponseObject> _callback);
 
     @GET(ApiConst.PATH_GET_DEVICE_CONFIG)
     void getDeviceConfig(
-//            @Body GetDeviceConfigRequestObject _requestObject,
-            Callback<GetDeviceConfigResponseObject> _callback);
+            @QueryMap() Map<String, String> _query,
+            Callback<DeviceConfig> _callback);
 
 }
 

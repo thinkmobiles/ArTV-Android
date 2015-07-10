@@ -4,11 +4,7 @@ import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.request.GetDeviceConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
-import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
-import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
-import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
-import com.artv.android.system.MyApplication;
 
 /**
  * Created by ZOG on 6/30/2015.
@@ -38,7 +34,7 @@ public class Temp {
 //        MyApplication.getApplicationLogic().getApiWorker().doGetToken(requestObject, callback);
 //        MyApplication.getApplicationLogic().getApiWorker().doGetCampaign(campaignRequestObject, callback1);
 //        MyApplication.getApplicationLogic().getApiWorker().doGetGlobalConfig("ASDFASWQER@!#$!@#$WEQWER", callback2);
-        MyApplication.getApplicationLogic().getApiWorker().doGetDeviceConfig(deviceConfigRequestObject, callback2);
+//        MyApplication.getApplicationLogic().getApiWorker().doGetDeviceConfig(deviceConfigRequestObject, callback2);
     }
 
 

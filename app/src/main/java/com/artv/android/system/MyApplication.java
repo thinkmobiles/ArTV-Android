@@ -11,17 +11,22 @@ import com.artv.android.core.ApplicationLogic;
  */
 public final class MyApplication extends Application {
 
-    private static ApplicationLogic mApplicationLogic;
+    private ApplicationLogic mApplicationLogic;
 
     @Override
     public final void onCreate() {
         super.onCreate();
 //        Fabric.with(this, new Crashlytics());
+    }
 
+    /**
+     * Calls by starting activity.
+     */
+    public final void createApplicationLogic() {
         mApplicationLogic = new ApplicationLogic(getApplicationContext());
     }
 
-    public static final ApplicationLogic getApplicationLogic() {
+    public final ApplicationLogic getApplicationLogic() {
         return mApplicationLogic;
     }
 
