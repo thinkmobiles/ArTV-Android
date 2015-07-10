@@ -38,6 +38,7 @@ public final class ApplicationLogic {
         mApiWorker = new ApiWorker(mContext);
 
         mInitWorker = new InitWorker();
+        mInitWorker.setStateWorker(mStateWorker);
 
         mDisplaySwitcher = new DisplaySwitcher();
 

@@ -19,6 +19,8 @@ import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Beacon;
 import com.artv.android.core.model.MsgBoardCampaign;
+import com.artv.android.core.state.ArTvState;
+import com.artv.android.core.state.StateWorker;
 
 import java.util.ArrayList;
 
@@ -30,11 +32,12 @@ import java.util.ArrayList;
  */
 public final class InitWorker {
 
-    private static final boolean IGNORE_IF_FAIL = true;
+    private static final boolean IGNORE_IF_FAIL = false;
 
     private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
+    private StateWorker mStateWorker;
 
     private InitData mInitData;
     private InitCallback mCallback;
@@ -53,6 +56,10 @@ public final class InitWorker {
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
+    }
+
+    public final void setStateWorker(final StateWorker _stateWorker) {
+        mStateWorker = _stateWorker;
     }
 
     public final void startInitializing(final InitCallback _callback) {
@@ -167,7 +174,7 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (IGNORE_IF_FAIL) getCampaign();
+                if (true) getCampaign();
             }
         });
     }
@@ -184,6 +191,7 @@ public final class InitWorker {
             public final void onSuccess(final GetCampaignResponseObject _respObj) {
                 mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
             }
 
             @Override

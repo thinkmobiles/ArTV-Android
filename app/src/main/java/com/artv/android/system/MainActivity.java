@@ -10,6 +10,7 @@ import com.artv.android.R;
 import com.artv.android.core.api.Temp;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.system.fragments.ConfigInfoFragment;
+import com.artv.android.system.fragments.MediaPlayerFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;
 
 public class MainActivity extends BaseActivity implements IArTvStateChangeListener {
@@ -66,6 +67,10 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
             case STATE_APP_START_WITH_CONFIG_INFO:
                 getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
+                break;
+
+            case STATE_PLAY_MODE:
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
                 break;
         }
     }
