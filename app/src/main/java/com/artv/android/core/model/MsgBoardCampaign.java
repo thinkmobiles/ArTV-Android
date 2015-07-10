@@ -12,31 +12,31 @@ import java.util.List;
 @Root(name = "MsgBoardCampaign")
 public final class MsgBoardCampaign {
 
-    @Element(name = "MsgBoardID")
+    @Element(name = "MsgBoardID", required = false)
     private long mMsgBoardID;
 
-    @Element(name = "CRCVersion")
+    @Element(name = "CRCVersion", required = false)
     private int mCRCVersion;
 
-    @Element(name = "StartDate")
+    @Element(name = "StartDate", required = false)
     private String mStartDate;
 
-    @Element(name = "EndDate")
+    @Element(name = "EndDate", required = false)
     private String mEndDate;
 
-    @Element(name = "PlayDay")
+    @Element(name = "PlayDay", required = false)
     private String mPlayDay;
 
-    @Element(name = "TextColor")
+    @Element(name = "TextColor", required = false)
     private String mTextColor;
 
-    @Element(name = "RightBkgURL")
+    @Element(name = "RightBkgURL", required = false)
     private String mRightBkgURL;
 
-    @Element(name = "BottomBkgURL")
+    @Element(name = "BottomBkgURL", required = false)
     private String mBottomBkgURL;
 
-    @ElementList(name = "Messages")
+    @ElementList(name = "Messages", required = false)
     private List<Message> mMessages;
 
 }

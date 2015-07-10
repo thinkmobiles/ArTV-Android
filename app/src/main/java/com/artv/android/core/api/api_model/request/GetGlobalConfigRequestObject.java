@@ -12,12 +12,12 @@ import java.util.Map;
  * Created by
  * Rogach on 06.07.2015.
  */
-public class GetGlobalConfigRequestObject extends BaseRequestObject implements IQueryCreator {
+public final class GetGlobalConfigRequestObject extends BaseRequestObject implements IQueryCreator {
 
     private String mToken;
 
     private GetGlobalConfigRequestObject() {
-        apiType = ApiType.GET_GLOBAL_GONFIG;
+        apiType = ApiType.GET_GLOBAL_CONFIG;
     }
 
     public String getToken() {

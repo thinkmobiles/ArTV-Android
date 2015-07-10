@@ -3,10 +3,12 @@ package com.artv.android.core.api;
 import android.content.Context;
 
 import com.artv.android.core.api.api_model.ErrorResponseObject;
+import com.artv.android.core.api.api_model.request.BeaconRequestObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.request.GetDeviceConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetGlobalConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
+import com.artv.android.core.api.api_model.response.BeaconResponseObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
@@ -66,6 +68,7 @@ public final class ApiWorker {
                     _callback.onSuccess(_getGlobalConfigResponseObject);
                 }
             }
+
             @Override
             public void failure(RetrofitError _error) {
                 if (_error != null) {
@@ -91,6 +94,7 @@ public final class ApiWorker {
                     _callback.onSuccess(response);
                 }
             }
+
             @Override
             public void failure(RetrofitError _error) {
                 if (_error != null) {
@@ -103,6 +107,32 @@ public final class ApiWorker {
             }
         });
     }
+
+    public final void doBeacon(final BeaconRequestObject _requestObject,
+                               final WebRequestCallback<BeaconResponseObject> _callback) {
+        TestRestClient.getApiService().beacon(_requestObject.getQuery(), _requestObject.beacon,
+                new Callback<BeaconResponseObject>() {
+                    @Override
+                    public final void success(final BeaconResponseObject _beaconResponseObject, final Response _response) {
+                        if (_response != null) {
+                            _callback.onSuccess(_beaconResponseObject);
+                        }
+                    }
+
+                    @Override
+                    public final void failure(final RetrofitError _error) {
+                        if (_error != null) {
+                            final ErrorResponseObject error = new ErrorResponseObject.Builder()
+                                    .setApiType(_requestObject.apiType)
+                                    .setError(_error.getMessage())
+                                    .build();
+                            _callback.onFailure(error);
+                        }
+                    }
+                });
+
+    }
+
 
     public final void doGetCampaign(final GetCampaignRequestObject _requestObject,
                                         final WebRequestCallback<GetCampaignResponseObject> _callback) {

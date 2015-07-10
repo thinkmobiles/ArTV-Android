@@ -10,15 +10,15 @@ import org.simpleframework.xml.Root;
 @Root(name = "Asset")
 public final class Asset {
 
-    @Element(name = "Name")
+    @Element(name = "Name", required = false)
     private String mName;
 
-    @Element(name = "URL")
+    @Element(name = "URL", required = false)
     private String mURL;
 
-    @Element(name = "Duration")
+    @Element(name = "Duration", required = false)
     private int mDuration;
 
-    @Element(name = "Sequence")
+    @Element(name = "Sequence", required = false)
     private int mSequence;
 }
