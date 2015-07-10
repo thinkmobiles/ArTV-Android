@@ -19,10 +19,10 @@ import java.util.List;
 @Root(name = "CampaignInfoXML")
 public final class GetCampaignResponseObject extends BaseResponseObject {
 
-    @ElementList(name = "Campaigns")
+    @ElementList(name = "Campaigns", required = false)
     private List<Campaign> mCampaigns;
 
-    @Element(name = "MsgBoardCampaign")
+    @Element(name = "MsgBoardCampaign", required = false)
     private MsgBoardCampaign mMsgBoardCampaign;
 
     public GetCampaignResponseObject() {

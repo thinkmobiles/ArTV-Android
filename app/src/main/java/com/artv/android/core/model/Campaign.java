@@ -13,28 +13,28 @@ import java.util.List;
 @Root(name = "Campaign")
 public final class Campaign {
 
-    @Element(name = "CampaignID")
+    @Element(name = "CampaignID", required = false)
     private long mCampaignID;
 
-    @Element(name = "CRCVersion")
-    private int mCRCVersion;
+    @Element(name = "CRCVersion", required = false)
+    private String mCRCVersion;
 
-    @Element(name = "StartDate")
+    @Element(name = "StartDate", required = false)
     private String mStartDate;
 
-    @Element(name = "EndDate")
+    @Element(name = "EndDate", required = false)
     private String mEndDate;
 
-    @Element(name = "Sequence")
+    @Element(name = "Sequence", required = false)
     private int mSequence;
 
-    @Element(name = "PlayDay")
+    @Element(name = "PlayDay", required = false)
     private String mPlayDay;
 
-    @Element(name = "OverrideTime")
+    @Element(name = "OverrideTime", required = false)
     private String mOverrideTime;
 
-    @ElementList(name = "Assets")
+    @ElementList(name = "Assets", required = false)
     private List<Asset> mAssets;
 
 }

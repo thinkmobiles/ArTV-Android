@@ -28,6 +28,7 @@ public abstract class ApiConst {
     public static final String KEY_PASSWORD                 = "Password";
     public static final String KEY_TAG_ID                   = "TagID";
     public static final String KEY_TOKEN                    = "Token";
+    public static final String KEY_CAMPAIGN_ID              = "CampaignID";
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 }

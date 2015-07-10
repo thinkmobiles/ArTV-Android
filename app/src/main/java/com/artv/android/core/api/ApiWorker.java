@@ -136,7 +136,7 @@ public final class ApiWorker {
 
     public final void doGetCampaign(final GetCampaignRequestObject _requestObject,
                                         final WebRequestCallback<GetCampaignResponseObject> _callback) {
-        TestRestClient.getApiService().getCampaign(new Callback<GetCampaignResponseObject>() {
+        TestRestClient.getApiService().getCampaign(_requestObject.getQuery(), new Callback<GetCampaignResponseObject>() {
 
             @Override
             public void success(GetCampaignResponseObject _getCampaignResponseObject, Response _response) {

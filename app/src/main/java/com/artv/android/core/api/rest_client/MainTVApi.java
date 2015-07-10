@@ -54,7 +54,7 @@ public interface MainTVApi {
 
     @GET(ApiConst.PATH_GET_CAMPAIGN)
     void getCampaign(
-//            @QueryMap() Map<String, String> _query,
+            @QueryMap() Map<String, String> _query,
             Callback<GetCampaignResponseObject> _callback);
 
 }
