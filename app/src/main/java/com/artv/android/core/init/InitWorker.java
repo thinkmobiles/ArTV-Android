@@ -221,7 +221,7 @@ public final class InitWorker {
     private final InitResult buildInitResult(final boolean _success, final String _message) {
         return new InitResult.Builder()
                 .setSuccess(_success)
-                .setMessage(_message + (_success ? "" : "\tfuuuuuuuuuu"))
+                .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
                 .build();
     }
 

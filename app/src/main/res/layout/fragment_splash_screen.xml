@@ -39,4 +39,11 @@
         android:scrollbars="vertical"
         android:text="Log:"
         android:gravity="bottom"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Video"
+        android:id="@+id/btnShowVideo_FSS"
+        android:layout_toLeftOf="@+id/btnClearConfigInfo_FSS" />
 </RelativeLayout>
