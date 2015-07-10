@@ -12,6 +12,7 @@ import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.api.rest_client.TestRestClient;
+import com.artv.android.core.model.DeviceConfig;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -30,7 +31,7 @@ public final class ApiWorker {
 
     public final void doGetToken(final GetTokenRequestObject _requestObject,
                                  final WebRequestCallback<GetTokenResponseObject> _callback) {
-        TestRestClient.getApiService().getToken(new Callback<GetTokenResponseObject>() {
+        TestRestClient.getApiService().getToken(_requestObject.getQuery(), new Callback<GetTokenResponseObject>() {
             @Override
             public void success(GetTokenResponseObject getTokenResponseObject, Response _response) {
                 if (_response != null) {
@@ -57,7 +58,7 @@ public final class ApiWorker {
 
     public final void doGetGlobalConfig(final GetGlobalConfigRequestObject _requestObject,
                                  final WebRequestCallback<GetGlobalConfigResponseObject> _callback) {
-        TestRestClient.getApiService().getGlobalConfig(new Callback<GetGlobalConfigResponseObject>() {
+        TestRestClient.getApiService().getGlobalConfig(_requestObject.getQuery(), new Callback<GetGlobalConfigResponseObject>() {
 
             @Override
             public void success(GetGlobalConfigResponseObject _getGlobalConfigResponseObject, Response _response) {
@@ -80,12 +81,14 @@ public final class ApiWorker {
 
     public final void doGetDeviceConfig(final GetDeviceConfigRequestObject _requestObject,
                                         final WebRequestCallback<GetDeviceConfigResponseObject> _callback) {
-        TestRestClient.getApiService().getDeviceConfig(new Callback<GetDeviceConfigResponseObject>() {
+        TestRestClient.getApiService().getDeviceConfig(_requestObject.getQuery(), new Callback<DeviceConfig>() {
 
             @Override
-            public void success(GetDeviceConfigResponseObject _getDeviceConfigResponseObject, Response _response) {
+            public void success(DeviceConfig _deviceConfig, Response _response) {
                 if (_response != null) {
-                    _callback.onSuccess(_getDeviceConfigResponseObject);
+                    final GetDeviceConfigResponseObject response = new GetDeviceConfigResponseObject();
+                    response.setDeviceConfig(_deviceConfig);
+                    _callback.onSuccess(response);
                 }
             }
             @Override

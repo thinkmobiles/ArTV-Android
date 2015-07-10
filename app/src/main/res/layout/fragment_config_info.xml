@@ -4,106 +4,94 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rlDevice_FCI"
+            android:layout_weight="1">
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/device_id"
+                android:id="@+id/tvDeviceId_FCI"
+                android:layout_toLeftOf="@+id/etDeviceId_FCI"
+                android:layout_marginRight="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/device_id"
-                    android:id="@+id/textView" />
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etDeviceId_FCI"
+                android:layout_alignParentRight="true"
+                android:text="1"
+                android:layout_marginRight="5dp" />
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/etDeviceId_FCI" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:text="@string/master_device_ip"
+                android:id="@+id/tvMasterDeviceIp_FCI"
+                android:layout_below="@+id/etDeviceId_FCI"
+                android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
+                android:layout_marginRight="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/master_device_ip"
-                    android:id="@+id/textView2" />
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etMasterDeviceIp_FCI"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/tvMasterDeviceIp_FCI"
+                android:layout_marginRight="5dp" />
+        </RelativeLayout>
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:ems="10"
-                    android:id="@+id/etMasterDeviceIp_FCI" />
-            </LinearLayout>
-        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rlUser_FCI"
+            android:layout_toRightOf="@+id/rlDevice_FCI"
+            android:layout_weight="1">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/user"
+                android:id="@+id/tvUserName_FCI"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etUserName_FCI"
+                android:text="testdev"
+                android:layout_toRightOf="@+id/tvUserName_FCI" />
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/password"
+                android:id="@+id/tvPassword_FCI"
+                android:layout_below="@+id/etUserName_FCI"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="5dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/user"
-                        android:id="@+id/textView3" />
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/etPassword_FCI"
+                android:layout_alignTop="@+id/tvPassword_FCI"
+                android:text="testdev123"
+                android:layout_toRightOf="@+id/tvPassword_FCI" />
 
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:text="Name"
-                        android:ems="10"
-                        android:id="@+id/etUserName_FCI" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/password"
-                        android:id="@+id/textView4" />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/etPassword_FCI" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 
     <Button
@@ -113,4 +101,5 @@
         android:id="@+id/btnSave_FCI"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

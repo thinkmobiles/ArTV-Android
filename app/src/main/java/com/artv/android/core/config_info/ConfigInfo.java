@@ -33,7 +33,7 @@ public final class ConfigInfo {
 
     public final boolean hasConfigInfo() {
         return mDeviceId != null && !mDeviceId.isEmpty()
-                && mMasterDeviceIp != null && !mMasterDeviceIp.isEmpty()
+//                && mMasterDeviceIp != null && !mMasterDeviceIp.isEmpty()
                 && mUser != null && !mUser.isEmpty()
                 && mPassword != null && !mPassword.isEmpty();
     }

@@ -89,7 +89,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
                 mInitData.setToken(_respObj.mToken);
-                mCallback.onProgress(buildInitResult(true, "GetToken : success"));
+                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 getGlobalConfig();
             }
 
@@ -110,7 +110,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetGlobalConfigResponseObject _respObj) {
                 mInitData.setGlobalConfig(new ArrayList<>(_respObj.list));
-                mCallback.onProgress(buildInitResult(true, "GetGlobalConfig : success"));
+                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 getDeviceConfig();
             }
 
@@ -132,7 +132,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetDeviceConfigResponseObject _respObj) {
                 mInitData.setDeviceConfig(_respObj.getDeviceConfig());
-                mCallback.onProgress(buildInitResult(true, "GetDeviceConfig : success"));
+                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
             }
 
