@@ -19,7 +19,7 @@ import com.artv.android.core.state.IArTvStateChangeListener;
  */
 public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener {
 
-    private ProgressBar mLoadingProgressBar;
+    private ProgressBar pbLoading;
     private Button btnClearConfigInfo;
     private Button btnShowVideo;
     private TextView tvLog;
@@ -28,7 +28,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
         final View view = _inflater.inflate(R.layout.fragment_splash_screen, null);
 
-        mLoadingProgressBar = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
+        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
         btnClearConfigInfo = (Button) view.findViewById(R.id.btnClearConfigInfo_FSS);
         btnShowVideo = (Button) view.findViewById(R.id.btnShowVideo_FSS);
         tvLog = (TextView) view.findViewById(R.id.tvLog_FSS);
@@ -68,11 +68,13 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
                         tvLog.append("\n" + _result.getMessage());
+                        pbLoading.setProgress(100);
                     }
 
                     @Override
                     public final void onProgress(final InitResult _result) {
                         tvLog.append("\n" + _result.getMessage());
+                        pbLoading.incrementProgressBy(17);
                     }
 
                     @Override
