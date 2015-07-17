@@ -12,6 +12,13 @@ import android.widget.TextView;
 import com.artv.android.R;
 import com.artv.android.core.init.InitCallback;
 import com.artv.android.core.init.InitResult;
+import com.artv.android.core.model.Asset;
+import com.artv.android.core.model.Campaign;
+import com.artv.android.database.DBManager;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -37,6 +44,7 @@ public final class SplashScreenFragment extends BaseFragment {
                 getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onNeedRemoveConfigInfo();
             }
         });
+
 
         return view;
     }
