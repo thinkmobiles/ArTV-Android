@@ -12,8 +12,8 @@ public class DBCampaign {
 
     private Long id;
     private Integer crcVersion;
-    private String startDate;
-    private String endDate;
+    private Long startDate;
+    private Long endDate;
     private Integer sequence;
     private String playDay;
     private String overrideTime;
@@ -33,7 +33,7 @@ public class DBCampaign {
         this.id = id;
     }
 
-    public DBCampaign(Long id, Integer crcVersion, String startDate, String endDate, Integer sequence, String playDay, String overrideTime) {
+    public DBCampaign(Long id, Integer crcVersion, Long startDate, Long endDate, Integer sequence, String playDay, String overrideTime) {
         this.id = id;
         this.crcVersion = crcVersion;
         this.startDate = startDate;
@@ -65,19 +65,19 @@ public class DBCampaign {
         this.crcVersion = crcVersion;
     }
 
-    public String getStartDate() {
+    public Long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Long startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

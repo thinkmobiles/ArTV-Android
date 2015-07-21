@@ -53,4 +53,20 @@ public final class Asset {
     public void setmSequence(int mSequence) {
         this.mSequence = mSequence;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+
+        Asset asset = (Asset) o;
+
+        if(!mName.equals(asset.mName)) return false;
+        if(!mURL.equals(asset.mURL)) return false;
+        if(mDuration != asset.mDuration) return false;
+        if(mSequence != asset.mSequence) return false;
+
+        return true;
+    }
 }

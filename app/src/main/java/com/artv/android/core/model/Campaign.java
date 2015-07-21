@@ -5,6 +5,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by
@@ -99,5 +100,42 @@ public final class Campaign {
 
     public void setmAssets(List<Asset> mAssets) {
         this.mAssets = mAssets;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+
+        Campaign campaign = (Campaign) o;
+        if(mCampaignID != campaign.mCampaignID) return false;
+        if(mCRCVersion != campaign.mCRCVersion) return false;
+        if(!mEndDate.equals(campaign.mEndDate)) return false;
+        if(!mStartDate.equals(campaign.mStartDate)) return false;
+        if(!mOverrideTime.equals(campaign.mOverrideTime)) return false;
+        if(!mPlayDay.equals(campaign.mPlayDay)) return false;
+        if(mSequence != campaign.mSequence) return false;
+
+        for (int i=0; i < mAssets.size(); i++) {
+            if(!mAssets.get(i).equals(campaign.mAssets.get(i))) return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Campaign{" +
+                "mCampaignID=" + mCampaignID +
+                ", mCRCVersion=" + mCRCVersion +
+                ", mStartDate='" + mStartDate + '\'' +
+                ", mEndDate='" + mEndDate + '\'' +
+                ", mSequence=" + mSequence +
+                ", mPlayDay='" + mPlayDay + '\'' +
+                ", mOverrideTime='" + mOverrideTime + '\'' +
+                ", mAssets=" + mAssets +
+                '}';
     }
 }

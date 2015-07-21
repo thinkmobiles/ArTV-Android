@@ -5,14 +5,18 @@ import com.artv.android.core.model.Campaign;
 import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBCampaign;
 
+import java.text.DateFormatSymbols;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Misha on 7/16/2015.
  */
 public final class Transformer {
-
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-dd-MM");
     private Transformer() {}
 
     protected static List<DBCampaign> createDBCompaignList(List<Campaign> campaigns) {
@@ -37,8 +41,8 @@ public final class Transformer {
         DBCampaign dbCampaign = new DBCampaign();
         dbCampaign.setId(campaign.getmCampaignID());
         dbCampaign.setCrcVersion(campaign.getmCRCVersion());
-        dbCampaign.setStartDate(campaign.getmStartDate());
-        dbCampaign.setEndDate(campaign.getmEndDate());
+        dbCampaign.setStartDate(getMilisecFromStringDate(campaign.getmStartDate()));
+        dbCampaign.setEndDate(getMilisecFromStringDate(campaign.getmEndDate()));
         dbCampaign.setPlayDay(campaign.getmPlayDay());
         dbCampaign.setOverrideTime(campaign.getmOverrideTime());
         dbCampaign.setSequence(campaign.getmSequence());
@@ -50,8 +54,8 @@ public final class Transformer {
         Campaign campaign = new Campaign();
         campaign.setmCampaignID(dbCampaign.getId());
         campaign.setmCRCVersion(dbCampaign.getCrcVersion());
-        campaign.setmStartDate(dbCampaign.getStartDate());
-        campaign.setmEndDate(dbCampaign.getEndDate());
+        campaign.setmStartDate(simpleDateFormat.format(new Date(dbCampaign.getStartDate())));
+        campaign.setmEndDate(simpleDateFormat.format(new Date(dbCampaign.getEndDate())));
         campaign.setmOverrideTime(dbCampaign.getOverrideTime());
         campaign.setmSequence(dbCampaign.getSequence());
         campaign.setmPlayDay(dbCampaign.getPlayDay());
@@ -100,5 +104,9 @@ public final class Transformer {
         asset.setmURL(dbAsset.getUrl());
 
         return asset;
+    }
+
+    public static long getMilisecFromStringDate(String date) {
+        return simpleDateFormat.parse(date, new ParsePosition(0)).getTime();
     }
 }

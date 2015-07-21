@@ -47,8 +47,8 @@ public class ArtvDaoGenerator {
         Entity user = schema.addEntity("DBCampaign");
         user.addIdProperty().primaryKey();
         user.addIntProperty("crcVersion");
-        user.addStringProperty("startDate");
-        user.addStringProperty("endDate");
+        user.addLongProperty("startDate");
+        user.addLongProperty("endDate");
         user.addIntProperty("sequence");
         user.addStringProperty("playDay");
         user.addStringProperty("overrideTime");

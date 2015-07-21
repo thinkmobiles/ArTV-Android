@@ -3,7 +3,6 @@ package com.artv.android.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 import com.artv.android.core.model.Campaign;
 import com.artv.android.database.gen.DBAsset;
@@ -13,7 +12,6 @@ import com.artv.android.database.gen.DBCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -53,7 +51,7 @@ public class DBManager implements AsyncOperationListener {
     }
 
     /**
-     * @param context The Android {@link android.content.Context}.
+     * @param applicationContext The Android {@link android.content.Context}.
      * @return this.instance
      */
     public static DBManager getInstance(Context applicationContext) {
@@ -78,7 +76,7 @@ public class DBManager implements AsyncOperationListener {
     /**
      * Query for readable DB
      */
-    public void openReadableDb() throws SQLiteException {
+    private void openReadableDb() throws SQLiteException {
         database = mHelper.getReadableDatabase();
         daoMaster = new DaoMaster(database);
         daoSession = daoMaster.newSession();
@@ -89,7 +87,7 @@ public class DBManager implements AsyncOperationListener {
     /**
      * Query for writable DB
      */
-    public void openWritableDb() throws SQLiteException {
+    private void openWritableDb() throws SQLiteException {
         database = mHelper.getWritableDatabase();
         daoMaster = new DaoMaster(database);
         daoSession = daoMaster.newSession();
@@ -134,7 +132,7 @@ public class DBManager implements AsyncOperationListener {
                 //firstly add campaigns
                 List<DBCampaign> dbCampaigns = Transformer.createDBCompaignList(campaigns);
                 DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
-                dbCampaignDao.insertInTx(dbCampaigns);
+                dbCampaignDao.insertOrReplaceInTx(dbCampaigns);
 
                 //then add assets
                 LinkedList<DBAsset> dbAssets = new LinkedList<>();
@@ -142,8 +140,7 @@ public class DBManager implements AsyncOperationListener {
                     dbAssets.addAll(Transformer.createDBAssetsLis(campaign.getmAssets(),campaign.getmCampaignID()));
 
                 DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
-                dbAssetDao.insertInTx(dbAssets);
-
+                dbAssetDao.insertOrReplaceInTx(dbAssets);
                 daoSession.clear();
 
                 return true;
@@ -168,7 +165,7 @@ public class DBManager implements AsyncOperationListener {
         return campaigns;
     }
 
-    public synchronized List<Campaign> getCapaignsFromDate(long startTimeMillis) {
+    public synchronized List<Campaign> getCampaignsFromDate(long startTimeMillis) {
         List<Campaign> campaigns = null;
         try {
             openReadableDb();
@@ -181,6 +178,10 @@ public class DBManager implements AsyncOperationListener {
             e.printStackTrace();
         }
         return campaigns;
+    }
+
+    public List<Campaign> getCampaignsFromDate(String startTime) {
+        return getCampaignsFromDate(Transformer.getMilisecFromStringDate(startTime));
     }
 
     public synchronized Campaign getCampaignById(Long id) {

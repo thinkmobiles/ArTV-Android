@@ -25,8 +25,8 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property CrcVersion = new Property(1, Integer.class, "crcVersion", false, "CRC_VERSION");
-        public final static Property StartDate = new Property(2, String.class, "startDate", false, "START_DATE");
-        public final static Property EndDate = new Property(3, String.class, "endDate", false, "END_DATE");
+        public final static Property StartDate = new Property(2, Long.class, "startDate", false, "START_DATE");
+        public final static Property EndDate = new Property(3, Long.class, "endDate", false, "END_DATE");
         public final static Property Sequence = new Property(4, Integer.class, "sequence", false, "SEQUENCE");
         public final static Property PlayDay = new Property(5, String.class, "playDay", false, "PLAY_DAY");
         public final static Property OverrideTime = new Property(6, String.class, "overrideTime", false, "OVERRIDE_TIME");
@@ -50,8 +50,8 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'DBCAMPAIGN' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'CRC_VERSION' INTEGER," + // 1: crcVersion
-                "'START_DATE' TEXT," + // 2: startDate
-                "'END_DATE' TEXT," + // 3: endDate
+                "'START_DATE' INTEGER," + // 2: startDate
+                "'END_DATE' INTEGER," + // 3: endDate
                 "'SEQUENCE' INTEGER," + // 4: sequence
                 "'PLAY_DAY' TEXT," + // 5: playDay
                 "'OVERRIDE_TIME' TEXT);"); // 6: overrideTime
@@ -78,14 +78,14 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
             stmt.bindLong(2, crcVersion);
         }
  
-        String startDate = entity.getStartDate();
+        Long startDate = entity.getStartDate();
         if (startDate != null) {
-            stmt.bindString(3, startDate);
+            stmt.bindLong(3, startDate);
         }
  
-        String endDate = entity.getEndDate();
+        Long endDate = entity.getEndDate();
         if (endDate != null) {
-            stmt.bindString(4, endDate);
+            stmt.bindLong(4, endDate);
         }
  
         Integer sequence = entity.getSequence();
@@ -122,8 +122,8 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
         DBCampaign entity = new DBCampaign( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // crcVersion
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // startDate
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // endDate
+            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // startDate
+            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // endDate
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // sequence
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // playDay
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // overrideTime
@@ -136,8 +136,8 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
     public void readEntity(Cursor cursor, DBCampaign entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setCrcVersion(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setStartDate(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setEndDate(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setStartDate(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
+        entity.setEndDate(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
         entity.setSequence(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setPlayDay(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setOverrideTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
