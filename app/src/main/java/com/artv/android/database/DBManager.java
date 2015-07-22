@@ -5,10 +5,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.artv.android.core.model.Campaign;
+import com.artv.android.core.model.Message;
+import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBAssetDao;
 import com.artv.android.database.gen.DBCampaign;
 import com.artv.android.database.gen.DBCampaignDao;
+import com.artv.android.database.gen.DBMessage;
+import com.artv.android.database.gen.DBMessageDao;
+import com.artv.android.database.gen.DBmsgBoardCampaign;
+import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
@@ -130,14 +136,14 @@ public class DBManager implements AsyncOperationListener {
                 openWritableDb();
 
                 //firstly add campaigns
-                List<DBCampaign> dbCampaigns = Transformer.createDBCompaignList(campaigns);
+                List<DBCampaign> dbCampaigns = Transformer.createDBCampaignList(campaigns);
                 DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
                 dbCampaignDao.insertOrReplaceInTx(dbCampaigns);
 
                 //then add assets
                 LinkedList<DBAsset> dbAssets = new LinkedList<>();
                 for (Campaign campaign : campaigns)
-                    dbAssets.addAll(Transformer.createDBAssetsLis(campaign.getmAssets(),campaign.getmCampaignID()));
+                    dbAssets.addAll(Transformer.createDBAssetsList(campaign.getmAssets(), campaign.getmCampaignID()));
 
                 DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
                 dbAssetDao.insertOrReplaceInTx(dbAssets);
@@ -151,12 +157,42 @@ public class DBManager implements AsyncOperationListener {
         return false;
     }
 
+
+    public synchronized boolean addNewOrUpdateMsgBoardCampaigns(List<MsgBoardCampaign> msgBoardCampaigns) {
+        try {
+            if (msgBoardCampaigns != null && msgBoardCampaigns.size() > 0) {
+                openWritableDb();
+
+                //firstly add msgBoardCampaigns
+                List<DBmsgBoardCampaign> dBmsgBoardCampaigns = Transformer.createDBmsgCampaignList(msgBoardCampaigns);
+                DBmsgBoardCampaignDao dBmsgBoardCampaignDao = daoSession.getDBmsgBoardCampaignDao();
+                dBmsgBoardCampaignDao.insertOrReplaceInTx(dBmsgBoardCampaigns);
+
+                //then add Messages
+                LinkedList<DBMessage> dbMessages = new LinkedList<>();
+                for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
+                    dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.getmMessages(),
+                            msgBoardCampaign.getmMsgBoardID()));
+
+                DBMessageDao messageDao = daoSession.getDBMessageDao();
+                messageDao.insertOrReplaceInTx(dbMessages);
+                daoSession.clear();
+
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
     public synchronized List<Campaign> getAllCampaigns() {
         List<Campaign> campaigns = null;
         try {
             openReadableDb();
             DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
-            campaigns = Transformer.createCompaignList(dbCampaignDao.loadAll());
+            campaigns = Transformer.createCampaignList(dbCampaignDao.loadAll());
 
             daoSession.clear();
         } catch (Exception e) {
@@ -165,12 +201,26 @@ public class DBManager implements AsyncOperationListener {
         return campaigns;
     }
 
+    public synchronized List<MsgBoardCampaign> getAllMsgBoardCampaigns() {
+        List<MsgBoardCampaign> msgBoardCampaigns = null;
+        try {
+            openReadableDb();
+            DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
+            msgBoardCampaigns = Transformer.createMsgBoardCampaignList(dao.loadAll());
+
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return msgBoardCampaigns;
+    }
+
     public synchronized List<Campaign> getCampaignsFromDate(long startTimeMillis) {
         List<Campaign> campaigns = null;
         try {
             openReadableDb();
             DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
-            campaigns = Transformer.createCompaignList(dbCampaignDao.queryBuilder()
+            campaigns = Transformer.createCampaignList(dbCampaignDao.queryBuilder()
                     .where(DBCampaignDao.Properties.StartDate.ge(startTimeMillis)).list());
 
             daoSession.clear();
@@ -181,7 +231,26 @@ public class DBManager implements AsyncOperationListener {
     }
 
     public List<Campaign> getCampaignsFromDate(String startTime) {
-        return getCampaignsFromDate(Transformer.getMilisecFromStringDate(startTime));
+        return getCampaignsFromDate(Transformer.getMillisecFromStringDate(startTime));
+    }
+
+    public synchronized List<MsgBoardCampaign> getMsgBoardCampaignsFromDate(long startTimeMillis) {
+        List<MsgBoardCampaign> msgBoardCampaigns = null;
+        try {
+            openReadableDb();
+            DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
+            msgBoardCampaigns = Transformer.createMsgBoardCampaignList(dao.queryBuilder()
+                    .where(DBCampaignDao.Properties.StartDate.ge(startTimeMillis)).list());
+
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return msgBoardCampaigns;
+    }
+
+    public List<MsgBoardCampaign> getMsgBoardCampaignsFromDate(String startTime) {
+        return getMsgBoardCampaignsFromDate(Transformer.getMillisecFromStringDate(startTime));
     }
 
     public synchronized Campaign getCampaignById(Long id) {
@@ -198,4 +267,18 @@ public class DBManager implements AsyncOperationListener {
         return campaign;
     }
 
+
+    public synchronized MsgBoardCampaign getMsgBoardCampaignById(Long id) {
+        MsgBoardCampaign msgBoardCampaign = null;
+        try {
+            openReadableDb();
+            DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
+            msgBoardCampaign = Transformer.createMsgBoardCampaign(dao.load(id));
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return msgBoardCampaign;
+    }
 }

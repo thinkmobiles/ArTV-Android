@@ -13,30 +13,101 @@ import java.util.List;
 public final class MsgBoardCampaign {
 
     @Element(name = "MsgBoardID")
-    public long mMsgBoardID;
+    private long mMsgBoardID;
 
     @Element(name = "CRCVersion")
-    public int mCRCVersion;
+    private int mCRCVersion;
 
     @Element(name = "StartDate")
-    public String mStartDate;
+    private String mStartDate;
 
     @Element(name = "EndDate")
-    public String mEndDate;
+    private String mEndDate;
 
     @Element(name = "PlayDay")
-    public String mPlayDay;
+    private String mPlayDay;
 
     @Element(name = "TextColor")
-    public String mTextColor;
+    private String mTextColor;
 
     @Element(name = "RightBkgURL")
-    public String mRightBkgURL;
+    private String mRightBkgURL;
 
     @Element(name = "BottomBkgURL")
-    public String mBottomBkgURL;
+    private String mBottomBkgURL;
 
     @ElementList(name = "Messages")
-    public List<Message> mMessages;
+    private List<Message> mMessages;
 
+    public long getmMsgBoardID() {
+        return mMsgBoardID;
+    }
+
+    public void setmMsgBoardID(long mMsgBoardID) {
+        this.mMsgBoardID = mMsgBoardID;
+    }
+
+    public int getmCRCVersion() {
+        return mCRCVersion;
+    }
+
+    public void setmCRCVersion(int mCRCVersion) {
+        this.mCRCVersion = mCRCVersion;
+    }
+
+    public String getmStartDate() {
+        return mStartDate;
+    }
+
+    public void setmStartDate(String mStartDate) {
+        this.mStartDate = mStartDate;
+    }
+
+    public String getmEndDate() {
+        return mEndDate;
+    }
+
+    public void setmEndDate(String mEndDate) {
+        this.mEndDate = mEndDate;
+    }
+
+    public String getmPlayDay() {
+        return mPlayDay;
+    }
+
+    public void setmPlayDay(String mPlayDay) {
+        this.mPlayDay = mPlayDay;
+    }
+
+    public String getmTextColor() {
+        return mTextColor;
+    }
+
+    public void setmTextColor(String mTextColor) {
+        this.mTextColor = mTextColor;
+    }
+
+    public String getmRightBkgURL() {
+        return mRightBkgURL;
+    }
+
+    public void setmRightBkgURL(String mRightBkgURL) {
+        this.mRightBkgURL = mRightBkgURL;
+    }
+
+    public String getmBottomBkgURL() {
+        return mBottomBkgURL;
+    }
+
+    public void setmBottomBkgURL(String mBottomBkgURL) {
+        this.mBottomBkgURL = mBottomBkgURL;
+    }
+
+    public List<Message> getmMessages() {
+        return mMessages;
+    }
+
+    public void setmMessages(List<Message> mMessages) {
+        this.mMessages = mMessages;
+    }
 }

@@ -28,14 +28,19 @@ public class ArtvDaoGenerator {
         /* entities */
         Entity campaigns = addCampaign(schema);
         Entity assets = addAssets(schema);
+        Entity msgBoardCampaign = addMsgBoardCampaign(schema);
+        Entity message = addMessage(schema);
 
         /* properties */
         Property campaignIdForAssets = assets.addLongProperty("campaignId").notNull().getProperty();
+        Property msgBoardIDForMessages = message.addLongProperty("msgBoardID").notNull().getProperty();
 
         /* relationships between entities */
         ToMany campaignToAssets = campaigns.addToMany(assets, campaignIdForAssets);
         campaignToAssets.setName("assets"); // one-to-many
 
+        ToMany msgBoardCampaignToMessages = msgBoardCampaign.addToMany(message,msgBoardIDForMessages);
+        msgBoardCampaignToMessages.setName("messages");
     }
 
     /**
@@ -44,15 +49,15 @@ public class ArtvDaoGenerator {
      * @return Campaigns entity
      */
     private static Entity addCampaign(Schema schema) {
-        Entity user = schema.addEntity("DBCampaign");
-        user.addIdProperty().primaryKey();
-        user.addIntProperty("crcVersion");
-        user.addLongProperty("startDate");
-        user.addLongProperty("endDate");
-        user.addIntProperty("sequence");
-        user.addStringProperty("playDay");
-        user.addStringProperty("overrideTime");
-        return user;
+        Entity campaign = schema.addEntity("DBCampaign");
+        campaign.addIdProperty().primaryKey();
+        campaign.addIntProperty("crcVersion");
+        campaign.addLongProperty("startDate");
+        campaign.addLongProperty("endDate");
+        campaign.addIntProperty("sequence");
+        campaign.addStringProperty("playDay");
+        campaign.addStringProperty("overrideTime");
+        return campaign;
     }
 
     /**
@@ -69,5 +74,28 @@ public class ArtvDaoGenerator {
         asset.addIntProperty("sequence");
 
         return asset;
+    }
+
+    private static Entity addMsgBoardCampaign(Schema schema) {
+        Entity msgBoardCampaign = schema.addEntity("DBmsgBoardCampaign");
+        msgBoardCampaign.addIdProperty().primaryKey();
+        msgBoardCampaign.addIntProperty("crcVersion");
+        msgBoardCampaign.addLongProperty("startDate");
+        msgBoardCampaign.addLongProperty("endDate");
+        msgBoardCampaign.addStringProperty("playDay");
+        msgBoardCampaign.addStringProperty("textColor");
+        msgBoardCampaign.addStringProperty("RightBkgURL");
+        msgBoardCampaign.addStringProperty("BottomBkgURL");
+
+        return msgBoardCampaign;
+    }
+
+    private static Entity addMessage(Schema schema) {
+        Entity message = schema.addEntity("DBMessage");
+        message.addStringProperty("text");
+        message.addStringProperty("position");
+        message.addIntProperty("sequence");
+
+        return message;
     }
 }
