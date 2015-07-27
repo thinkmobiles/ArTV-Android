@@ -61,7 +61,6 @@ public class DBManager implements AsyncOperationListener {
      * @return this.instance
      */
     public static DBManager getInstance(Context applicationContext) {
-
         if (instance == null) {
             instance = new DBManager(applicationContext);
         }
@@ -118,7 +117,7 @@ public class DBManager implements AsyncOperationListener {
         }
     }
 
-    public synchronized void dropDatabase() {
+    public void dropDatabase() {
         try {
             openWritableDb();
             DaoMaster.dropAllTables(database, true); // drops all tables
@@ -130,7 +129,7 @@ public class DBManager implements AsyncOperationListener {
         }
     }
 
-    public synchronized boolean addNewOrUpdateCampaigns(List<Campaign> campaigns) {
+    public boolean addNewOrUpdateCampaigns(List<Campaign> campaigns) {
         try {
             if (campaigns != null && campaigns.size() > 0) {
                 openWritableDb();
@@ -158,7 +157,7 @@ public class DBManager implements AsyncOperationListener {
     }
 
 
-    public synchronized boolean addNewOrUpdateMsgBoardCampaigns(List<MsgBoardCampaign> msgBoardCampaigns) {
+    public boolean addNewOrUpdateMsgBoardCampaigns(List<MsgBoardCampaign> msgBoardCampaigns) {
         try {
             if (msgBoardCampaigns != null && msgBoardCampaigns.size() > 0) {
                 openWritableDb();
@@ -187,8 +186,8 @@ public class DBManager implements AsyncOperationListener {
     }
 
 
-    public synchronized List<Campaign> getAllCampaigns() {
-        List<Campaign> campaigns = null;
+    public List<Campaign> getAllCampaigns() {
+        List<Campaign> campaigns = new LinkedList<>();
         try {
             openReadableDb();
             DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
@@ -201,8 +200,8 @@ public class DBManager implements AsyncOperationListener {
         return campaigns;
     }
 
-    public synchronized List<MsgBoardCampaign> getAllMsgBoardCampaigns() {
-        List<MsgBoardCampaign> msgBoardCampaigns = null;
+    public List<MsgBoardCampaign> getAllMsgBoardCampaigns() {
+        List<MsgBoardCampaign> msgBoardCampaigns = new LinkedList<>();
         try {
             openReadableDb();
             DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
@@ -215,8 +214,8 @@ public class DBManager implements AsyncOperationListener {
         return msgBoardCampaigns;
     }
 
-    public synchronized List<Campaign> getCampaignsFromDate(long startTimeMillis) {
-        List<Campaign> campaigns = null;
+    public List<Campaign> getCampaignsFromDate(long startTimeMillis) {
+        List<Campaign> campaigns = new LinkedList<>();
         try {
             openReadableDb();
             DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
@@ -234,8 +233,8 @@ public class DBManager implements AsyncOperationListener {
         return getCampaignsFromDate(Transformer.getMillisecFromStringDate(startTime));
     }
 
-    public synchronized List<MsgBoardCampaign> getMsgBoardCampaignsFromDate(long startTimeMillis) {
-        List<MsgBoardCampaign> msgBoardCampaigns = null;
+    public List<MsgBoardCampaign> getMsgBoardCampaignsFromDate(long startTimeMillis) {
+        List<MsgBoardCampaign> msgBoardCampaigns = new LinkedList<>();
         try {
             openReadableDb();
             DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
@@ -253,7 +252,7 @@ public class DBManager implements AsyncOperationListener {
         return getMsgBoardCampaignsFromDate(Transformer.getMillisecFromStringDate(startTime));
     }
 
-    public synchronized Campaign getCampaignById(Long id) {
+    public Campaign getCampaignById(Long id) {
         Campaign campaign = null;
         try {
             openReadableDb();
@@ -268,7 +267,7 @@ public class DBManager implements AsyncOperationListener {
     }
 
 
-    public synchronized MsgBoardCampaign getMsgBoardCampaignById(Long id) {
+    public MsgBoardCampaign getMsgBoardCampaignById(Long id) {
         MsgBoardCampaign msgBoardCampaign = null;
         try {
             openReadableDb();

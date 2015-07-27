@@ -110,4 +110,43 @@ public final class MsgBoardCampaign {
     public void setmMessages(List<Message> mMessages) {
         this.mMessages = mMessages;
     }
+
+
+    @Override
+    public String toString() {
+        return "MsgBoardCampaign{" +
+                "mMsgBoardID=" + mMsgBoardID +
+                ", mCRCVersion=" + mCRCVersion +
+                ", mStartDate='" + mStartDate + '\'' +
+                ", mEndDate='" + mEndDate + '\'' +
+                ", mPlayDay='" + mPlayDay + '\'' +
+                ", mTextColor='" + mTextColor + '\'' +
+                ", mRightBkgURL='" + mRightBkgURL + '\'' +
+                ", mBottomBkgURL='" + mBottomBkgURL + '\'' +
+                ", mMessages=" + mMessages +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+
+        MsgBoardCampaign msgBoardCampaign = (MsgBoardCampaign) o;
+        if(mMsgBoardID != msgBoardCampaign.mMsgBoardID) return false;
+        if(mCRCVersion != msgBoardCampaign.mCRCVersion) return false;
+        if(!mEndDate.equals(msgBoardCampaign.mEndDate)) return false;
+        if(!mStartDate.equals(msgBoardCampaign.mStartDate)) return false;
+        if(!mTextColor.equals(msgBoardCampaign.mTextColor)) return false;
+        if(!mPlayDay.equals(msgBoardCampaign.mPlayDay)) return false;
+        if(!mBottomBkgURL.equals(msgBoardCampaign.mBottomBkgURL)) return false;
+        if(!mRightBkgURL.equals(msgBoardCampaign.mRightBkgURL)) return false;
+
+        for (int i=0; i < mMessages.size(); i++) {
+            if(!mMessages.get(i).equals(msgBoardCampaign.mMessages.get(i))) return false;
+        }
+
+        return true;
+    }
 }

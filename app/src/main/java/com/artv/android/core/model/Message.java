@@ -42,4 +42,19 @@ public final class Message {
     public void setmSequenceL(int mSequenceL) {
         this.mSequenceL = mSequenceL;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        if (getClass() != o.getClass()) return false;
+
+        Message message = (Message) o;
+
+        if(!mText.equals(message.mText)) return false;
+        if(!mPosition.equals(message.mPosition)) return false;
+        if(mSequenceL != message.mSequenceL) return false;
+
+        return true;
+    }
 }
