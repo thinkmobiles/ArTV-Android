@@ -10,34 +10,34 @@ import org.simpleframework.xml.Root;
 @Root(name = "DeviceConfigXML")
 public final class DeviceConfig {
 
-    @Element(name = "TagID")
+    @Element(name = "TagID", required = false)
     public String tagID;
 
-    @Element(name = "FTPUsr")
+    @Element(name = "FTPUsr", required = false)
     public String fTPUsr;
 
-    @Element(name = "FTPPwd")
+    @Element(name = "FTPPwd", required = false)
     public String fTPPwd;
 
-    @Element(name = "HomeFolder")
+    @Element(name = "HomeFolder", required = false)
     public String homeFolder;
 
-    @Element(name = "SerialNo")
+    @Element(name = "SerialNo", required = false)
     public long serialNo;
 
-    @Element(name = "Latitude")
+    @Element(name = "Latitude", required = false)
     public double latitude;
 
-    @Element(name = "Longitude")
+    @Element(name = "Longitude", required = false)
     public double longitude;
 
-    @Element(name = "TurnOnDisp")
+    @Element(name = "TurnOnDisp", required = false)
     public int turnOnDisp;
 
-    @Element(name = "TurnOffDisp")
+    @Element(name = "TurnOffDisp", required = false)
     public int turnOffDisp;
 
-    @Element(name = "DevGroup")
+    @Element(name = "DevGroup", required = false)
     public int devGroup;
 
 }
