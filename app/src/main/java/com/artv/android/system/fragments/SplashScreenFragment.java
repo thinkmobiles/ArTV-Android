@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
-import com.artv.android.core.init.InitCallback;
+import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
 import com.artv.android.core.state.IArTvStateChangeListener;
 
@@ -64,7 +64,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                 getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfo());
 
         getMyApplication().getApplicationLogic().getInitWorker().startInitializing(
-                new InitCallback() {
+                new IInitCallback() {
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
                         tvLog.append("\n" + _result.getMessage());

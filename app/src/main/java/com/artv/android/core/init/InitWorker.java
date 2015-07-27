@@ -3,23 +3,15 @@ package com.artv.android.core.init;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
-import com.artv.android.core.api.api_model.request.BeaconRequestObject;
-import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.request.GetDeviceConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetGlobalConfigRequestObject;
 import com.artv.android.core.api.api_model.request.GetTokenRequestObject;
-import com.artv.android.core.api.api_model.response.BeaconResponseObject;
-import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
-import com.artv.android.core.model.Asset;
-import com.artv.android.core.model.Beacon;
-import com.artv.android.core.model.MsgBoardCampaign;
-import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 
 import java.util.ArrayList;
@@ -32,15 +24,13 @@ import java.util.ArrayList;
  */
 public final class InitWorker {
 
-    private static final boolean IGNORE_IF_FAIL = false;
-
     private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
     private StateWorker mStateWorker;
 
     private InitData mInitData;
-    private InitCallback mCallback;
+    private IInitCallback mCallback;
 
     public InitWorker() {
         mInitData = new InitData();
@@ -62,7 +52,7 @@ public final class InitWorker {
         mStateWorker = _stateWorker;
     }
 
-    public final void startInitializing(final InitCallback _callback) {
+    public final void startInitializing(final IInitCallback _callback) {
         mCallback = _callback;
         turnOnDisplayIfNeed(); //begin
     }
@@ -110,7 +100,6 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (IGNORE_IF_FAIL) getGlobalConfig();
             }
         });
     }
@@ -131,7 +120,6 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (IGNORE_IF_FAIL) getDeviceConfig();
             }
         });
     }
@@ -147,51 +135,7 @@ public final class InitWorker {
             public final void onSuccess(final GetDeviceConfigResponseObject _respObj) {
                 mInitData.setDeviceConfig(_respObj.getDeviceConfig());
                 mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
-                doBeacon();
-            }
-
-            @Override
-            public final void onFailure(final ErrorResponseObject _errorResp) {
-                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (IGNORE_IF_FAIL) getDeviceConfig();
-            }
-        });
-    }
-
-    public final void doBeacon() {
-        final BeaconRequestObject requestObject = new BeaconRequestObject();
-        requestObject.token = mInitData.getToken();
-        requestObject.tagId = mConfigInfo.getDeviceId();
-        requestObject.beacon = buildTestBeacon();
-
-        mApiWorker.doBeacon(requestObject, new WebRequestCallback<BeaconResponseObject>() {
-            @Override
-            public final void onSuccess(final BeaconResponseObject _respObj) {
-                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
-                getCampaign();
-            }
-
-            @Override
-            public final void onFailure(final ErrorResponseObject _errorResp) {
-                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (true) getCampaign();
-            }
-        });
-    }
-
-    public final void getCampaign() {
-        final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
-                .setToken(mInitData.getToken())
-                .setTagID(mConfigInfo.getDeviceId())
-                .setCampaignID(0)
-                .build();
-
-        mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
-            @Override
-            public final void onSuccess(final GetCampaignResponseObject _respObj) {
-                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
-                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
             }
 
             @Override
@@ -199,23 +143,6 @@ public final class InitWorker {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
             }
         });
-    }
-
-    private final Beacon buildTestBeacon() {
-        final Beacon beacon = new Beacon();
-        beacon.tagId = mConfigInfo.getDeviceId();
-        beacon.currentDateTime = "";
-        beacon.currentCampaign = 0;
-        beacon.currentAsset = new Asset();
-        beacon.campaigns = new ArrayList<>();
-        beacon.msgBoardCampaign = buildMsgBoardCampaign();
-        beacon.errorLog = "";
-        return beacon;
-    }
-
-    private final MsgBoardCampaign buildMsgBoardCampaign() {
-        final MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
-        return msgBoardCampaign;
     }
 
     private final InitResult buildInitResult(final boolean _success, final String _message) {
