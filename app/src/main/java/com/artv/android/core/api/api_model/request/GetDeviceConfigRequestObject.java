@@ -14,10 +14,10 @@ import java.util.Map;
  */
 public final class GetDeviceConfigRequestObject extends BaseRequestObject implements IQueryCreator {
 
-    protected String mToken;
-    protected String mTagID;
+    private String mToken;
+    private String mTagID;
 
-    protected GetDeviceConfigRequestObject() {
+    private GetDeviceConfigRequestObject() {
         apiType = ApiType.GET_DEVICE_CONFIG;
     }
 

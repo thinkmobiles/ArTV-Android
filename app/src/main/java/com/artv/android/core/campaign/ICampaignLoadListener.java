@@ -5,7 +5,7 @@ package com.artv.android.core.campaign;
  */
 public interface ICampaignLoadListener {
 
-    void printMessage(final String _message);
+    void progressMessage(final String _message);
     void onProgress(final int _percent);
     void onCampaignLoaded(final CampaignLoadResult _result);
     void onCampaignLoadFailed(final CampaignLoadResult _result);

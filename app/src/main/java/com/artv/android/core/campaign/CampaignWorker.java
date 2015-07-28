@@ -7,7 +7,6 @@ import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
-import com.artv.android.core.init.InitResult;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -47,8 +46,8 @@ public final class CampaignWorker {
         return mCampaignLoadListeners.remove(_listener);
     }
 
-    public final void notifyPrintMessage(final String _message) {
-        for (final ICampaignLoadListener listener : mCampaignLoadListeners) listener.printMessage(_message);
+    public final void notifyProgressMessage(final String _message) {
+        for (final ICampaignLoadListener listener : mCampaignLoadListeners) listener.progressMessage(_message);
     }
 
     public final void notifyProgress(final int _percent) {
@@ -78,6 +77,7 @@ public final class CampaignWorker {
         mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
             @Override
             public final void onSuccess(final GetCampaignResponseObject _respObj) {
+                notifyProgressMessage(_respObj.apiType + " : success\n" + "campaigns: ");
 
 //                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
 //                mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));

@@ -20,10 +20,10 @@ import java.util.List;
 public final class GetCampaignResponseObject extends BaseResponseObject {
 
     @ElementList(name = "Campaigns", required = false)
-    private List<Campaign> mCampaigns;
+    public List<Campaign> campaigns;
 
     @Element(name = "MsgBoardCampaign", required = false)
-    private MsgBoardCampaign mMsgBoardCampaign;
+    public MsgBoardCampaign msgBoardCampaign;
 
     public GetCampaignResponseObject() {
         apiType = ApiType.GET_CAMPAIGN;

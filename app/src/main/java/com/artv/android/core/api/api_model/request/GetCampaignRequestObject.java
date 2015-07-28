@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public final class GetCampaignRequestObject extends BaseRequestObject implements IQueryCreator {
 
-    protected String mToken;
-    protected String mTagID;
+    private String mToken;
+    private String mTagID;
     private int mCampaignID;
 
     private GetCampaignRequestObject() {
