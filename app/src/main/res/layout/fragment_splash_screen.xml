@@ -45,6 +45,7 @@
         android:text="Log:"
         android:gravity="bottom"
         android:background="#5e070707"
-        android:textColor="#e400ff00" />
+        android:textColor="#e400ff00"
+        android:freezesText="true"/>
 
 </RelativeLayout>

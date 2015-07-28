@@ -10,9 +10,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
+import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
+import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.IArTvStateChangeListener;
+import com.artv.android.core.state.StateWorker;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -24,9 +28,25 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     private Button btnShowVideo;
     private TextView tvLog;
 
+    private StateWorker mStateWorker;
+    private InitWorker mInitWorker;
+    private ConfigInfoWorker mConfigInfoWorker;
+
+    @Override
+    public final void onCreate(final Bundle _savedInstanceState) {
+        super.onCreate(_savedInstanceState);
+        initLogic();
+    }
+
+    private final void initLogic() {
+        mStateWorker = getMyApplication().getApplicationLogic().getStateWorker();
+        mInitWorker = getMyApplication().getApplicationLogic().getInitWorker();
+        mConfigInfoWorker = getMyApplication().getApplicationLogic().getConfigInfoWorker();
+    }
+
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
-        final View view = _inflater.inflate(R.layout.fragment_splash_screen, null);
+        final View view = _inflater.inflate(R.layout.fragment_splash_screen, _container, false);
 
         pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
         btnClearConfigInfo = (Button) view.findViewById(R.id.btnClearConfigInfo_FSS);
@@ -44,26 +64,25 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        beginInitializing();
+        if (_savedInstanceState == null) beginInitializing();
     }
 
     @Override
     public final void onStart() {
         super.onStart();
-        getMyApplication().getApplicationLogic().getStateWorker().addStateChangeListener(this);
+        mStateWorker.addStateChangeListener(this);
     }
 
     @Override
     public final void onStop() {
         super.onStop();
-        getMyApplication().getApplicationLogic().getStateWorker().removeStateChangeListener(this);
+        mStateWorker.removeStateChangeListener(this);
     }
 
     private final void beginInitializing() {
-        getMyApplication().getApplicationLogic().getInitWorker().setConfigInfo(
-                getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfo());
+        mInitWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
 
-        getMyApplication().getApplicationLogic().getInitWorker().startInitializing(
+        mInitWorker.startInitializing(
                 new IInitCallback() {
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
@@ -89,7 +108,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     public final void onClick(final View _v) {
         switch (_v.getId()) {
             case R.id.btnClearConfigInfo_FSS:
-                    getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onNeedRemoveConfigInfo();
+                    mConfigInfoWorker.notifyNeedRemoveConfigInfo();
                 break;
 
             case R.id.btnShowVideo_FSS:

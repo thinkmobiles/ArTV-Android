@@ -12,7 +12,6 @@ import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
-import com.artv.android.core.state.StateWorker;
 
 import java.util.ArrayList;
 
@@ -27,7 +26,6 @@ public final class InitWorker {
     private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
-    private StateWorker mStateWorker;
 
     private InitData mInitData;
     private IInitCallback mCallback;
@@ -46,10 +44,6 @@ public final class InitWorker {
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
-    }
-
-    public final void setStateWorker(final StateWorker _stateWorker) {
-        mStateWorker = _stateWorker;
     }
 
     public final void startInitializing(final IInitCallback _callback) {

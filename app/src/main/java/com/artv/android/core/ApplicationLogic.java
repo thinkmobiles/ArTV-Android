@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
+import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
@@ -26,6 +27,7 @@ public final class ApplicationLogic {
     private InitWorker mInitWorker;
     private DisplaySwitcher mDisplaySwitcher;
     private BeaconWorker mBeaconWorker;
+    private CampaignWorker mCampaignWorker;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -41,13 +43,14 @@ public final class ApplicationLogic {
         mApiWorker = new ApiWorker(mContext);
 
         mInitWorker = new InitWorker();
-        mInitWorker.setStateWorker(mStateWorker);
         mDisplaySwitcher = new DisplaySwitcher();
 
         mBeaconWorker = new BeaconWorker();
 
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
+
+        mCampaignWorker = new CampaignWorker();
 
         determineStateWhenAppStart();
     }
@@ -78,7 +81,8 @@ public final class ApplicationLogic {
     private final void determineStateWhenAppStart() {
         mConfigInfoWorker.loadConfigInfo();
 
-        if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()) {
+        if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()
+                && !mCampaignWorker.hasCapmaign()) {
             mStateWorker.setState(ArTvState.STATE_APP_START);
         } else {
             mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);

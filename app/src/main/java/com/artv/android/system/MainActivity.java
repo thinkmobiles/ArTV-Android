@@ -8,38 +8,54 @@ import android.widget.FrameLayout;
 
 import com.artv.android.R;
 import com.artv.android.core.api.Temp;
+import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.state.IArTvStateChangeListener;
+import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.MediaPlayerFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;
 
-public class MainActivity extends BaseActivity implements IArTvStateChangeListener {
+public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IConfigInfoListener {
+
     private FrameLayout mFragmentContainer;
+
+    private StateWorker mStateWorker;
+    private ConfigInfoWorker mConfigInfoWorker;
 
     @Override
     protected final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getMyApplication().createApplicationLogic();
+        //does not create ApplicationLogic each time activity recreating (i.e. rotate, screen lock etc)
+        if (getMyApplication().getApplicationLogic() == null) getMyApplication().createApplicationLogic();
+        initLogic();
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
+        //don't replace existing fragment when recreating
         if (_savedInstanceState == null) handleAppState();
+    }
+
+    private final void initLogic() {
+        mStateWorker = getMyApplication().getApplicationLogic().getStateWorker();
+        mConfigInfoWorker = getMyApplication().getApplicationLogic().getConfigInfoWorker();
     }
 
     @Override
     protected final void onStart() {
         super.onStart();
-
-        getMyApplication().getApplicationLogic().getStateWorker().addStateChangeListener(this);
+        mStateWorker.addStateChangeListener(this);
+        mConfigInfoWorker.addConfigInfoListener(this);
     }
 
     @Override
     protected final void onStop() {
         super.onStop();
-
-        getMyApplication().getApplicationLogic().getStateWorker().removeStateChangeListener(this);
+        mStateWorker.removeStateChangeListener(this);
+        mConfigInfoWorker.removeConfigInfoListener(this);
     }
 
     private void getDeviceId() {
@@ -60,7 +76,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     private final void handleAppState() {
-        switch (getMyApplication().getApplicationLogic().getStateWorker().getArTvState()) {
+        switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
                 getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
                 break;
@@ -74,4 +90,12 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
         }
     }
+
+    @Override
+    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+        getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
+    }
+
+    @Override
+    public final void onNeedRemoveConfigInfo() {}
 }

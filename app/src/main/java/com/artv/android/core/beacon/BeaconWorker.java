@@ -22,7 +22,7 @@ public final class BeaconWorker {
     private ConfigInfo mConfigInfo;
     private InitData mInitData;
     private ApiWorker mApiWorker;
-    private IBeconCallback mCallback;
+    private IBeaconCallback mCallback;
 
     public final void doBeacon() {
         final BeaconRequestObject requestObject = new BeaconRequestObject();
@@ -44,28 +44,6 @@ public final class BeaconWorker {
         });
     }
 
-//    public final void getCampaign() {
-//        final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
-//                .setToken(mInitData.getToken())
-//                .setTagID(mConfigInfo.getDeviceId())
-//                .setCampaignID(0)
-//                .build();
-//
-//        mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
-//            @Override
-//            public final void onSuccess(final GetCampaignResponseObject _respObj) {
-//                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
-//                mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
-//                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-//            }
-//
-//            @Override
-//            public final void onFailure(final ErrorResponseObject _errorResp) {
-//                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-//            }
-//        });
-//    }
-
     private final Beacon buildEmptyBeacon() {
         final Beacon beacon = new Beacon();
         beacon.tagId = mConfigInfo.getDeviceId();
@@ -77,7 +55,6 @@ public final class BeaconWorker {
         beacon.errorLog = "";
         return beacon;
     }
-
 
     private final MsgBoardCampaign buildMsgBoardCampaign() {
         final MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
