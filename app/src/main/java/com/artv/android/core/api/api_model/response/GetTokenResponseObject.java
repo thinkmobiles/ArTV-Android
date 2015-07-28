@@ -13,14 +13,14 @@ import org.simpleframework.xml.Root;
 @Root(name = "api")
 public final class GetTokenResponseObject extends BaseResponseObject {
 
-    @Element(name = "Token", required = false)
-    public String mToken;
+    @Element(name = "Token")
+    public String token;
 
     @Element(name = "ErrorNumber")
-    public int mErrorNumber;
+    public int errorNumber;
 
     @Element(name = "ErrorDescription", required = false)
-    public String mErrorDescription;
+    public String errorDescription;
 
     public GetTokenResponseObject() {
         apiType = ApiType.GET_TOKEN;

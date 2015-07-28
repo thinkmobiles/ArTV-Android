@@ -32,10 +32,10 @@ public final class DeviceConfig {
     public double longitude;
 
     @Element(name = "TurnOnDisp", required = false)
-    public int turnOnDisp;
+    public String turnOnDisp;
 
     @Element(name = "TurnOffDisp", required = false)
-    public int turnOffDisp;
+    public String turnOffDisp;
 
     @Element(name = "DevGroup", required = false)
     public int devGroup;

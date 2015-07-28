@@ -37,12 +37,12 @@ public final class ApiWorker {
             @Override
             public void success(GetTokenResponseObject getTokenResponseObject, Response _response) {
                 if (_response != null) {
-                    if(getTokenResponseObject.mErrorNumber == 0) {
+                    if(getTokenResponseObject.errorNumber == 0) {
                         _callback.onSuccess(getTokenResponseObject);
                     } else
                         _callback.onFailure(new ErrorResponseObject.Builder()
                                 .setApiType(_requestObject.apiType)
-                                .setError(getTokenResponseObject.mErrorDescription)
+                                .setError(getTokenResponseObject.errorDescription)
                                 .build());
                 }
             }

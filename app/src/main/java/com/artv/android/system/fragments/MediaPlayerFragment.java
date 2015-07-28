@@ -98,7 +98,7 @@ public class MediaPlayerFragment extends Fragment {
     }
 
     public void setMsgBoardCampaign(MsgBoardCampaign _msgBoardCampaign) {
-        Picasso.with(getActivity()).load(_msgBoardCampaign.mBottomBkgURL).into(new Target() {
+        Picasso.with(getActivity()).load(_msgBoardCampaign.bottomBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 mBottomContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
@@ -114,7 +114,7 @@ public class MediaPlayerFragment extends Fragment {
                 mBottomContainer.setBackgroundDrawable(null);
             }
         });
-        Picasso.with(getActivity()).load(_msgBoardCampaign.mRightBkgURL).into(new Target() {
+        Picasso.with(getActivity()).load(_msgBoardCampaign.rightBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 mRightContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
@@ -131,7 +131,7 @@ public class MediaPlayerFragment extends Fragment {
             }
         });
 
-        int textColor = Color.parseColor(_msgBoardCampaign.mTextColor);
+        int textColor = Color.parseColor(_msgBoardCampaign.textColor);
         mBottomText.setTextColor(textColor);
         mRightText.setTextColor(textColor);
 

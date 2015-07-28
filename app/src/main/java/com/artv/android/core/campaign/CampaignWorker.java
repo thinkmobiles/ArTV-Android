@@ -39,7 +39,7 @@ public final class CampaignWorker {
         });
     }
 
-    public final boolean hasCapmaign() {
+    public final boolean hasCampaign() {
         return false;
     }
 

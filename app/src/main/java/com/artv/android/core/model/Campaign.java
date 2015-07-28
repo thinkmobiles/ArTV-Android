@@ -14,7 +14,7 @@ import java.util.List;
 public final class Campaign {
 
     @Element(name = "CampaignID", required = false)
-    private long mCampaignID;
+    private int mCampaignID;
 
     @Element(name = "CRCVersion", required = false)
     private String mCRCVersion;

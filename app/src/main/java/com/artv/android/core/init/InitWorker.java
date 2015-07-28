@@ -86,7 +86,7 @@ public final class InitWorker {
         mApiWorker.doGetToken(requestObject, new WebRequestCallback<GetTokenResponseObject>() {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
-                mInitData.setToken(_respObj.mToken);
+                mInitData.setToken(_respObj.token);
                 mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 getGlobalConfig();
             }

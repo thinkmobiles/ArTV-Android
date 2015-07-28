@@ -82,7 +82,7 @@ public final class ApplicationLogic {
         mConfigInfoWorker.loadConfigInfo();
 
         if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()
-                && !mCampaignWorker.hasCapmaign()) {
+                || !mCampaignWorker.hasCampaign()) {
             mStateWorker.setState(ArTvState.STATE_APP_START);
         } else {
             mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);

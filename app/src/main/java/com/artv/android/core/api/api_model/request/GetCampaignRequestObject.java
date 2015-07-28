@@ -16,7 +16,7 @@ public final class GetCampaignRequestObject extends BaseRequestObject implements
 
     protected String mToken;
     protected String mTagID;
-    private long mCampaignID;
+    private int mCampaignID;
 
     private GetCampaignRequestObject() {
         apiType = ApiType.GET_CAMPAIGN;
@@ -49,7 +49,7 @@ public final class GetCampaignRequestObject extends BaseRequestObject implements
             return this;
         }
 
-        public final Builder setCampaignID(final long _campaignID) {
+        public final Builder setCampaignID(final int _campaignID) {
             mGetCampaignRequestObject.mCampaignID = _campaignID;
             return this;
         }
