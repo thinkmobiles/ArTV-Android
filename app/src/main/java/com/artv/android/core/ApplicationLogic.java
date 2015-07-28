@@ -51,6 +51,7 @@ public final class ApplicationLogic {
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
         mCampaignWorker = new CampaignWorker();
+        mCampaignWorker.setApiWorker(mApiWorker);
 
         determineStateWhenAppStart();
     }
@@ -73,6 +74,10 @@ public final class ApplicationLogic {
 
     public final DisplaySwitcher getDisplaySwitcher() {
         return mDisplaySwitcher;
+    }
+
+    public final CampaignWorker getCampaignWorker() {
+        return mCampaignWorker;
     }
 
     /**

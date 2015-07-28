@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
+import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
@@ -31,6 +32,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     private StateWorker mStateWorker;
     private InitWorker mInitWorker;
     private ConfigInfoWorker mConfigInfoWorker;
+    private CampaignWorker mCampaignWorker;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
@@ -42,6 +44,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mStateWorker = getMyApplication().getApplicationLogic().getStateWorker();
         mInitWorker = getMyApplication().getApplicationLogic().getInitWorker();
         mConfigInfoWorker = getMyApplication().getApplicationLogic().getConfigInfoWorker();
+        mCampaignWorker = getMyApplication().getApplicationLogic().getCampaignWorker();
     }
 
     @Override
@@ -88,6 +91,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                     public final void onInitSuccess(final InitResult _result) {
                         tvLog.append("\n" + _result.getMessage());
                         pbLoading.setProgress(100);
+                        beginCampaignLogic();
                     }
 
                     @Override
@@ -121,4 +125,11 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     public final void onArTvStateChanged() {
         btnShowVideo.setVisibility(View.VISIBLE);
     }
+
+    private final void beginCampaignLogic() {
+        mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mCampaignWorker.setInitData(mInitWorker.getInitData());
+        mCampaignWorker.getCampaign();
+    }
+
 }
