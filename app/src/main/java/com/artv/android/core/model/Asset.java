@@ -11,14 +11,14 @@ import org.simpleframework.xml.Root;
 public final class Asset {
 
     @Element(name = "Name", required = false)
-    private String mName;
+    public String name;
 
     @Element(name = "URL", required = false)
-    private String mURL;
+    public String url;
 
     @Element(name = "Duration", required = false)
-    private int mDuration;
+    public int duration;
 
     @Element(name = "Sequence", required = false)
-    private int mSequence;
+    public int sequence;
 }

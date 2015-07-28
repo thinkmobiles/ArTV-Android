@@ -14,27 +14,27 @@ import java.util.List;
 public final class Campaign {
 
     @Element(name = "CampaignID", required = false)
-    private int mCampaignID;
+    public int campaignId;
 
     @Element(name = "CRCVersion", required = false)
-    private String mCRCVersion;
+    public String crcVersion;
 
     @Element(name = "StartDate", required = false)
-    private String mStartDate;
+    public String startDate;
 
     @Element(name = "EndDate", required = false)
-    private String mEndDate;
+    public String endDate;
 
     @Element(name = "Sequence", required = false)
-    private int mSequence;
+    public int sequence;
 
     @Element(name = "PlayDay", required = false)
-    private String mPlayDay;
+    public String playDay;
 
     @Element(name = "OverrideTime", required = false)
-    private String mOverrideTime;
+    public String overrideTime;
 
     @ElementList(name = "Assets", required = false)
-    private List<Asset> mAssets;
+    public List<Asset> assets;
 
 }
