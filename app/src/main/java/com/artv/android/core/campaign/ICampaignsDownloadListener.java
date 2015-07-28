@@ -3,7 +3,7 @@ package com.artv.android.core.campaign;
 /**
  * Created by ZOG on 7/28/2015.
  */
-public interface ICampaignLoadListener {
+public interface ICampaignsDownloadListener {
 
     void progressMessage(final String _message);
     void onProgress(final int _percent);

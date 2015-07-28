@@ -10,8 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
+import com.artv.android.core.campaign.CampaignLoadResult;
 import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.campaign.ICampaignsDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
@@ -22,7 +23,7 @@ import com.artv.android.core.state.StateWorker;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener {
+public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener, ICampaignsDownloadListener {
 
     private ProgressBar pbLoading;
     private Button btnClearConfigInfo;
@@ -74,12 +75,14 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     public final void onStart() {
         super.onStart();
         mStateWorker.addStateChangeListener(this);
+        mCampaignWorker.addCampaignLoadListener(this);
     }
 
     @Override
     public final void onStop() {
         super.onStop();
         mStateWorker.removeStateChangeListener(this);
+        mCampaignWorker.removeCampaignLoadListener(this);
     }
 
     private final void beginInitializing() {
@@ -129,7 +132,26 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     private final void beginCampaignLogic() {
         mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mCampaignWorker.setInitData(mInitWorker.getInitData());
-        mCampaignWorker.getCampaign();
+        mCampaignWorker.doCampaignLogic();
     }
 
+    @Override
+    public final void progressMessage(final String _message) {
+        tvLog.append("\n" + _message);
+    }
+
+    @Override
+    public final void onProgress(final int _percent) {
+
+    }
+
+    @Override
+    public final void onCampaignLoaded(final CampaignLoadResult _result) {
+
+    }
+
+    @Override
+    public final void onCampaignLoadFailed(final CampaignLoadResult _result) {
+        tvLog.append("\n" + _result.getMessage());
+    }
 }
