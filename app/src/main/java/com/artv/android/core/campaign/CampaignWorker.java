@@ -9,6 +9,7 @@ import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.campaign.load.CampaignLoadResult;
+import com.artv.android.core.campaign.load.CampaignLoader;
 import com.artv.android.core.campaign.load.ICampaignsDownloadListener;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
@@ -20,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import static com.artv.android.core.campaign.CampaignHelper.*;
 
@@ -36,6 +35,8 @@ public final class CampaignWorker {
     private Set<ICampaignsDownloadListener> mCampaignLoadListeners;
 
     private List<Campaign> mCampaigns;
+
+    private CampaignLoader mCampaignLoader;
 
     public CampaignWorker() {
         mCampaignLoadListeners = new HashSet<>();
@@ -82,33 +83,8 @@ public final class CampaignWorker {
     }
 
     public final void doCampaignLogic() {
-        getCampaign(0);
+//        getCampaign(0);
 
-    }
-
-    private final void getCampaign(final int _id) {
-        final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
-                .setToken(mInitData.getToken())
-                .setTagID(mConfigInfo.getDeviceId())
-                .setCampaignID(_id)
-                .build();
-
-        mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
-            @Override
-            public final void onSuccess(final GetCampaignResponseObject _respObj) {
-                mCampaigns = _respObj.campaigns;
-                notifyProgressMessage(_respObj.apiType + " : success\n"
-                                + "Campaigns: " + getCampaignsCount(mCampaigns) + "\n"
-                                + "Assets: " + getAssetsCount(mCampaigns)
-                );
-                initLoading();
-            }
-
-            @Override
-            public final void onFailure(final ErrorResponseObject _errorResp) {
-                notifyCampaignLoadFailed(buildCampaignLoadResult(false, _errorResp.apiType + ": " + _errorResp.error));
-            }
-        });
     }
 
     private final CampaignLoadResult buildCampaignLoadResult(final boolean _success, final String _message) {

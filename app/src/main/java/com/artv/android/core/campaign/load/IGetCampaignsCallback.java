@@ -5,7 +5,6 @@ package com.artv.android.core.campaign.load;
  */
 public interface IGetCampaignsCallback {
 
-    void onLoaded();
-    void onFailed();
+    void onFinished(final GetCampaignsResult _result);
 
 }

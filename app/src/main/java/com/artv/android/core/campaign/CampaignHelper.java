@@ -1,7 +1,9 @@
 package com.artv.android.core.campaign;
 
+import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +21,14 @@ abstract class CampaignHelper {
             i += campaign.assets.size();
         }
         return i;
+    }
+
+    protected final List<Asset> getAssetsToDownload(final List<Campaign> _campaigns) {
+        final List<Asset> assets = new ArrayList<>();
+        for (final Campaign campaign : _campaigns) {
+            assets.addAll(campaign.assets);
+        }
+        return assets;
     }
 
 }

@@ -1,5 +1,9 @@
 package com.artv.android.core.campaign.load;
 
+import com.artv.android.core.model.Campaign;
+
+import java.util.List;
+
 /**
  * Created by ZOG on 7/28/2015.
  */

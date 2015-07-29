@@ -1,5 +1,9 @@
 package com.artv.android.core.campaign.load;
 
+import com.artv.android.core.model.Campaign;
+
+import java.util.List;
+
 /**
  * Created by ZOG on 7/29/2015.
  */
@@ -7,6 +11,7 @@ public class GetCampaignsResult {
 
     private boolean mSuccess = false;
     private String mMessage;
+    private List<Campaign> mCampaigns;
 
     private GetCampaignsResult() {}
 
@@ -16,6 +21,10 @@ public class GetCampaignsResult {
 
     public final String getMessage() {
         return mMessage;
+    }
+
+    public final List<Campaign> getCampaigns() {
+        return mCampaigns;
     }
 
 
@@ -34,6 +43,11 @@ public class GetCampaignsResult {
 
         public final Builder setMessage(final String _message) {
             mGetCampaignsResult.mMessage = _message;
+            return this;
+        }
+
+        public final Builder setCampaigns(final List<Campaign> _campaigns) {
+            mGetCampaignsResult.mCampaigns = _campaigns;
             return this;
         }
 
