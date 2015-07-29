@@ -1,14 +1,14 @@
-package com.artv.android.core.campaign;
+package com.artv.android.core.campaign.load;
 
 /**
- * Created by ZOG on 7/28/2015.
+ * Created by ZOG on 7/29/2015.
  */
-public final class CampaignLoadResult {
+public class GetCampaignsResult {
 
     private boolean mSuccess = false;
     private String mMessage;
 
-    private CampaignLoadResult() {}
+    private GetCampaignsResult() {}
 
     public final boolean getSuccess() {
         return mSuccess;
@@ -21,24 +21,24 @@ public final class CampaignLoadResult {
 
     public static final class Builder {
 
-        private CampaignLoadResult mCampaignLoadResult;
+        private GetCampaignsResult mGetCampaignsResult;
 
         public Builder() {
-            mCampaignLoadResult = new CampaignLoadResult();
+            mGetCampaignsResult = new GetCampaignsResult();
         }
 
         public final Builder setSuccess(final boolean _success) {
-            mCampaignLoadResult.mSuccess = _success;
+            mGetCampaignsResult.mSuccess = _success;
             return this;
         }
 
         public final Builder setMessage(final String _message) {
-            mCampaignLoadResult.mMessage = _message;
+            mGetCampaignsResult.mMessage = _message;
             return this;
         }
 
-        public final CampaignLoadResult build() {
-            return mCampaignLoadResult;
+        public final GetCampaignsResult build() {
+            return mGetCampaignsResult;
         }
 
     }

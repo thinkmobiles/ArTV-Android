@@ -10,9 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
-import com.artv.android.core.campaign.CampaignLoadResult;
+import com.artv.android.core.campaign.load.CampaignLoadResult;
 import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.campaign.ICampaignsDownloadListener;
+import com.artv.android.core.campaign.load.ICampaignsDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
@@ -147,7 +147,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
 
     @Override
     public final void onCampaignLoaded(final CampaignLoadResult _result) {
-
+        tvLog.append("\n" + _result.getMessage());
     }
 
     @Override

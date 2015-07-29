@@ -8,6 +8,8 @@ import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
+import com.artv.android.core.campaign.load.CampaignLoadResult;
+import com.artv.android.core.campaign.load.ICampaignsDownloadListener;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
 import com.artv.android.core.model.Asset;
@@ -121,12 +123,11 @@ public final class CampaignWorker {
 
     private final void initLoading() {
         campaignIterator = mCampaigns.iterator();
+        notifyProgressMessage("Begin loading campaigns");
         loadCampaigns();
     }
 
     private final void loadCampaigns() {
-        notifyProgressMessage("Begin loading campaigns");
-
         if (campaignIterator.hasNext()) {
             loadCampaign();
         } else {
@@ -143,8 +144,6 @@ public final class CampaignWorker {
     }
 
     private final void loadAssets() {
-        notifyProgressMessage("Begin loading assets");
-
         if (assetIterator.hasNext()) {
             loadAsset();
         } else {
@@ -155,6 +154,7 @@ public final class CampaignWorker {
 
     private final void loadAsset() {
         final Asset asset = assetIterator.next();
+        notifyProgressMessage("Loading asset " + asset.name + " ...");
 
         new Thread(new Runnable() {
             @Override
@@ -166,6 +166,7 @@ public final class CampaignWorker {
                         @Override
                         public final void run() {
                             notifyProgressMessage("load " + asset.name + " finished " + slept);
+                            loadAssets();
                         }
                     });
                 } catch (InterruptedException e) {
@@ -174,83 +175,6 @@ public final class CampaignWorker {
             }
         }).start();
 
-        loadAssets();
-
-    }
-
-    private interface CampaignLoadCallback {
-        void campaignLoaded();
-    }
-
-    private interface AssetLoadCallback {
-        void assetLoaded();
-    }
-
-    private final CampaignLoadCallback campaignLoadCallback = new CampaignLoadCallback() {
-        @Override
-        public void campaignLoaded() {
-
-        }
-    };
-
-    private final AssetLoadCallback assetLoadCallback = new AssetLoadCallback() {
-        @Override
-        public final void assetLoaded() {
-
-        }
-    };
-
-
-    private final void loadAssets_test() {
-        notifyProgressMessage("Loading assets:");
-        final Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Task("task 1"));
-        executor.execute(new Task("task 2"));
-        executor.execute(new Task("task 3"));
-        executor.execute(new Task("task 4"));
-        executor.execute(new Task("task 5"));
-        executor.execute(new Task("task 6"));
-        executor.execute(new Task("task 7"));
-        executor.execute(new Task("task 8"));
-        executor.execute(new Task("task 9"));
-        executor.execute(new Task("task 10"));
-        executor.execute(new Task("task 11"));
-        executor.execute(new Task("task 12"));
-        executor.execute(new Task("task 13"));
-        executor.execute(new Task("task 14"));
-    }
-
-
-    private final class MyExecutor implements Executor {
-        @Override
-        public final void execute(final Runnable _command) {
-            new Thread(_command).start();
-        }
-    }
-
-    private final class Task implements Runnable {
-
-        private String mName;
-
-        public Task(final String _name) {
-            mName = _name;
-        }
-
-        @Override
-        public final void run() {
-            try {
-                final int slept = 1000 + new Random(this.hashCode()).nextInt(4000);
-                Thread.sleep(slept);
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public final void run() {
-                        notifyProgressMessage(mName + " finished " + slept);
-                    }
-                });
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
 }
