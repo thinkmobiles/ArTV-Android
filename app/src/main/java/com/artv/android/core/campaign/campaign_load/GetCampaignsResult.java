@@ -1,4 +1,4 @@
-package com.artv.android.core.campaign.load;
+package com.artv.android.core.campaign.campaign_load;
 
 import com.artv.android.core.model.Campaign;
 

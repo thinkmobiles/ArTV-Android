@@ -26,6 +26,15 @@
         android:src="@drawable/logo"
         android:adjustViewBounds="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00%"
+        android:id="@+id/tvPercent_FSS"
+        android:textColor="#000"
+        android:layout_above="@+id/pbLoading_FSS"
+        android:layout_alignRight="@+id/pbLoading_FSS" />
+
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="500dp"
@@ -33,7 +42,7 @@
         android:id="@+id/pbLoading_FSS"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/ivLogo_FSS"
-        android:max="100"
+        android:max="10000"
         android:progress="0" />
 
     <TextView

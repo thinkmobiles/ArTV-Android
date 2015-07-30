@@ -10,9 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
-import com.artv.android.core.campaign.load.CampaignLoadResult;
+import com.artv.android.core.ILogger;
+import com.artv.android.core.IPercentListener;
 import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.campaign.load.ICampaignsDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
@@ -23,12 +23,13 @@ import com.artv.android.core.state.StateWorker;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener, ICampaignsDownloadListener {
+public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener, ILogger, IPercentListener {
 
     private ProgressBar pbLoading;
     private Button btnClearConfigInfo;
     private Button btnShowVideo;
     private TextView tvLog;
+    private TextView tvPercent;
 
     private StateWorker mStateWorker;
     private InitWorker mInitWorker;
@@ -57,6 +58,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         btnShowVideo = (Button) view.findViewById(R.id.btnShowVideo_FSS);
         tvLog = (TextView) view.findViewById(R.id.tvLog_FSS);
         tvLog.setMovementMethod(new ScrollingMovementMethod());
+        tvPercent = (TextView) view.findViewById(R.id.tvPercent_FSS);
 
         btnClearConfigInfo.setOnClickListener(this);
         btnShowVideo.setOnClickListener(this);
@@ -75,14 +77,12 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     public final void onStart() {
         super.onStart();
         mStateWorker.addStateChangeListener(this);
-        mCampaignWorker.addCampaignLoadListener(this);
     }
 
     @Override
     public final void onStop() {
         super.onStop();
         mStateWorker.removeStateChangeListener(this);
-        mCampaignWorker.removeCampaignLoadListener(this);
     }
 
     private final void beginInitializing() {
@@ -92,20 +92,18 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                 new IInitCallback() {
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
-                        tvLog.append("\n" + _result.getMessage());
-                        pbLoading.setProgress(100);
+                        printMessage(_result.getMessage());
                         beginCampaignLogic();
                     }
 
                     @Override
                     public final void onProgress(final InitResult _result) {
-                        tvLog.append("\n" + _result.getMessage());
-                        pbLoading.incrementProgressBy(17);
+                        printMessage(_result.getMessage());
                     }
 
                     @Override
                     public final void onInitFail(final InitResult _result) {
-                        tvLog.append("\n" + _result.getMessage());
+                        printMessage(_result.getMessage());
                     }
                 }
         );
@@ -132,26 +130,24 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     private final void beginCampaignLogic() {
         mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mCampaignWorker.setInitData(mInitWorker.getInitData());
+        mCampaignWorker.setUiLogger(this);
+        mCampaignWorker.setPercentListener(this);
         mCampaignWorker.doCampaignLogic();
     }
 
     @Override
-    public final void progressMessage(final String _message) {
-        tvLog.append("\n" + _message);
+    public final void printMessage(final String _message) {
+        printMessage(true, _message);
     }
 
     @Override
-    public final void onProgress(final int _percent) {
-
+    public final void printMessage(final boolean _fromNewLine, final String _message) {
+        tvLog.append((_fromNewLine ? "\n " : "") + _message);
     }
 
     @Override
-    public final void onCampaignLoaded(final CampaignLoadResult _result) {
-        tvLog.append("\n" + _result.getMessage());
-    }
-
-    @Override
-    public final void onCampaignLoadFailed(final CampaignLoadResult _result) {
-        tvLog.append("\n" + _result.getMessage());
+    public final void onPercentUpdate(final double _percent) {
+        tvPercent.setText(String.format("%.2f%%", _percent / 100));
+        pbLoading.setProgress((int) _percent);
     }
 }

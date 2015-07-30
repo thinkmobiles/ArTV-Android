@@ -1,5 +1,6 @@
-package com.artv.android.core.campaign.load;
+package com.artv.android.core.campaign.campaign_load;
 
+import com.artv.android.core.ILogger;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -7,9 +8,6 @@ import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
-import com.artv.android.core.model.Asset;
-
-import java.util.List;
 
 /**
  * Created by ZOG on 7/29/2015.
@@ -19,6 +17,7 @@ public final class CampaignLoader {
     private ApiWorker mApiWorker;
     private InitData mInitData;
     private ConfigInfo mConfigInfo;
+    private ILogger mUiLogger;
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -32,6 +31,10 @@ public final class CampaignLoader {
         mConfigInfo = _configInfo;
     }
 
+    public final void setUiLogger(final ILogger _logger) {
+        mUiLogger = _logger;
+    }
+
     public final void getCampaigns(final IGetCampaignsCallback _callback) {
         final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
                 .setToken(mInitData.getToken())
@@ -42,10 +45,8 @@ public final class CampaignLoader {
         mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
             @Override
             public final void onSuccess(final GetCampaignResponseObject _respObj) {
-//                notifyProgressMessage(_respObj.apiType + " : success\n"
-//                                + "Campaigns: " + getCampaignsCount(mCampaigns) + "\n"
-//                                + "Assets: " + getAssetsCount(mCampaigns)
-//                );
+                mUiLogger.printMessage(_respObj.apiType + " : success");
+
                 _callback.onFinished(
                         new GetCampaignsResult.Builder()
                                 .setSuccess(true)
@@ -57,7 +58,8 @@ public final class CampaignLoader {
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
-//                notifyCampaignLoadFailed(buildCampaignLoadResult(false, _errorResp.apiType + ": " + _errorResp.error));
+                mUiLogger.printMessage(_errorResp.apiType + ": " + _errorResp.error);
+
                 _callback.onFinished(
                         new GetCampaignsResult.Builder()
                                 .setSuccess(false)
@@ -66,10 +68,6 @@ public final class CampaignLoader {
                 );
             }
         });
-    }
-
-    public final void downloadAssets(final List<Asset> _assets) {
-
     }
 
 }
