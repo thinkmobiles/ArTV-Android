@@ -57,8 +57,6 @@ public final class ApplicationLogic {
 
         mVideoFilesHolder = new VideoFilesHolder();
         mCampaignWorker.setVideoFilesHolder(mVideoFilesHolder);
-
-        determineStateWhenAppStart();
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -92,7 +90,7 @@ public final class ApplicationLogic {
     /**
      * Determine state when application start. Next steps will be triggered from UI.
      */
-    private final void determineStateWhenAppStart() {
+    public final void determineStateWhenAppStart() {
         mConfigInfoWorker.loadConfigInfo();
 
         if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()

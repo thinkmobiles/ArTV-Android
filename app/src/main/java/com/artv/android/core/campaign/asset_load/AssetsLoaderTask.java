@@ -130,6 +130,14 @@ public final class AssetsLoaderTask extends AsyncTask<Void, Double, Boolean> {
     }
 
     private final URL buildUrlFrom(final String _path) throws UnsupportedEncodingException, MalformedURLException {
+        final URL url;
+        try {
+            url = new URL(_path);
+            return url;
+        } catch (final MalformedURLException _e) {
+            _e.printStackTrace();
+        }
+
         final Uri uri = new Uri.Builder()
                 .scheme(ApiConst.PROTOCOL)
                 .authority(ApiConst.SERVER_AUTHORITY)

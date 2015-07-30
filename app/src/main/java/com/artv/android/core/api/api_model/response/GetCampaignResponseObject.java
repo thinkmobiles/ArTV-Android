@@ -19,6 +19,12 @@ import java.util.List;
 @Root(name = "CampaignInfoXML")
 public final class GetCampaignResponseObject extends BaseResponseObject {
 
+    @Element(name = "ErrorNumber", required = false)
+    public int errorNumber;
+
+    @Element(name = "ErrorDescription", required = false)
+    public String errorDescription;
+
     @ElementList(name = "Campaigns", required = false)
     public List<Campaign> campaigns;
 

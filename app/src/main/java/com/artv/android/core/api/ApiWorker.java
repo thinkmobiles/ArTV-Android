@@ -37,13 +37,14 @@ public final class ApiWorker {
             @Override
             public void success(GetTokenResponseObject getTokenResponseObject, Response _response) {
                 if (_response != null) {
-                    if(getTokenResponseObject.errorNumber == 0) {
+                    if (getTokenResponseObject.errorNumber == 0) {
                         _callback.onSuccess(getTokenResponseObject);
-                    } else
+                    } else {
                         _callback.onFailure(new ErrorResponseObject.Builder()
                                 .setApiType(_requestObject.apiType)
                                 .setError(getTokenResponseObject.errorDescription)
                                 .build());
+                    }
                 }
             }
 
@@ -141,7 +142,14 @@ public final class ApiWorker {
             @Override
             public void success(GetCampaignResponseObject _getCampaignResponseObject, Response _response) {
                 if (_response != null) {
-                    _callback.onSuccess(_getCampaignResponseObject);
+                    if (_getCampaignResponseObject.errorNumber == 0) {
+                        _callback.onSuccess(_getCampaignResponseObject);
+                    } else {
+                        _callback.onFailure(new ErrorResponseObject.Builder()
+                                .setApiType(_requestObject.apiType)
+                                .setError(_getCampaignResponseObject.errorDescription)
+                                .build());
+                    }
                 }
             }
             @Override

@@ -31,6 +31,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
         //does not create ApplicationLogic each time activity recreating (i.e. rotate, screen lock etc)
         if (getMyApplication().getApplicationLogic() == null) getMyApplication().createApplicationLogic();
+        getMyApplication().getApplicationLogic().determineStateWhenAppStart();
         initLogic();
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
