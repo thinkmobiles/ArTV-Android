@@ -13,10 +13,12 @@ import com.artv.android.R;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.campaign.CampaignWorker;
+import com.artv.android.core.campaign.campaign_load.ICampaignPrepareCallback;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
 import com.artv.android.core.init.InitWorker;
+import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 
@@ -132,7 +134,12 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mCampaignWorker.setInitData(mInitWorker.getInitData());
         mCampaignWorker.setUiLogger(this);
         mCampaignWorker.setPercentListener(this);
-        mCampaignWorker.doCampaignLogic();
+        mCampaignWorker.doCampaignLogic(new ICampaignPrepareCallback() {
+            @Override
+            public final void onPrepared() {
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+            }
+        });
     }
 
     @Override

@@ -14,6 +14,7 @@ import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
+import com.artv.android.system.fragments.MediaPlayerFragment;
 import com.artv.android.system.fragments.SplashScreenFragment;
 
 public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IConfigInfoListener {
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
-//                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
                 break;
         }
     }

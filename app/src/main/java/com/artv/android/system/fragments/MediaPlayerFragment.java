@@ -1,6 +1,5 @@
 package com.artv.android.system.fragments;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,7 +25,7 @@ import com.squareup.picasso.Target;
 /**
  * Created by Misha on 6/30/2015.
  */
-public class MediaPlayerFragment extends Fragment {
+public class MediaPlayerFragment extends BaseFragment {
     private FrameLayout mVideoContainer;
     private LinearLayout mRightContainer, mBottomContainer;
     private TextView mRightText, mBottomText;

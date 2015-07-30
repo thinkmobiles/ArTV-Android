@@ -7,12 +7,11 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.artv.android.core.api.ApiConst;
+import com.artv.android.core.campaign.VideoFilesHolder;
 import com.artv.android.core.model.Asset;
 
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.protocol.HTTP;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +30,7 @@ public final class AssetsLoaderTask extends AsyncTask<Void, Double, Boolean> {
 
     private List<Asset> mAssets;
     private IDownloadAssetsListener mDownloadAssetsListener;
+    private VideoFilesHolder mVideoFilesHolder;
 
     private static final String FOLDER_NAME = "artv_data";
     private static final String PATH = Environment.getExternalStorageDirectory() + File.separator + FOLDER_NAME;
@@ -43,6 +43,10 @@ public final class AssetsLoaderTask extends AsyncTask<Void, Double, Boolean> {
 
     public final void setDownloadAssetsListener(final IDownloadAssetsListener _listener) {
         mDownloadAssetsListener = _listener;
+    }
+
+    public final void setVideoFilesHolder(final VideoFilesHolder _holder) {
+        mVideoFilesHolder = _holder;
     }
 
     @Override
@@ -100,6 +104,7 @@ public final class AssetsLoaderTask extends AsyncTask<Void, Double, Boolean> {
 
         if (respCode == 200) {
             final File file = new File(PATH + _asset.url);
+            mVideoFilesHolder.addFile(file);
             //if exist - publish progress and return
             final boolean reload = needReloadFile(file, fileLength);
             if (!reload) {

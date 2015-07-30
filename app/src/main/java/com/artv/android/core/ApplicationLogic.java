@@ -5,6 +5,7 @@ import android.content.Context;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignWorker;
+import com.artv.android.core.campaign.VideoFilesHolder;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
@@ -28,6 +29,7 @@ public final class ApplicationLogic {
     private DisplaySwitcher mDisplaySwitcher;
     private BeaconWorker mBeaconWorker;
     private CampaignWorker mCampaignWorker;
+    private VideoFilesHolder mVideoFilesHolder;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -52,6 +54,9 @@ public final class ApplicationLogic {
 
         mCampaignWorker = new CampaignWorker();
         mCampaignWorker.setApiWorker(mApiWorker);
+
+        mVideoFilesHolder = new VideoFilesHolder();
+        mCampaignWorker.setVideoFilesHolder(mVideoFilesHolder);
 
         determineStateWhenAppStart();
     }
@@ -78,6 +83,10 @@ public final class ApplicationLogic {
 
     public final CampaignWorker getCampaignWorker() {
         return mCampaignWorker;
+    }
+
+    public final VideoFilesHolder getVideoFilesHolder() {
+        return mVideoFilesHolder;
     }
 
     /**

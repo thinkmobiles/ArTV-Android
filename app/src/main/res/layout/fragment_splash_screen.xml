@@ -33,7 +33,8 @@
         android:id="@+id/tvPercent_FSS"
         android:textColor="#000"
         android:layout_above="@+id/pbLoading_FSS"
-        android:layout_alignRight="@+id/pbLoading_FSS" />
+        android:layout_alignRight="@+id/pbLoading_FSS"
+        android:freezesText="true" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"

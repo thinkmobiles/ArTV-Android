@@ -4,9 +4,10 @@ import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.campaign.asset_load.AssetLoader;
+import com.artv.android.core.campaign.asset_load.IDownloadAssetsListener;
 import com.artv.android.core.campaign.campaign_load.CampaignLoader;
 import com.artv.android.core.campaign.campaign_load.GetCampaignsResult;
-import com.artv.android.core.campaign.asset_load.IDownloadAssetsListener;
+import com.artv.android.core.campaign.campaign_load.ICampaignPrepareCallback;
 import com.artv.android.core.campaign.campaign_load.IGetCampaignsCallback;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
@@ -30,6 +31,8 @@ public final class CampaignWorker {
     private AssetLoader mAssetLoader;
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
+    private ICampaignPrepareCallback mCampaignPrepareCallback;
+    private VideoFilesHolder mVideoFilesHolder;
 
     public CampaignWorker() {
         mCampaignLoader = new CampaignLoader();
@@ -56,15 +59,25 @@ public final class CampaignWorker {
         mPercentListener = _listener;
     }
 
+    public final void setVideoFilesHolder(final VideoFilesHolder _holder) {
+        mVideoFilesHolder = _holder;
+    }
+
     public final boolean hasCampaign() {
         return false;
     }
 
-    public final void doCampaignLogic() {
+    public final void doCampaignLogic(final ICampaignPrepareCallback _callback) {
+        mCampaignPrepareCallback = _callback;
+
+        mVideoFilesHolder.clearFiles();
+
         mCampaignLoader.setApiWorker(mApiWorker);
         mCampaignLoader.setInitData(mInitData);
         mCampaignLoader.setConfigInfo(mConfigInfo);
         mCampaignLoader.setUiLogger(mUiLogger);
+
+        mAssetLoader.setVideoFilesHolder(mVideoFilesHolder);
 
         getCampaigns();
     }
@@ -100,6 +113,7 @@ public final class CampaignWorker {
             public final void onLoadFinished() {
                 mPercentListener.onPercentUpdate(10000);
                 mUiLogger.printMessage("All assets loaded");
+                mCampaignPrepareCallback.onPrepared();
             }
 
             @Override
