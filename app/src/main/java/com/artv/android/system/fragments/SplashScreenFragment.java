@@ -45,10 +45,10 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     }
 
     private final void initLogic() {
-        mStateWorker = getMyApplication().getApplicationLogic().getStateWorker();
-        mInitWorker = getMyApplication().getApplicationLogic().getInitWorker();
-        mConfigInfoWorker = getMyApplication().getApplicationLogic().getConfigInfoWorker();
-        mCampaignWorker = getMyApplication().getApplicationLogic().getCampaignWorker();
+        mStateWorker = getApplicationLogic().getStateWorker();
+        mInitWorker = getApplicationLogic().getInitWorker();
+        mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
+        mCampaignWorker = getApplicationLogic().getCampaignWorker();
     }
 
     @Override

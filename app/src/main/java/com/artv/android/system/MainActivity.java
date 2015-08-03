@@ -30,8 +30,8 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         setContentView(R.layout.activity_main);
 
         //does not create ApplicationLogic each time activity recreating (i.e. rotate, screen lock etc)
-        if (getMyApplication().getApplicationLogic() == null) getMyApplication().createApplicationLogic();
-        getMyApplication().getApplicationLogic().determineStateWhenAppStart();
+        if (getApplicationLogic() == null) getMyApplication().createApplicationLogic();
+        getApplicationLogic().determineStateWhenAppStart();
         initLogic();
 
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
@@ -41,8 +41,8 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     private final void initLogic() {
-        mStateWorker = getMyApplication().getApplicationLogic().getStateWorker();
-        mConfigInfoWorker = getMyApplication().getApplicationLogic().getConfigInfoWorker();
+        mStateWorker = getApplicationLogic().getStateWorker();
+        mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
     }
 
     @Override

@@ -42,7 +42,7 @@ public final class MediaPlayerFragment extends BaseFragment {
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
-        mVideoFilesHolder = getMyApplication().getApplicationLogic().getVideoFilesHolder();
+        mVideoFilesHolder = getApplicationLogic().getVideoFilesHolder();
     }
 
     @Override

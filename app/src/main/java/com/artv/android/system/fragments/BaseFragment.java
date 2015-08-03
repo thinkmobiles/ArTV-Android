@@ -3,6 +3,7 @@ package com.artv.android.system.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 
+import com.artv.android.core.ApplicationLogic;
 import com.artv.android.system.BaseActivity;
 import com.artv.android.system.MyApplication;
 
@@ -19,8 +20,8 @@ public abstract class BaseFragment extends Fragment {
         mBaseActivity = ((BaseActivity) getActivity());
     }
 
-    public final MyApplication getMyApplication() {
-        return mBaseActivity.getMyApplication();
+    public final ApplicationLogic getApplicationLogic() {
+        return mBaseActivity.getApplicationLogic();
     }
 
 }
