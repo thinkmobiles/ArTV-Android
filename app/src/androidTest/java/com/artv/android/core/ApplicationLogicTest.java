@@ -10,6 +10,7 @@ import com.artv.android.core.state.ArTvState;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -40,6 +41,7 @@ public final class ApplicationLogicTest {
         Assert.assertEquals(mApplicationLogic.getStateWorker().getArTvState(), ArTvState.STATE_APP_START);
     }
 
+    @Ignore
     @Test
     public final void Create_SaveAndRemoveConfigInfo_StateMatch() throws NoSuchFieldException, IllegalAccessException {
         final ConfigInfo ci1 = new ConfigInfo.Builder()

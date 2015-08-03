@@ -15,6 +15,7 @@ import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -57,6 +58,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .findFragmentById(R.id.flFragmentContainer_AM);
     }
 
+    @Ignore
     @Test
     public final void ActivityStart_StateAppStartWithConfigInfo_SplashScreenFragmentIsShown() {
         final ConfigInfo ci = new ConfigInfo.Builder()
@@ -80,6 +82,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
         mMainActivity.getApplicationLogic().getConfigInfoWorker().removeConfigInfo();
     }
 
+    @Ignore
     @Test
     public final void SetAndRemoveConfigInfo_FragmentsChangeProperly() throws Throwable {
         final ConfigInfo ci = new ConfigInfo.Builder()
@@ -101,10 +104,10 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .getFragmentManager()
                 .findFragmentById(R.id.flFragmentContainer_AM);
 
-        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyNeedRemoveConfigInfo();
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyNeedRemoveConfigInfo();
                 mMainActivity.getFragmentManager().executePendingTransactions();
             }
         });
