@@ -3,5 +3,5 @@
     <solid android:color="@color/cis_edit_text_bg" />
     <stroke
         android:color="@color/cis_edit_text_border"
-        android:width="@dimen/cis_border_width"/>
+        android:width="@dimen/border_width"/>
 </shape>

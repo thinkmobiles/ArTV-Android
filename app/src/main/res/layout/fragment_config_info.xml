@@ -11,14 +11,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/ivLogo_FCI"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/logo"
-        android:adjustViewBounds="true" />
+        style="@style/LogoImage" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -31,34 +31,34 @@
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/tvDeviceId_FCI"
                 android:layout_toLeftOf="@+id/etDeviceId_FCI"
-                android:layout_marginRight="@dimen/cis_main_distance"
-                android:layout_marginBottom="@dimen/cis_main_distance"
-                style="@style/CIS_TextMedium"
+                android:layout_marginRight="@dimen/main_distance"
+                android:layout_marginBottom="@dimen/main_distance"
+                style="@style/TextMedium"
                 android:text="@string/device_id"
                 android:gravity="center|right" />
 
             <EditText
-                android:layout_width="@dimen/cis_element_width"
+                android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etDeviceId_FCI"
                 android:layout_alignParentRight="true"
                 android:text="1"
                 style="@style/CIS_EditText"
-                android:layout_marginBottom="@dimen/cis_main_distance" />
+                android:layout_marginBottom="@dimen/main_distance" />
 
             <TextView
                 android:text="@string/master_device_ip"
                 android:id="@+id/tvMasterDeviceIp_FCI"
                 android:layout_below="@+id/etDeviceId_FCI"
                 android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
-                android:layout_marginRight="@dimen/cis_main_distance"
-                style="@style/CIS_TextSmall"
+                android:layout_marginRight="@dimen/main_distance"
+                style="@style/TextSmall"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:gravity="center|right" />
 
             <EditText
-                android:layout_width="@dimen/cis_element_width"
+                android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etMasterDeviceIp_FCI"
                 android:layout_alignParentRight="true"
@@ -70,40 +70,39 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/rlUser_FCI"
-            android:layout_toRightOf="@+id/rlDevice_FCI"
             android:layout_weight="1">
 
             <TextView
-                android:layout_width="@dimen/cis_element_width"
+                android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:text="@string/user"
                 android:id="@+id/tvUserName_FCI"
-                android:layout_marginRight="@dimen/cis_main_distance"
-                style="@style/CIS_TextMedium"
+                android:layout_marginRight="@dimen/main_distance"
+                style="@style/TextMedium"
                 android:gravity="center|right"
-                android:layout_marginBottom="@dimen/cis_main_distance" />
+                android:layout_marginBottom="@dimen/main_distance" />
 
             <EditText
-                android:layout_width="@dimen/cis_element_width"
+                android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etUserName_FCI"
                 android:text="testdev"
                 android:layout_toRightOf="@+id/tvUserName_FCI"
                 style="@style/CIS_EditText"
-                android:layout_marginBottom="@dimen/cis_main_distance" />
+                android:layout_marginBottom="@dimen/main_distance" />
 
             <TextView
-                android:layout_width="@dimen/cis_element_width"
+                android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:text="@string/password"
                 android:id="@+id/tvPassword_FCI"
                 android:layout_below="@+id/etUserName_FCI"
-                android:layout_marginRight="@dimen/cis_main_distance"
-                style="@style/CIS_TextMedium"
+                android:layout_marginRight="@dimen/main_distance"
+                style="@style/TextMedium"
                 android:gravity="center|right" />
 
             <EditText
-                android:layout_width="@dimen/cis_element_width"
+                android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etPassword_FCI"
                 android:layout_alignTop="@+id/tvPassword_FCI"
@@ -116,12 +115,12 @@
     </LinearLayout>
 
     <Button
-        android:layout_width="@dimen/cis_element_width"
+        android:layout_width="@dimen/element_width"
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:id="@+id/btnSave_FCI"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        style="@style/CIS_Button" />
+        style="@style/Button" />
 
 </RelativeLayout>

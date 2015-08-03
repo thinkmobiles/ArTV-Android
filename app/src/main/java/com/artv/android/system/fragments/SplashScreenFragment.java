@@ -19,17 +19,15 @@ import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
-import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener, ILogger, IPercentListener {
+public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, ILogger, IPercentListener {
 
     private ProgressBar pbLoading;
     private Button btnClearConfigInfo;
-    private Button btnShowVideo;
     private TextView tvLog;
     private TextView tvPercent;
 
@@ -54,37 +52,24 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
         final View view = _inflater.inflate(R.layout.fragment_splash_screen, _container, false);
+        prepareViews(view);
+        return view;
+    }
 
-        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
-        btnClearConfigInfo = (Button) view.findViewById(R.id.btnClearConfigInfo_FSS);
-        btnShowVideo = (Button) view.findViewById(R.id.btnShowVideo_FSS);
-        tvLog = (TextView) view.findViewById(R.id.tvLog_FSS);
+    private final void prepareViews(final View _view) {
+        pbLoading = (ProgressBar) _view.findViewById(R.id.pbLoading_FSS);
+        btnClearConfigInfo = (Button) _view.findViewById(R.id.btnClearConfigInfo_FSS);
+        tvLog = (TextView) _view.findViewById(R.id.tvLog_FSS);
         tvLog.setMovementMethod(new ScrollingMovementMethod());
-        tvPercent = (TextView) view.findViewById(R.id.tvPercent_FSS);
+        tvPercent = (TextView) _view.findViewById(R.id.tvPercent_FSS);
 
         btnClearConfigInfo.setOnClickListener(this);
-        btnShowVideo.setOnClickListener(this);
-        btnShowVideo.setVisibility(View.INVISIBLE);
-
-        return view;
     }
 
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
         if (_savedInstanceState == null) beginInitializing();
-    }
-
-    @Override
-    public final void onStart() {
-        super.onStart();
-        mStateWorker.addStateChangeListener(this);
-    }
-
-    @Override
-    public final void onStop() {
-        super.onStop();
-        mStateWorker.removeStateChangeListener(this);
     }
 
     private final void beginInitializing() {
@@ -95,6 +80,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
                         printMessage(_result.getMessage());
+                        showProgressUi();
                         beginCampaignLogic();
                     }
 
@@ -111,22 +97,18 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         );
     }
 
+    private final void showProgressUi() {
+        pbLoading.setVisibility(View.VISIBLE);
+        tvPercent.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public final void onClick(final View _v) {
         switch (_v.getId()) {
             case R.id.btnClearConfigInfo_FSS:
-                    mConfigInfoWorker.notifyNeedRemoveConfigInfo();
-                break;
-
-            case R.id.btnShowVideo_FSS:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
+                mConfigInfoWorker.notifyNeedRemoveConfigInfo();
                 break;
         }
-    }
-
-    @Override
-    public final void onArTvStateChanged() {
-        btnShowVideo.setVisibility(View.VISIBLE);
     }
 
     private final void beginCampaignLogic() {

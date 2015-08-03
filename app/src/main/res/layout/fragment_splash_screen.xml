@@ -7,24 +7,18 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Video"
-        android:id="@+id/btnShowVideo_FSS"
-        android:layout_toLeftOf="@+id/btnClearConfigInfo_FSS" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Clear Config Info"
         android:id="@+id/btnClearConfigInfo_FSS"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        style="@style/Button"
+        android:layout_marginTop="@dimen/main_distance" />
 
     <ImageView
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivLogo_FSS"
         android:layout_centerInParent="true"
-        android:src="@drawable/logo"
-        android:adjustViewBounds="true" />
+        style="@style/LogoImage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,7 +28,8 @@
         android:textColor="#000"
         android:layout_above="@+id/pbLoading_FSS"
         android:layout_alignRight="@+id/pbLoading_FSS"
-        android:freezesText="true" />
+        android:freezesText="true"
+        android:visibility="invisible" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
@@ -44,7 +39,8 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/ivLogo_FSS"
         android:max="10000"
-        android:progress="0" />
+        android:progress="0"
+        android:visibility="invisible" />
 
     <TextView
         android:layout_width="match_parent"
