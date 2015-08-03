@@ -1,6 +1,7 @@
-package com.artv.android.core.campaign.campaign_load;
+package com.artv.android.core.campaign;
 
 import com.artv.android.core.ILogger;
+import com.artv.android.core.IPercentListener;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -8,16 +9,24 @@ import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
+import com.artv.android.core.model.Campaign;
+
+import java.util.List;
+
+import static com.artv.android.core.campaign.CampaignHelper.getAssetsCount;
+import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
 
 /**
- * Created by ZOG on 7/29/2015.
+ * Created by ZOG on 7/28/2015.
  */
-public final class CampaignLoader {
+public final class CampaignsWorker {
 
     private ApiWorker mApiWorker;
     private InitData mInitData;
     private ConfigInfo mConfigInfo;
     private ILogger mUiLogger;
+    private IPercentListener mPercentListener;
+
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -35,17 +44,42 @@ public final class CampaignLoader {
         mUiLogger = _logger;
     }
 
-    public final void getCampaigns(final IGetCampaignsCallback _callback) {
+    public final void setPercentListener(final IPercentListener _listener) {
+        mPercentListener = _listener;
+    }
+
+    public final boolean hasCampaignToPlay() {
+        return false;
+    }
+
+    public final void doInitialCampaignDownload() {
+        getCampaign(0, new IGetCampaignsCallback() {
+            @Override
+            public final void onFinished(final GetCampaignsResult _result) {
+                if (_result.getSuccess()) {
+                    mUiLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
+                    mUiLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
+                    loadCampaigns(_result.getCampaigns());
+                } else {
+                    mUiLogger.printMessage("Error loading campaigns: " + _result.getMessage());
+                }
+            }
+        });
+    }
+
+    public final void getCampaign(final int _campaignId, final IGetCampaignsCallback _callback) {
         final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
                 .setToken(mInitData.getToken())
                 .setTagID(mConfigInfo.getDeviceId())
-                .setCampaignID(0)
+                .setCampaignID(_campaignId)
                 .build();
 
         mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
             @Override
             public final void onSuccess(final GetCampaignResponseObject _respObj) {
                 mUiLogger.printMessage(_respObj.apiType + " : success");
+                _respObj.campaigns.addAll(_respObj.campaigns);
+                _respObj.campaigns.addAll(_respObj.campaigns);
 
                 _callback.onFinished(
                         new GetCampaignsResult.Builder()
@@ -68,6 +102,18 @@ public final class CampaignLoader {
                 );
             }
         });
+    }
+
+    public final void loadCampaigns(final List<Campaign> _campaigns) {
+        final CampaignsLoaderTask task = new CampaignsLoaderTask();
+        task.setCampaigns(_campaigns);
+        task.setUiLogger(mUiLogger);
+        task.setPercentListener(mPercentListener);
+        task.execute();
+    }
+
+    public final void doRegularDownload() {
+
     }
 
 }

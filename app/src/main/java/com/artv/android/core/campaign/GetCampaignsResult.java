@@ -1,4 +1,4 @@
-package com.artv.android.core.campaign.campaign_load;
+package com.artv.android.core.campaign;
 
 import com.artv.android.core.model.Campaign;
 
@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ZOG on 7/29/2015.
  */
-public class GetCampaignsResult {
+public final class GetCampaignsResult {
 
     private boolean mSuccess = false;
     private String mMessage;

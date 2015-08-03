@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
-import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.campaign.VideoFilesHolder;
+import com.artv.android.core.campaign.CampaignsWorker;
+import com.artv.android.core.campaign.old.VideoFilesHolder;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
@@ -28,7 +28,7 @@ public final class ApplicationLogic {
     private InitWorker mInitWorker;
     private DisplaySwitcher mDisplaySwitcher;
     private BeaconWorker mBeaconWorker;
-    private CampaignWorker mCampaignWorker;
+    private CampaignsWorker mCampaignsWorker;
     private VideoFilesHolder mVideoFilesHolder;
 
     public ApplicationLogic(final Context _context) {
@@ -52,11 +52,10 @@ public final class ApplicationLogic {
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
-        mCampaignWorker = new CampaignWorker();
-        mCampaignWorker.setApiWorker(mApiWorker);
+        mCampaignsWorker = new CampaignsWorker();
+        mCampaignsWorker.setApiWorker(mApiWorker);
 
         mVideoFilesHolder = new VideoFilesHolder();
-        mCampaignWorker.setVideoFilesHolder(mVideoFilesHolder);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -79,8 +78,8 @@ public final class ApplicationLogic {
         return mDisplaySwitcher;
     }
 
-    public final CampaignWorker getCampaignWorker() {
-        return mCampaignWorker;
+    public final CampaignsWorker getCampaignWorker() {
+        return mCampaignsWorker;
     }
 
     public final VideoFilesHolder getVideoFilesHolder() {
@@ -94,7 +93,7 @@ public final class ApplicationLogic {
         mConfigInfoWorker.loadConfigInfo();
 
         if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()
-                || !mCampaignWorker.hasCampaign()) {
+                || !mCampaignsWorker.hasCampaignToPlay()) {
             mStateWorker.setState(ArTvState.STATE_APP_START);
         } else {
             mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);

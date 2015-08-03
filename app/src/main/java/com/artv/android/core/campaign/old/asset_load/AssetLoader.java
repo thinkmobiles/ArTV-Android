@@ -1,6 +1,6 @@
-package com.artv.android.core.campaign.asset_load;
+package com.artv.android.core.campaign.old.asset_load;
 
-import com.artv.android.core.campaign.VideoFilesHolder;
+import com.artv.android.core.campaign.old.VideoFilesHolder;
 import com.artv.android.core.model.Asset;
 
 import java.util.List;

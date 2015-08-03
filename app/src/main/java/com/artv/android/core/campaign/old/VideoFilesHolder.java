@@ -1,4 +1,4 @@
-package com.artv.android.core.campaign;
+package com.artv.android.core.campaign.old;
 
 import java.io.File;
 import java.util.ArrayList;

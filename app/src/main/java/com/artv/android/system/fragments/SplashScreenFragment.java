@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.artv.android.R;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
-import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.campaign.campaign_load.ICampaignPrepareCallback;
+import com.artv.android.core.campaign.CampaignsWorker;
+import com.artv.android.core.campaign.old.ICampaignPrepareCallback;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
@@ -34,7 +34,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     private StateWorker mStateWorker;
     private InitWorker mInitWorker;
     private ConfigInfoWorker mConfigInfoWorker;
-    private CampaignWorker mCampaignWorker;
+    private CampaignsWorker mCampaignsWorker;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
@@ -46,7 +46,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mStateWorker = getApplicationLogic().getStateWorker();
         mInitWorker = getApplicationLogic().getInitWorker();
         mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
-        mCampaignWorker = getApplicationLogic().getCampaignWorker();
+        mCampaignsWorker = getApplicationLogic().getCampaignWorker();
     }
 
     @Override
@@ -112,16 +112,22 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     }
 
     private final void beginCampaignLogic() {
-        mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
-        mCampaignWorker.setInitData(mInitWorker.getInitData());
-        mCampaignWorker.setUiLogger(this);
-        mCampaignWorker.setPercentListener(this);
-        mCampaignWorker.doCampaignLogic(new ICampaignPrepareCallback() {
-            @Override
-            public final void onPrepared() {
-                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-            }
-        });
+        mCampaignsWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mCampaignsWorker.setInitData(mInitWorker.getInitData());
+        mCampaignsWorker.setUiLogger(this);
+        mCampaignsWorker.setPercentListener(this);
+        if (mCampaignsWorker.hasCampaignToPlay()) {
+            printMessage("Has campaigns to play: not implemented yet");
+        } else {
+            mCampaignsWorker.doInitialCampaignDownload();
+//            mCampaignsWorker.doCampaignLogic(new ICampaignPrepareCallback() {
+//                @Override
+//                public final void onPrepared() {
+//                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+//                }
+//            });
+        }
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.artv.android.core.campaign.campaign_load;
+package com.artv.android.core.campaign;
 
 /**
  * Created by ZOG on 7/29/2015.
