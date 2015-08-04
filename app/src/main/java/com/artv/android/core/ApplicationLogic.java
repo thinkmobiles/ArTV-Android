@@ -3,6 +3,9 @@ package com.artv.android.core;
 import android.content.Context;
 
 import com.artv.android.core.api.ApiWorker;
+import com.artv.android.core.beacon.BeaconWorker;
+import com.artv.android.core.campaign.CampaignWorker;
+import com.artv.android.core.campaign.VideoFilesHolder;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
@@ -12,6 +15,7 @@ import com.artv.android.system.SpHelper;
 
 /**
  * Created by ZOG on 6/30/2015.
+ * todo: in first run no need call beacon, just download all campaigns
  */
 public final class ApplicationLogic {
 
@@ -23,6 +27,9 @@ public final class ApplicationLogic {
     private ApiWorker mApiWorker;
     private InitWorker mInitWorker;
     private DisplaySwitcher mDisplaySwitcher;
+    private BeaconWorker mBeaconWorker;
+    private CampaignWorker mCampaignWorker;
+    private VideoFilesHolder mVideoFilesHolder;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -38,13 +45,18 @@ public final class ApplicationLogic {
         mApiWorker = new ApiWorker(mContext);
 
         mInitWorker = new InitWorker();
-
         mDisplaySwitcher = new DisplaySwitcher();
+
+        mBeaconWorker = new BeaconWorker();
 
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
-        determineStateWhenAppStart();
+        mCampaignWorker = new CampaignWorker();
+        mCampaignWorker.setApiWorker(mApiWorker);
+
+        mVideoFilesHolder = new VideoFilesHolder();
+        mCampaignWorker.setVideoFilesHolder(mVideoFilesHolder);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -67,13 +79,22 @@ public final class ApplicationLogic {
         return mDisplaySwitcher;
     }
 
+    public final CampaignWorker getCampaignWorker() {
+        return mCampaignWorker;
+    }
+
+    public final VideoFilesHolder getVideoFilesHolder() {
+        return mVideoFilesHolder;
+    }
+
     /**
      * Determine state when application start. Next steps will be triggered from UI.
      */
-    private final void determineStateWhenAppStart() {
+    public final void determineStateWhenAppStart() {
         mConfigInfoWorker.loadConfigInfo();
 
-        if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()) {
+        if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()
+                || !mCampaignWorker.hasCampaign()) {
             mStateWorker.setState(ArTvState.STATE_APP_START);
         } else {
             mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);

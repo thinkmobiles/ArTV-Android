@@ -21,7 +21,7 @@ public final class GetGlobalConfigResponseObject extends BaseResponseObject {
     public List<Entry> list;
 
     public GetGlobalConfigResponseObject() {
-        apiType = ApiType.GET_GLOBAL_GONFIG;
+        apiType = ApiType.GET_GLOBAL_CONFIG;
     }
 
 }

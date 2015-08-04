@@ -19,11 +19,17 @@ import java.util.List;
 @Root(name = "CampaignInfoXML")
 public final class GetCampaignResponseObject extends BaseResponseObject {
 
-    @ElementList(name = "Campaigns")
-    private List<Campaign> mCampaigns;
+    @Element(name = "ErrorNumber", required = false)
+    public int errorNumber;
 
-    @Element(name = "MsgBoardCampaign")
-    private MsgBoardCampaign mMsgBoardCampaign;
+    @Element(name = "ErrorDescription", required = false)
+    public String errorDescription;
+
+    @ElementList(name = "Campaigns", required = false)
+    public List<Campaign> campaigns;
+
+    @Element(name = "MsgBoardCampaign", required = false)
+    public MsgBoardCampaign msgBoardCampaign;
 
     public GetCampaignResponseObject() {
         apiType = ApiType.GET_CAMPAIGN;

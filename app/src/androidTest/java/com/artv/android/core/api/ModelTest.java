@@ -34,7 +34,7 @@ public final class ModelTest {
         Assert.assertEquals(ApiType.GET_TOKEN, getTokenRequest.apiType);
         Assert.assertEquals(ApiType.GET_DEVICE_CONFIG, getDeviceConfigRequest.apiType);
         Assert.assertEquals(ApiType.GET_CAMPAIGN, getCampaignRequest.apiType);
-        Assert.assertEquals(ApiType.GET_GLOBAL_GONFIG, getGlobalConfigResponse.apiType);
+        Assert.assertEquals(ApiType.GET_GLOBAL_CONFIG, getGlobalConfigResponse.apiType);
 
         Assert.assertEquals(getTokenRequest.apiType, getTokenResponse.apiType);
         Assert.assertEquals(getDeviceConfigRequest.apiType, getDeviceConfigResponse.apiType);

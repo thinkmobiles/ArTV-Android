@@ -70,11 +70,11 @@ public final class ApplicationLogicTest {
                 .setPassword("password")
                 .build();
 
-        mApplicationLogic.getConfigInfoWorker().onEnteredConfigInfo(ci1);
+        mApplicationLogic.getConfigInfoWorker().notifyEnteredConfigInfo(ci1);
         mApplicationLogic.getConfigInfoWorker().loadConfigInfo();
 
         Assert.assertEquals(mApplicationLogic.getConfigInfoWorker().getConfigInfo(), ci1);
-        Assert.assertEquals(mApplicationLogic.getStateWorker().getArTvState(), ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
+        Assert.assertEquals(mApplicationLogic.getStateWorker().getArTvState(), ArTvState.STATE_APP_START);
 
         mApplicationLogic.getConfigInfoWorker().removeConfigInfo();
     }
@@ -88,8 +88,8 @@ public final class ApplicationLogicTest {
                 .setPassword("password")
                 .build();
 
-        mApplicationLogic.getConfigInfoWorker().onEnteredConfigInfo(ci1);
-        mApplicationLogic.getConfigInfoWorker().onNeedRemoveConfigInfo();
+        mApplicationLogic.getConfigInfoWorker().notifyEnteredConfigInfo(ci1);
+        mApplicationLogic.getConfigInfoWorker().notifyNeedRemoveConfigInfo();
 
         mApplicationLogic.getConfigInfoWorker().loadConfigInfo();
         Assert.assertFalse(mApplicationLogic.getConfigInfoWorker().getConfigInfo().hasConfigInfo());

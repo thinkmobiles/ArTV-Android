@@ -9,9 +9,9 @@ import org.simpleframework.xml.Element;
 public final class Entry {
 
     @Element(name = "Name")
-    private String mName;
+    public String name;
 
     @Element(name = "Value")
-    private String mValue;
+    public String value;
 
 }

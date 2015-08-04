@@ -13,29 +13,29 @@ import java.util.List;
 @Root(name = "Campaign")
 public final class Campaign {
 
-    @Element(name = "CampaignID")
-    private long mCampaignID;
+    @Element(name = "CampaignID", required = false)
+    public int campaignId;
 
-    @Element(name = "CRCVersion")
-    private int mCRCVersion;
+    @Element(name = "CRCVersion", required = false)
+    public String crcVersion;
 
-    @Element(name = "StartDate")
-    private String mStartDate;
+    @Element(name = "StartDate", required = false)
+    public String startDate;
 
-    @Element(name = "EndDate")
-    private String mEndDate;
+    @Element(name = "EndDate", required = false)
+    public String endDate;
 
-    @Element(name = "Sequence")
-    private int mSequence;
+    @Element(name = "Sequence", required = false)
+    public int sequence;
 
-    @Element(name = "PlayDay")
-    private String mPlayDay;
+    @Element(name = "PlayDay", required = false)
+    public String playDay;
 
-    @Element(name = "OverrideTime")
-    private String mOverrideTime;
+    @Element(name = "OverrideTime", required = false)
+    public String overrideTime;
 
-    @ElementList(name = "Assets")
-    private List<Asset> mAssets;
+    @ElementList(name = "Assets", required = false)
+    public List<Asset> assets;
 
     public long getmCampaignID() {
         return mCampaignID;

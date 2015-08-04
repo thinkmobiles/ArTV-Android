@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivLogo_FCI"
+        android:layout_centerHorizontal="true"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +32,8 @@
                 android:text="@string/device_id"
                 android:id="@+id/tvDeviceId_FCI"
                 android:layout_toLeftOf="@+id/etDeviceId_FCI"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:textColor="#ff000000" />
 
             <EditText
                 android:layout_width="120dp"
@@ -30,7 +41,10 @@
                 android:id="@+id/etDeviceId_FCI"
                 android:layout_alignParentRight="true"
                 android:text="1"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:background="#ffffffff"
+                android:textColor="#ff000000"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,7 +53,8 @@
                 android:id="@+id/tvMasterDeviceIp_FCI"
                 android:layout_below="@+id/etDeviceId_FCI"
                 android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:textColor="#ff000000" />
 
             <EditText
                 android:layout_width="120dp"
@@ -47,7 +62,11 @@
                 android:id="@+id/etMasterDeviceIp_FCI"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tvMasterDeviceIp_FCI"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:background="#ffffffff"
+                android:textColor="#ff000000"
+                android:layout_marginTop="8dp"
+                android:gravity="center" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -64,14 +83,18 @@
                 android:text="@string/user"
                 android:id="@+id/tvUserName_FCI"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                android:textColor="#ff000000" />
 
             <EditText
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/etUserName_FCI"
                 android:text="testdev"
-                android:layout_toRightOf="@+id/tvUserName_FCI" />
+                android:layout_toRightOf="@+id/tvUserName_FCI"
+                android:background="#ffffffff"
+                android:textColor="#ff000000"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="120dp"
@@ -81,7 +104,8 @@
                 android:id="@+id/tvPassword_FCI"
                 android:layout_below="@+id/etUserName_FCI"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                android:textColor="#ff000000" />
 
             <EditText
                 android:layout_width="120dp"
@@ -89,7 +113,11 @@
                 android:id="@+id/etPassword_FCI"
                 android:layout_alignTop="@+id/tvPassword_FCI"
                 android:text="testdev123"
-                android:layout_toRightOf="@+id/tvPassword_FCI" />
+                android:layout_toRightOf="@+id/tvPassword_FCI"
+                android:background="#ffffffff"
+                android:textColor="#ff000000"
+                android:layout_marginTop="8dp"
+                android:gravity="center" />
 
         </RelativeLayout>
     </LinearLayout>

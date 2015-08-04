@@ -17,16 +17,18 @@ public abstract class ApiConst {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public static final String PATH_GET_TOKEN		        = "/api/GetToken.xml";
-    public static final String PATH_GET_CAMPAIGN	        = "/api/GetCampaign.xml";
     public static final String PATH_GET_GLOBAL_CONFIG       = "/api/GetGlobalConfig.xml";
     public static final String PATH_GET_DEVICE_CONFIG       = "/api/GetDeviceConfig.xml";
+    public static final String PATH_BEACON	                = "/api/Beacon.xml";
+    public static final String PATH_GET_CAMPAIGN	        = "/api/GetCampaign.xml";
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public static final String KEY_USERNAME = "Username";
-    public static final String KEY_PASSWORD = "Password";
-    public static final String KEY_TAG_ID = "TagID";
-    public static final String KEY_TOKEN = "Token";
+    public static final String KEY_USERNAME                 = "Username";
+    public static final String KEY_PASSWORD                 = "Password";
+    public static final String KEY_TAG_ID                   = "TagID";
+    public static final String KEY_TOKEN                    = "Token";
+    public static final String KEY_CAMPAIGN_ID              = "CampaignID";
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 }

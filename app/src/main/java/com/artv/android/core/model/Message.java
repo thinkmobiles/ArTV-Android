@@ -11,12 +11,12 @@ import org.simpleframework.xml.Root;
 public final class Message {
 
     @Element(name = "Text")
-    private String mText;
+    public String text;
 
     @Element(name = "Position")
-    private String mPosition;
+    public String position;
 
     @Element(name = "Sequence")
-    private int mSequenceL;
+    public int sequenceL;
 
 }

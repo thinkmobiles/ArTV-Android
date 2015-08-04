@@ -4,10 +4,13 @@ import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.SpHelper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by ZOG on 7/6/2015.
  */
-public final class ConfigInfoWorker implements IConfigInfoListener {
+public final class ConfigInfoWorker {
 
     private static final String KEY_DEVICE_ID           = "key_device_id";
     private static final String KEY_MASTER_DEVICE_IP    = "key_master_device_ip";
@@ -17,6 +20,13 @@ public final class ConfigInfoWorker implements IConfigInfoListener {
     private ConfigInfo mConfigInfo;
     private SpHelper mSpHelper;
     private StateWorker mStateWorker;
+
+    private Set<IConfigInfoListener> mConfigInfoListeners;
+
+    public ConfigInfoWorker() {
+        mConfigInfoListeners = new HashSet<>();
+        mConfigInfoListeners.add(mConfigInfoListener);
+    }
 
     public final void setSpHelper(final SpHelper _helper) {
         mSpHelper = _helper;
@@ -34,8 +44,20 @@ public final class ConfigInfoWorker implements IConfigInfoListener {
         return mConfigInfo;
     }
 
-    public final IConfigInfoListener getConfigInfoListener() {
-        return this;
+    public final boolean addConfigInfoListener(final IConfigInfoListener _listener) {
+        return mConfigInfoListeners.add(_listener);
+    }
+
+    public final boolean removeConfigInfoListener(final IConfigInfoListener _listener) {
+        return mConfigInfoListeners.remove(_listener);
+    }
+
+    public final void notifyEnteredConfigInfo(final ConfigInfo _configInfo) {
+        for (final IConfigInfoListener listener : mConfigInfoListeners) listener.onEnteredConfigInfo(_configInfo);
+    }
+
+    public final void notifyNeedRemoveConfigInfo() {
+        for (final IConfigInfoListener listener : mConfigInfoListeners) listener.onNeedRemoveConfigInfo();
     }
 
     public final void saveConfigInfo() {
@@ -62,19 +84,19 @@ public final class ConfigInfoWorker implements IConfigInfoListener {
         mSpHelper.removeString(KEY_PASSWORD);
     }
 
-    @Override
-    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
-        setConfigInfo(_configInfo);
-        saveConfigInfo();
 
-        mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
-    }
+    private IConfigInfoListener mConfigInfoListener = new IConfigInfoListener() {
+        @Override
+        public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+            setConfigInfo(_configInfo);
+            saveConfigInfo();
+        }
 
-    @Override
-    public final void onNeedRemoveConfigInfo() {
-        removeConfigInfo();
-
-        mStateWorker.setState(ArTvState.STATE_APP_START);
-    }
+        @Override
+        public final void onNeedRemoveConfigInfo() {
+            removeConfigInfo();
+            mStateWorker.setState(ArTvState.STATE_APP_START);
+        }
+    };
 
 }

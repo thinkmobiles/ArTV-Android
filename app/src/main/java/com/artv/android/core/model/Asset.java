@@ -10,47 +10,15 @@ import org.simpleframework.xml.Root;
 @Root(name = "Asset")
 public final class Asset {
 
-    @Element(name = "Name")
-    private String mName;
+    @Element(name = "Name", required = false)
+    public String name;
 
-    @Element(name = "URL")
-    private String mURL;
+    @Element(name = "URL", required = false)
+    public String url;
 
-    @Element(name = "Duration")
-    private int mDuration;
+    @Element(name = "Duration", required = false)
+    public int duration;
 
-    @Element(name = "Sequence")
-    private int mSequence;
-
-    public String getmName() {
-        return mName;
-    }
-
-    public void setmName(String mName) {
-        this.mName = mName;
-    }
-
-    public String getmURL() {
-        return mURL;
-    }
-
-    public void setmURL(String mURL) {
-        this.mURL = mURL;
-    }
-
-    public int getmDuration() {
-        return mDuration;
-    }
-
-    public void setmDuration(int mDuration) {
-        this.mDuration = mDuration;
-    }
-
-    public int getmSequence() {
-        return mSequence;
-    }
-
-    public void setmSequence(int mSequence) {
-        this.mSequence = mSequence;
-    }
+    @Element(name = "Sequence", required = false)
+    public int sequence;
 }

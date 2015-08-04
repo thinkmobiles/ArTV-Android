@@ -23,14 +23,12 @@ import java.util.ArrayList;
  */
 public final class InitWorker {
 
-    private static final boolean IGNORE_IF_FAIL = true;
-
     private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
 
     private InitData mInitData;
-    private InitCallback mCallback;
+    private IInitCallback mCallback;
 
     public InitWorker() {
         mInitData = new InitData();
@@ -48,7 +46,7 @@ public final class InitWorker {
         mApiWorker = _apiWorker;
     }
 
-    public final void startInitializing(final InitCallback _callback) {
+    public final void startInitializing(final IInitCallback _callback) {
         mCallback = _callback;
         turnOnDisplayIfNeed(); //begin
     }
@@ -88,7 +86,7 @@ public final class InitWorker {
         mApiWorker.doGetToken(requestObject, new WebRequestCallback<GetTokenResponseObject>() {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
-                mInitData.setToken(_respObj.mToken);
+                mInitData.setToken(_respObj.token);
                 mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
                 getGlobalConfig();
             }
@@ -96,7 +94,6 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (IGNORE_IF_FAIL) getGlobalConfig();
             }
         });
     }
@@ -117,7 +114,6 @@ public final class InitWorker {
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
-                if (IGNORE_IF_FAIL) getDeviceConfig();
             }
         });
     }
@@ -146,7 +142,7 @@ public final class InitWorker {
     private final InitResult buildInitResult(final boolean _success, final String _message) {
         return new InitResult.Builder()
                 .setSuccess(_success)
-                .setMessage(_message)
+                .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
                 .build();
     }
 

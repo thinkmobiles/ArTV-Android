@@ -22,7 +22,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
-        final View view = _inflater.inflate(R.layout.fragment_config_info, null);
+        final View view = _inflater.inflate(R.layout.fragment_config_info, _container, false);
 
         etDeviceId = (EditText) view.findViewById(R.id.etDeviceId_FCI);
         etMasterDeviceIp = (EditText) view.findViewById(R.id.etMasterDeviceIp_FCI);
@@ -38,9 +38,13 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
     public final void onClick(final View _v) {
         switch (_v.getId()) {
             case R.id.btnSave_FCI:
-                saveState();
+                onClickBtnSave();
                 break;
         }
+    }
+
+    private final void onClickBtnSave() {
+        saveState();
     }
 
     private final void saveState() {
@@ -61,6 +65,6 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
             return;
         }
 
-        getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onEnteredConfigInfo(configInfo);
+        getMyApplication().getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(configInfo);
     }
 }

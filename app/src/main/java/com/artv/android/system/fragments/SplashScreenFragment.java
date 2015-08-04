@@ -10,41 +10,61 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
-import com.artv.android.core.init.InitCallback;
+import com.artv.android.core.ILogger;
+import com.artv.android.core.IPercentListener;
+import com.artv.android.core.campaign.CampaignWorker;
+import com.artv.android.core.campaign.campaign_load.ICampaignPrepareCallback;
+import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
-import com.artv.android.core.model.Asset;
-import com.artv.android.core.model.Campaign;
-import com.artv.android.database.DBManager;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import com.artv.android.core.init.InitWorker;
+import com.artv.android.core.state.ArTvState;
+import com.artv.android.core.state.IArTvStateChangeListener;
+import com.artv.android.core.state.StateWorker;
 
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends BaseFragment {
+public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, IArTvStateChangeListener, ILogger, IPercentListener {
 
-    private ProgressBar mLoadingProgressBar;
+    private ProgressBar pbLoading;
     private Button btnClearConfigInfo;
+    private Button btnShowVideo;
     private TextView tvLog;
+    private TextView tvPercent;
+
+    private StateWorker mStateWorker;
+    private InitWorker mInitWorker;
+    private ConfigInfoWorker mConfigInfoWorker;
+    private CampaignWorker mCampaignWorker;
+
+    @Override
+    public final void onCreate(final Bundle _savedInstanceState) {
+        super.onCreate(_savedInstanceState);
+        initLogic();
+    }
+
+    private final void initLogic() {
+        mStateWorker = getMyApplication().getApplicationLogic().getStateWorker();
+        mInitWorker = getMyApplication().getApplicationLogic().getInitWorker();
+        mConfigInfoWorker = getMyApplication().getApplicationLogic().getConfigInfoWorker();
+        mCampaignWorker = getMyApplication().getApplicationLogic().getCampaignWorker();
+    }
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
-        final View view = _inflater.inflate(R.layout.fragment_splash_screen, null);
+        final View view = _inflater.inflate(R.layout.fragment_splash_screen, _container, false);
 
-        mLoadingProgressBar = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
+        pbLoading = (ProgressBar) view.findViewById(R.id.pbLoading_FSS);
         btnClearConfigInfo = (Button) view.findViewById(R.id.btnClearConfigInfo_FSS);
+        btnShowVideo = (Button) view.findViewById(R.id.btnShowVideo_FSS);
         tvLog = (TextView) view.findViewById(R.id.tvLog_FSS);
         tvLog.setMovementMethod(new ScrollingMovementMethod());
+        tvPercent = (TextView) view.findViewById(R.id.tvPercent_FSS);
 
-        btnClearConfigInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public final void onClick(final View _v) {
-                getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onNeedRemoveConfigInfo();
-            }
-        });
-
+        btnClearConfigInfo.setOnClickListener(this);
+        btnShowVideo.setOnClickListener(this);
+        btnShowVideo.setVisibility(View.INVISIBLE);
 
         return view;
     }
@@ -52,31 +72,89 @@ public final class SplashScreenFragment extends BaseFragment {
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        beginInitializing();
+        if (_savedInstanceState == null) beginInitializing();
+    }
+
+    @Override
+    public final void onStart() {
+        super.onStart();
+        mStateWorker.addStateChangeListener(this);
+    }
+
+    @Override
+    public final void onStop() {
+        super.onStop();
+        mStateWorker.removeStateChangeListener(this);
     }
 
     private final void beginInitializing() {
-        getMyApplication().getApplicationLogic().getInitWorker().setConfigInfo(
-                getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfo());
+        mInitWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
 
-        getMyApplication().getApplicationLogic().getInitWorker().startInitializing(
-                new InitCallback() {
+        mInitWorker.startInitializing(
+                new IInitCallback() {
                     @Override
                     public final void onInitSuccess(final InitResult _result) {
-                        tvLog.append("\n" + _result.getMessage());
+                        printMessage(_result.getMessage());
+                        beginCampaignLogic();
                     }
 
                     @Override
                     public final void onProgress(final InitResult _result) {
-                        tvLog.append("\n" + _result.getMessage());
+                        printMessage(_result.getMessage());
                     }
 
                     @Override
                     public final void onInitFail(final InitResult _result) {
-                        tvLog.append("\n" + _result.getMessage());
+                        printMessage(_result.getMessage());
                     }
                 }
         );
     }
 
+    @Override
+    public final void onClick(final View _v) {
+        switch (_v.getId()) {
+            case R.id.btnClearConfigInfo_FSS:
+                    mConfigInfoWorker.notifyNeedRemoveConfigInfo();
+                break;
+
+            case R.id.btnShowVideo_FSS:
+                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
+                break;
+        }
+    }
+
+    @Override
+    public final void onArTvStateChanged() {
+        btnShowVideo.setVisibility(View.VISIBLE);
+    }
+
+    private final void beginCampaignLogic() {
+        mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mCampaignWorker.setInitData(mInitWorker.getInitData());
+        mCampaignWorker.setUiLogger(this);
+        mCampaignWorker.setPercentListener(this);
+        mCampaignWorker.doCampaignLogic(new ICampaignPrepareCallback() {
+            @Override
+            public final void onPrepared() {
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+            }
+        });
+    }
+
+    @Override
+    public final void printMessage(final String _message) {
+        printMessage(true, _message);
+    }
+
+    @Override
+    public final void printMessage(final boolean _fromNewLine, final String _message) {
+        tvLog.append((_fromNewLine ? "\n " : "") + _message);
+    }
+
+    @Override
+    public final void onPercentUpdate(final double _percent) {
+        tvPercent.setText(String.format("%.2f%%", _percent / 100));
+        pbLoading.setProgress((int) _percent);
+    }
 }

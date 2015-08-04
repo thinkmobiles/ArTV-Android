@@ -66,7 +66,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .setPassword("password")
                 .build();
 
-        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onEnteredConfigInfo(ci);
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
         Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getMyApplication().getApplicationLogic().getStateWorker().getArTvState());
 
         mMainActivity.finish();
@@ -89,7 +89,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .setPassword("password")
                 .build();
 
-        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().onEnteredConfigInfo(ci);
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -101,7 +101,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .getFragmentManager()
                 .findFragmentById(R.id.flFragmentContainer_AM);
 
-        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().getConfigInfoListener().onNeedRemoveConfigInfo();
+        mMainActivity.getMyApplication().getApplicationLogic().getConfigInfoWorker().notifyNeedRemoveConfigInfo();
         runTestOnUiThread(new Runnable() {
             @Override
             public void run() {

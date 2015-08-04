@@ -1,27 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="500dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/pbLoading_FSS"
-        android:layout_centerHorizontal="true"
-        android:indeterminate="false"
-        android:layout_below="@+id/textView5"
-        android:layout_marginTop="20dp" />
-
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Splash Screen"
-        android:id="@+id/textView5"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/btnClearConfigInfo_FSS"
-        android:layout_marginTop="20dp" />
+        android:text="Show Video"
+        android:id="@+id/btnShowVideo_FSS"
+        android:layout_toLeftOf="@+id/btnClearConfigInfo_FSS" />
 
     <Button
         android:layout_width="wrap_content"
@@ -30,12 +18,44 @@
         android:id="@+id/btnClearConfigInfo_FSS"
         android:layout_centerHorizontal="true" />
 
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivLogo_FSS"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo"
+        android:adjustViewBounds="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00%"
+        android:id="@+id/tvPercent_FSS"
+        android:textColor="#000"
+        android:layout_above="@+id/pbLoading_FSS"
+        android:layout_alignRight="@+id/pbLoading_FSS"
+        android:freezesText="true" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/pbLoading_FSS"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/ivLogo_FSS"
+        android:max="10000"
+        android:progress="0" />
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/tvLog_FSS"
         android:layout_below="@+id/pbLoading_FSS"
-        android:layout_marginTop="15dp"
         android:scrollbars="vertical"
-        android:text="Log:" />
+        android:text="Log:"
+        android:gravity="bottom"
+        android:background="#5e070707"
+        android:textColor="#e400ff00"
+        android:freezesText="true"/>
+
 </RelativeLayout>
