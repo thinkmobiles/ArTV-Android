@@ -78,8 +78,6 @@ public final class CampaignsWorker {
             @Override
             public final void onSuccess(final GetCampaignResponseObject _respObj) {
                 mUiLogger.printMessage(_respObj.apiType + " : success");
-                _respObj.campaigns.addAll(_respObj.campaigns);
-                _respObj.campaigns.addAll(_respObj.campaigns);
 
                 _callback.onFinished(
                         new GetCampaignsResult.Builder()

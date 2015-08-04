@@ -5,7 +5,6 @@ import android.content.Context;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignsWorker;
-import com.artv.android.core.campaign.old.VideoFilesHolder;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;

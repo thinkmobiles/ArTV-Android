@@ -13,12 +13,10 @@ import com.artv.android.R;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.campaign.CampaignsWorker;
-import com.artv.android.core.campaign.old.ICampaignPrepareCallback;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitResult;
 import com.artv.android.core.init.InitWorker;
-import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 
 /**

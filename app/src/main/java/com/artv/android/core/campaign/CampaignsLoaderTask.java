@@ -50,8 +50,8 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
             postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
             for (final Asset asset : campaign.assets) {
                 postOnUiThread(true, "Loading asset " + asset.name + "...");
-                final boolean loaded = mAssetHelper.loadAsset(asset, progressPerAsset);
-                postOnUiThread(false, "finished: " + loaded);
+                final AssetLoadResult result = mAssetHelper.loadAsset(asset, progressPerAsset);
+                postOnUiThread(false, "finished: " + result.success);
             }
         }
         postOnUiThread(true, "All campaigns loaded");
@@ -78,7 +78,7 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
     }
 
     @Override
-    public final void onProgressLoad(final double _progress) {
+    public final void onProgressLoaded(final double _progress) {
         currentProgress += _progress;
         postOnUiThread(currentProgress);
     }

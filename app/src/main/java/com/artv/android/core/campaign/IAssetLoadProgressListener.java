@@ -5,6 +5,6 @@ package com.artv.android.core.campaign;
  */
 public interface IAssetLoadProgressListener {
 
-    void onProgressLoad(final double _progress);
+    void onProgressLoaded(final double _progress);
 
 }

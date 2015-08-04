@@ -17,7 +17,6 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
-import com.artv.android.core.campaign.old.VideoFilesHolder;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.system.custom_views.CustomMediaController;
 import com.squareup.picasso.Picasso;
