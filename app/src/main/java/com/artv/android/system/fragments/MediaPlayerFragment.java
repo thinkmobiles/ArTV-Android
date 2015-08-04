@@ -36,12 +36,9 @@ public final class MediaPlayerFragment extends BaseFragment {
 
     private SurfaceHolder mSurfaceHolder;
 
-    private VideoFilesHolder mVideoFilesHolder;
-
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
-        mVideoFilesHolder = getApplicationLogic().getVideoFilesHolder();
     }
 
     @Override
@@ -166,18 +163,18 @@ public final class MediaPlayerFragment extends BaseFragment {
     private int mCurrentVideo = 0;
 
     private final void playNextVideo() {
-        final int videosCount = mVideoFilesHolder.getFiles().size();
-        if (videosCount == 0) {
-            Toast.makeText(getActivity().getApplicationContext(), "No video to play", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (mCurrentVideo >= videosCount) {
-            mCurrentVideo = 0;
-        }
-
-        final File file = mVideoFilesHolder.getFiles().get(mCurrentVideo);
-        mVideoWindow.setVideoPath(file.getPath());
+//        final int videosCount = mVideoFilesHolder.getFiles().size();
+//        if (videosCount == 0) {
+//            Toast.makeText(getActivity().getApplicationContext(), "No video to play", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        if (mCurrentVideo >= videosCount) {
+//            mCurrentVideo = 0;
+//        }
+//
+//        final File file = mVideoFilesHolder.getFiles().get(mCurrentVideo);
+//        mVideoWindow.setVideoPath(file.getPath());
     }
 
 }

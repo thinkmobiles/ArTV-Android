@@ -9,6 +9,7 @@ import com.artv.android.core.IPercentListener;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -50,7 +51,15 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
             postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
             for (final Asset asset : campaign.assets) {
                 postOnUiThread(true, "Loading asset " + asset.name + "...");
-                final AssetLoadResult result = mAssetHelper.loadAsset(asset, progressPerAsset);
+                AssetLoadResult result = new AssetLoadResult();
+                try {
+                    result = mAssetHelper.loadAsset(asset, progressPerAsset);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (!result.success) {
+                    onProgressLoaded(progressPerAsset);
+                }
                 postOnUiThread(false, "finished: " + result.success);
             }
         }

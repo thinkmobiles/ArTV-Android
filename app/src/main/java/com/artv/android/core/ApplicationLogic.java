@@ -28,7 +28,6 @@ public final class ApplicationLogic {
     private DisplaySwitcher mDisplaySwitcher;
     private BeaconWorker mBeaconWorker;
     private CampaignsWorker mCampaignsWorker;
-    private VideoFilesHolder mVideoFilesHolder;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -53,8 +52,6 @@ public final class ApplicationLogic {
 
         mCampaignsWorker = new CampaignsWorker();
         mCampaignsWorker.setApiWorker(mApiWorker);
-
-        mVideoFilesHolder = new VideoFilesHolder();
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -79,10 +76,6 @@ public final class ApplicationLogic {
 
     public final CampaignsWorker getCampaignWorker() {
         return mCampaignsWorker;
-    }
-
-    public final VideoFilesHolder getVideoFilesHolder() {
-        return mVideoFilesHolder;
     }
 
     /**

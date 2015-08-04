@@ -10,17 +10,15 @@ import org.apache.http.client.methods.HttpGet;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
  * Created by ZOG on 8/3/2015.
@@ -41,69 +39,50 @@ public final class AssetHelper {
         mProgressListener = _progressListener;
     }
 
-    public final AssetLoadResult loadAsset(final Asset _asset, final double _progressPerAsset) {
+    public final AssetLoadResult loadAsset(final Asset _asset, final double _progressPerAsset) throws IOException {
         final AssetLoadResult result = new AssetLoadResult();
+        final URL url = buildUrlFrom(_asset.url);
 
-        final Future<AssetLoadResult> future = mExecutor.submit(new Callable<AssetLoadResult>() {
-            @Override
-            public final AssetLoadResult call() throws Exception {
-                final URL url = buildUrlFrom(_asset.url);
+        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(10000);
+        conn.setRequestMethod(HttpGet.METHOD_NAME);
 
-                final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setConnectTimeout(10000);
-                conn.setRequestMethod(HttpGet.METHOD_NAME);
+        final int respCode = conn.getResponseCode();
 
-                final int respCode = conn.getResponseCode();
+        final int buffLength = 4096;
+        final int fileLength = conn.getContentLength();
 
-                final int buffLength = 4096;
-                final int fileLength = conn.getContentLength();
+        if (respCode == 200) {
+            final File file = new File(PATH + _asset.url);
 
-                if (respCode == 200) {
-                    final File file = new File(PATH + _asset.url);
-
-                    //if exist - publish progress and return
-                    final boolean reload = needReloadFile(file, fileLength);
-                    if (!reload) {
-                        mProgressListener.onProgressLoaded(_progressPerAsset);
-                        result.success = true;
-                        return result;
-                    }
-                    file.getParentFile().mkdirs();
-
-                    final InputStream inputStream = conn.getInputStream();
-                    final FileOutputStream fos = new FileOutputStream(file);
-
-                    int readed;
-                    byte[] buffer = new byte[buffLength];
-                    while ((readed = inputStream.read(buffer)) != -1) {
-                        fos.write(buffer, 0, readed);
-                        final double writeProgress = readed / (double) fileLength * _progressPerAsset;
-                        mProgressListener.onProgressLoaded(writeProgress);
-                    }
-                    fos.close();
-                    inputStream.close();
-
-                    result.success= true;
-                    return result;
-                }
-
-                result.success = false;
-                result.message = "Erorr: response code = " + respCode;
+            //if exist - publish progress and return
+            final boolean reload = needReloadFile(file, fileLength);
+            if (!reload) {
+                mProgressListener.onProgressLoaded(_progressPerAsset);
+                result.success = true;
                 return result;
             }
-        });
+            file.getParentFile().mkdirs();
 
-        try {
-            return future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            result.message = e.toString();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-            result.message = e.toString();
+            final InputStream inputStream = conn.getInputStream();
+            final FileOutputStream fos = new FileOutputStream(file);
+
+            int readed;
+            byte[] buffer = new byte[buffLength];
+            while ((readed = inputStream.read(buffer)) != -1) {
+                fos.write(buffer, 0, readed);
+                final double writeProgress = readed / (double) fileLength * _progressPerAsset;
+                mProgressListener.onProgressLoaded(writeProgress);
+            }
+            fos.close();
+            inputStream.close();
+
+            result.success = true;
+            return result;
         }
 
         result.success = false;
+        result.message = "Erorr: response code = " + respCode;
         return result;
     }
 
