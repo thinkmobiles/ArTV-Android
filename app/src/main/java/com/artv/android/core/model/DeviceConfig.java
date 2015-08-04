@@ -11,7 +11,7 @@ import org.simpleframework.xml.Root;
 public final class DeviceConfig {
 
     @Element(name = "TagID", required = false)
-    public String tagID;
+    public String tagId;
 
     @Element(name = "FTPUsr", required = false)
     public String fTPUsr;

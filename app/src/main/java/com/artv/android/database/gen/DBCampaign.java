@@ -11,9 +11,10 @@ import de.greenrobot.dao.DaoException;
 public class DBCampaign {
 
     private Long id;
-    private Integer crcVersion;
-    private Long startDate;
-    private Long endDate;
+    private Integer campaignId;
+    private String crcVersion;
+    private String startDate;
+    private String endDate;
     private Integer sequence;
     private String playDay;
     private String overrideTime;
@@ -33,8 +34,9 @@ public class DBCampaign {
         this.id = id;
     }
 
-    public DBCampaign(Long id, Integer crcVersion, Long startDate, Long endDate, Integer sequence, String playDay, String overrideTime) {
+    public DBCampaign(Long id, Integer campaignId, String crcVersion, String startDate, String endDate, Integer sequence, String playDay, String overrideTime) {
         this.id = id;
+        this.campaignId = campaignId;
         this.crcVersion = crcVersion;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -57,27 +59,35 @@ public class DBCampaign {
         this.id = id;
     }
 
-    public Integer getCrcVersion() {
+    public Integer getCampaignId() {
+        return campaignId;
+    }
+
+    public void setCampaignId(Integer campaignId) {
+        this.campaignId = campaignId;
+    }
+
+    public String getCrcVersion() {
         return crcVersion;
     }
 
-    public void setCrcVersion(Integer crcVersion) {
+    public void setCrcVersion(String crcVersion) {
         this.crcVersion = crcVersion;
     }
 
-    public Long getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Long startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Long getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Long endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

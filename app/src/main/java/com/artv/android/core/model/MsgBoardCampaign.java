@@ -13,10 +13,10 @@ import java.util.List;
 public final class MsgBoardCampaign {
 
     @Element(name = "MsgBoardID", required = false)
-    public int msgBoardID;
+    public int msgBoardId;
 
     @Element(name = "CRCVersion", required = false)
-    public int crcVersion;
+    public String crcVersion;
 
     @Element(name = "StartDate", required = false)
     public String startDate;
@@ -42,15 +42,15 @@ public final class MsgBoardCampaign {
     @Override
     public String toString() {
         return "MsgBoardCampaign{" +
-                "mMsgBoardID=" + mMsgBoardID +
-                ", mCRCVersion=" + mCRCVersion +
-                ", mStartDate='" + mStartDate + '\'' +
-                ", mEndDate='" + mEndDate + '\'' +
-                ", mPlayDay='" + mPlayDay + '\'' +
-                ", mTextColor='" + mTextColor + '\'' +
-                ", mRightBkgURL='" + mRightBkgURL + '\'' +
-                ", mBottomBkgURL='" + mBottomBkgURL + '\'' +
-                ", mMessages=" + mMessages +
+                "mMsgBoardID=" + msgBoardId +
+                ", mCRCVersion=" + crcVersion +
+                ", mStartDate='" + startDate + '\'' +
+                ", mEndDate='" + endDate + '\'' +
+                ", mPlayDay='" + playDay + '\'' +
+                ", mTextColor='" + textColor + '\'' +
+                ", mRightBkgURL='" + rightBkgURL + '\'' +
+                ", mBottomBkgURL='" + bottomBkgURL + '\'' +
+                ", mMessages=" + messages +
                 '}';
     }
 
@@ -61,17 +61,17 @@ public final class MsgBoardCampaign {
         if (getClass() != o.getClass()) return false;
 
         MsgBoardCampaign msgBoardCampaign = (MsgBoardCampaign) o;
-        if(mMsgBoardID != msgBoardCampaign.mMsgBoardID) return false;
-        if(mCRCVersion != msgBoardCampaign.mCRCVersion) return false;
-        if(!mEndDate.equals(msgBoardCampaign.mEndDate)) return false;
-        if(!mStartDate.equals(msgBoardCampaign.mStartDate)) return false;
-        if(!mTextColor.equals(msgBoardCampaign.mTextColor)) return false;
-        if(!mPlayDay.equals(msgBoardCampaign.mPlayDay)) return false;
-        if(!mBottomBkgURL.equals(msgBoardCampaign.mBottomBkgURL)) return false;
-        if(!mRightBkgURL.equals(msgBoardCampaign.mRightBkgURL)) return false;
+        if(msgBoardId != msgBoardCampaign.msgBoardId) return false;
+        if(crcVersion != msgBoardCampaign.crcVersion) return false;
+        if(!endDate.equals(msgBoardCampaign.endDate)) return false;
+        if(!startDate.equals(msgBoardCampaign.startDate)) return false;
+        if(!textColor.equals(msgBoardCampaign.textColor)) return false;
+        if(!playDay.equals(msgBoardCampaign.playDay)) return false;
+        if(!bottomBkgURL.equals(msgBoardCampaign.bottomBkgURL)) return false;
+        if(!rightBkgURL.equals(msgBoardCampaign.rightBkgURL)) return false;
 
-        for (int i=0; i < mMessages.size(); i++) {
-            if(!mMessages.get(i).equals(msgBoardCampaign.mMessages.get(i))) return false;
+        for (int i=0; i < messages.size(); i++) {
+            if(!messages.get(i).equals(msgBoardCampaign.messages.get(i))) return false;
         }
 
         return true;

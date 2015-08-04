@@ -17,44 +17,26 @@ public final class Message {
     public String position;
 
     @Element(name = "Sequence")
-    public int sequenceL;
-
-    public String getmText() {
-        return mText;
-    }
-
-    public void setmText(String mText) {
-        this.mText = mText;
-    }
-
-    public String getmPosition() {
-        return mPosition;
-    }
-
-    public void setmPosition(String mPosition) {
-        this.mPosition = mPosition;
-    }
-
-    public int getmSequenceL() {
-        return mSequenceL;
-    }
-
-    public void setmSequenceL(int mSequenceL) {
-        this.mSequenceL = mSequenceL;
-    }
+    public int sequence;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null) return false;
-        if (getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Message message = (Message) o;
 
-        if(!mText.equals(message.mText)) return false;
-        if(!mPosition.equals(message.mPosition)) return false;
-        if(mSequenceL != message.mSequenceL) return false;
+        if (sequence != message.sequence) return false;
+        if (text != null ? !text.equals(message.text) : message.text != null) return false;
+        return !(position != null ? !position.equals(message.position) : message.position != null);
 
-        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = text != null ? text.hashCode() : 0;
+        result = 31 * result + (position != null ? position.hashCode() : 0);
+        result = 31 * result + sequence;
+        return result;
     }
 }

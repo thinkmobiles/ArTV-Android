@@ -30,10 +30,10 @@ public final class Asset {
 
         Asset asset = (Asset) o;
 
-        if(!mName.equals(asset.mName)) return false;
-        if(!mURL.equals(asset.mURL)) return false;
-        if(mDuration != asset.mDuration) return false;
-        if(mSequence != asset.mSequence) return false;
+        if(!name.equals(asset.name)) return false;
+        if(!url.equals(asset.url)) return false;
+        if(duration != asset.duration) return false;
+        if(sequence != asset.sequence) return false;
 
         return true;
     }

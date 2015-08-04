@@ -24,13 +24,14 @@ public class DBmsgBoardCampaignDao extends AbstractDao<DBmsgBoardCampaign, Long>
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property CrcVersion = new Property(1, Integer.class, "crcVersion", false, "CRC_VERSION");
-        public final static Property StartDate = new Property(2, Long.class, "startDate", false, "START_DATE");
-        public final static Property EndDate = new Property(3, Long.class, "endDate", false, "END_DATE");
-        public final static Property PlayDay = new Property(4, String.class, "playDay", false, "PLAY_DAY");
-        public final static Property TextColor = new Property(5, String.class, "textColor", false, "TEXT_COLOR");
-        public final static Property RightBkgURL = new Property(6, String.class, "RightBkgURL", false, "RIGHT_BKG_URL");
-        public final static Property BottomBkgURL = new Property(7, String.class, "BottomBkgURL", false, "BOTTOM_BKG_URL");
+        public final static Property MsgBoardId = new Property(1, Integer.class, "msgBoardId", false, "MSG_BOARD_ID");
+        public final static Property CrcVersion = new Property(2, String.class, "crcVersion", false, "CRC_VERSION");
+        public final static Property StartDate = new Property(3, String.class, "startDate", false, "START_DATE");
+        public final static Property EndDate = new Property(4, String.class, "endDate", false, "END_DATE");
+        public final static Property PlayDay = new Property(5, String.class, "playDay", false, "PLAY_DAY");
+        public final static Property TextColor = new Property(6, String.class, "textColor", false, "TEXT_COLOR");
+        public final static Property RightBkgURL = new Property(7, String.class, "RightBkgURL", false, "RIGHT_BKG_URL");
+        public final static Property BottomBkgURL = new Property(8, String.class, "BottomBkgURL", false, "BOTTOM_BKG_URL");
     };
 
     private DaoSession daoSession;
@@ -50,13 +51,14 @@ public class DBmsgBoardCampaignDao extends AbstractDao<DBmsgBoardCampaign, Long>
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'DBMSG_BOARD_CAMPAIGN' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'CRC_VERSION' INTEGER," + // 1: crcVersion
-                "'START_DATE' INTEGER," + // 2: startDate
-                "'END_DATE' INTEGER," + // 3: endDate
-                "'PLAY_DAY' TEXT," + // 4: playDay
-                "'TEXT_COLOR' TEXT," + // 5: textColor
-                "'RIGHT_BKG_URL' TEXT," + // 6: RightBkgURL
-                "'BOTTOM_BKG_URL' TEXT);"); // 7: BottomBkgURL
+                "'MSG_BOARD_ID' INTEGER," + // 1: msgBoardId
+                "'CRC_VERSION' TEXT," + // 2: crcVersion
+                "'START_DATE' TEXT," + // 3: startDate
+                "'END_DATE' TEXT," + // 4: endDate
+                "'PLAY_DAY' TEXT," + // 5: playDay
+                "'TEXT_COLOR' TEXT," + // 6: textColor
+                "'RIGHT_BKG_URL' TEXT," + // 7: RightBkgURL
+                "'BOTTOM_BKG_URL' TEXT);"); // 8: BottomBkgURL
     }
 
     /** Drops the underlying database table. */
@@ -75,39 +77,44 @@ public class DBmsgBoardCampaignDao extends AbstractDao<DBmsgBoardCampaign, Long>
             stmt.bindLong(1, id);
         }
  
-        Integer crcVersion = entity.getCrcVersion();
+        Integer msgBoardId = entity.getMsgBoardId();
+        if (msgBoardId != null) {
+            stmt.bindLong(2, msgBoardId);
+        }
+ 
+        String crcVersion = entity.getCrcVersion();
         if (crcVersion != null) {
-            stmt.bindLong(2, crcVersion);
+            stmt.bindString(3, crcVersion);
         }
  
-        Long startDate = entity.getStartDate();
+        String startDate = entity.getStartDate();
         if (startDate != null) {
-            stmt.bindLong(3, startDate);
+            stmt.bindString(4, startDate);
         }
  
-        Long endDate = entity.getEndDate();
+        String endDate = entity.getEndDate();
         if (endDate != null) {
-            stmt.bindLong(4, endDate);
+            stmt.bindString(5, endDate);
         }
  
         String playDay = entity.getPlayDay();
         if (playDay != null) {
-            stmt.bindString(5, playDay);
+            stmt.bindString(6, playDay);
         }
  
         String textColor = entity.getTextColor();
         if (textColor != null) {
-            stmt.bindString(6, textColor);
+            stmt.bindString(7, textColor);
         }
  
         String RightBkgURL = entity.getRightBkgURL();
         if (RightBkgURL != null) {
-            stmt.bindString(7, RightBkgURL);
+            stmt.bindString(8, RightBkgURL);
         }
  
         String BottomBkgURL = entity.getBottomBkgURL();
         if (BottomBkgURL != null) {
-            stmt.bindString(8, BottomBkgURL);
+            stmt.bindString(9, BottomBkgURL);
         }
     }
 
@@ -128,13 +135,14 @@ public class DBmsgBoardCampaignDao extends AbstractDao<DBmsgBoardCampaign, Long>
     public DBmsgBoardCampaign readEntity(Cursor cursor, int offset) {
         DBmsgBoardCampaign entity = new DBmsgBoardCampaign( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // crcVersion
-            cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // startDate
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // endDate
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // playDay
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // textColor
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // RightBkgURL
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // BottomBkgURL
+            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // msgBoardId
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // crcVersion
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // startDate
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // endDate
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // playDay
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // textColor
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // RightBkgURL
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8) // BottomBkgURL
         );
         return entity;
     }
@@ -143,13 +151,14 @@ public class DBmsgBoardCampaignDao extends AbstractDao<DBmsgBoardCampaign, Long>
     @Override
     public void readEntity(Cursor cursor, DBmsgBoardCampaign entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setCrcVersion(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setStartDate(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setEndDate(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setPlayDay(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setTextColor(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setRightBkgURL(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setBottomBkgURL(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setMsgBoardId(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
+        entity.setCrcVersion(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setStartDate(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setEndDate(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setPlayDay(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTextColor(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setRightBkgURL(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setBottomBkgURL(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
      }
     
     /** @inheritdoc */

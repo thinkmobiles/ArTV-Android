@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import com.artv.android.core.model.Campaign;
-import com.artv.android.core.model.Message;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBAssetDao;
@@ -142,7 +141,7 @@ public class DBManager implements AsyncOperationListener {
                 //then add assets
                 LinkedList<DBAsset> dbAssets = new LinkedList<>();
                 for (Campaign campaign : campaigns)
-                    dbAssets.addAll(Transformer.createDBAssetsList(campaign.getmAssets(), campaign.getmCampaignID()));
+                    dbAssets.addAll(Transformer.createDBAssetsList(campaign.assets, campaign.campaignId));
 
                 DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
                 dbAssetDao.insertOrReplaceInTx(dbAssets);
@@ -170,8 +169,8 @@ public class DBManager implements AsyncOperationListener {
                 //then add Messages
                 LinkedList<DBMessage> dbMessages = new LinkedList<>();
                 for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
-                    dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.getmMessages(),
-                            msgBoardCampaign.getmMsgBoardID()));
+                    dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.messages,
+                            msgBoardCampaign.msgBoardId));
 
                 DBMessageDao messageDao = daoSession.getDBMessageDao();
                 messageDao.insertOrReplaceInTx(dbMessages);

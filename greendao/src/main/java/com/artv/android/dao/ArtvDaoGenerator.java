@@ -8,10 +8,9 @@ import de.greenrobot.daogenerator.ToMany;
 
 public class ArtvDaoGenerator {
 
-    private static final String PROJECT_DIR = System.getProperty("user.dir").replace("\\", "/")
-            .replaceFirst("greendao","app");
+    private static final String PROJECT_DIR = System.getProperty("user.dir").replace("\\", "/");
 
-    private static final String OUT_DIR = PROJECT_DIR + "/src/main/java/";
+    private static final String OUT_DIR = PROJECT_DIR + "/app/src/main/java/";
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1, "com.artv.android.database.gen");
@@ -51,9 +50,10 @@ public class ArtvDaoGenerator {
     private static Entity addCampaign(Schema schema) {
         Entity campaign = schema.addEntity("DBCampaign");
         campaign.addIdProperty().primaryKey();
-        campaign.addIntProperty("crcVersion");
-        campaign.addLongProperty("startDate");
-        campaign.addLongProperty("endDate");
+        campaign.addIntProperty("campaignId");
+        campaign.addStringProperty("crcVersion");
+        campaign.addStringProperty("startDate");
+        campaign.addStringProperty("endDate");
         campaign.addIntProperty("sequence");
         campaign.addStringProperty("playDay");
         campaign.addStringProperty("overrideTime");
@@ -79,9 +79,10 @@ public class ArtvDaoGenerator {
     private static Entity addMsgBoardCampaign(Schema schema) {
         Entity msgBoardCampaign = schema.addEntity("DBmsgBoardCampaign");
         msgBoardCampaign.addIdProperty().primaryKey();
-        msgBoardCampaign.addIntProperty("crcVersion");
-        msgBoardCampaign.addLongProperty("startDate");
-        msgBoardCampaign.addLongProperty("endDate");
+        msgBoardCampaign.addIntProperty("msgBoardId");
+        msgBoardCampaign.addStringProperty("crcVersion");
+        msgBoardCampaign.addStringProperty("startDate");
+        msgBoardCampaign.addStringProperty("endDate");
         msgBoardCampaign.addStringProperty("playDay");
         msgBoardCampaign.addStringProperty("textColor");
         msgBoardCampaign.addStringProperty("RightBkgURL");

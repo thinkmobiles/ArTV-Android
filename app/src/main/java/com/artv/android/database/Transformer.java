@@ -60,61 +60,61 @@ public final class Transformer {
 
     protected static DBCampaign createDBCampaign(Campaign campaign) {
         DBCampaign dbCampaign = new DBCampaign();
-        dbCampaign.setId(campaign.getmCampaignID());
-        dbCampaign.setCrcVersion(campaign.getmCRCVersion());
-        dbCampaign.setStartDate(getMillisecFromStringDate(campaign.getmStartDate()));
-        dbCampaign.setEndDate(getMillisecFromStringDate(campaign.getmEndDate()));
-        dbCampaign.setPlayDay(campaign.getmPlayDay());
-        dbCampaign.setOverrideTime(campaign.getmOverrideTime());
-        dbCampaign.setSequence(campaign.getmSequence());
+        dbCampaign.setCampaignId(campaign.campaignId);
+        dbCampaign.setCrcVersion(campaign.crcVersion);
+        dbCampaign.setStartDate(campaign.startDate);
+        dbCampaign.setEndDate(campaign.endDate);
+        dbCampaign.setPlayDay(campaign.playDay);
+        dbCampaign.setOverrideTime(campaign.overrideTime);
+        dbCampaign.setSequence(campaign.sequence);
 
         return dbCampaign;
     }
 
     protected static DBmsgBoardCampaign createDBmsgBoardCampaign(MsgBoardCampaign msgBoardCampaign) {
         DBmsgBoardCampaign dBmsgBoardCampaign = new DBmsgBoardCampaign();
-        dBmsgBoardCampaign.setId(msgBoardCampaign.getmMsgBoardID());
-        dBmsgBoardCampaign.setBottomBkgURL(msgBoardCampaign.getmBottomBkgURL());
-        dBmsgBoardCampaign.setRightBkgURL(msgBoardCampaign.getmRightBkgURL());
-        dBmsgBoardCampaign.setCrcVersion(msgBoardCampaign.getmCRCVersion());
-        dBmsgBoardCampaign.setPlayDay(msgBoardCampaign.getmPlayDay());
-        dBmsgBoardCampaign.setTextColor(msgBoardCampaign.getmTextColor());
-        dBmsgBoardCampaign.setStartDate(getMillisecFromStringDate(msgBoardCampaign.getmStartDate()));
-        dBmsgBoardCampaign.setEndDate(getMillisecFromStringDate(msgBoardCampaign.getmEndDate()));
+        dBmsgBoardCampaign.setMsgBoardId(msgBoardCampaign.msgBoardId);
+        dBmsgBoardCampaign.setBottomBkgURL(msgBoardCampaign.bottomBkgURL);
+        dBmsgBoardCampaign.setRightBkgURL(msgBoardCampaign.rightBkgURL);
+        dBmsgBoardCampaign.setCrcVersion(msgBoardCampaign.crcVersion);
+        dBmsgBoardCampaign.setPlayDay(msgBoardCampaign.playDay);
+        dBmsgBoardCampaign.setTextColor(msgBoardCampaign.textColor);
+        dBmsgBoardCampaign.setStartDate(msgBoardCampaign.startDate);
+        dBmsgBoardCampaign.setEndDate(msgBoardCampaign.endDate);
 
         return dBmsgBoardCampaign;
     }
 
     protected static Campaign createCampaign(DBCampaign dbCampaign) {
         Campaign campaign = new Campaign();
-        campaign.setmCampaignID(dbCampaign.getId());
-        campaign.setmCRCVersion(dbCampaign.getCrcVersion());
-        campaign.setmStartDate(simpleDateFormat.format(new Date(dbCampaign.getStartDate())));
-        campaign.setmEndDate(simpleDateFormat.format(new Date(dbCampaign.getEndDate())));
-        campaign.setmOverrideTime(dbCampaign.getOverrideTime());
-        campaign.setmSequence(dbCampaign.getSequence());
-        campaign.setmPlayDay(dbCampaign.getPlayDay());
-        campaign.setmAssets(createAssetsList(dbCampaign.getAssets()));
+        campaign.campaignId = dbCampaign.getCampaignId();
+        campaign.crcVersion = dbCampaign.getCrcVersion();
+        campaign.startDate = simpleDateFormat.format(new Date(dbCampaign.getStartDate()));
+        campaign.endDate = simpleDateFormat.format(new Date(dbCampaign.getEndDate()));
+        campaign.overrideTime = dbCampaign.getOverrideTime();
+        campaign.sequence = dbCampaign.getSequence();
+        campaign.playDay = dbCampaign.getPlayDay();
+        campaign.assets = createAssetsList(dbCampaign.getAssets());
 
         return campaign;
     }
 
     protected static MsgBoardCampaign createMsgBoardCampaign(DBmsgBoardCampaign dBmsgBoardCampaign) {
         MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
-        msgBoardCampaign.setmBottomBkgURL(dBmsgBoardCampaign.getBottomBkgURL());
-        msgBoardCampaign.setmCRCVersion(dBmsgBoardCampaign.getCrcVersion());
-        msgBoardCampaign.setmMsgBoardID(dBmsgBoardCampaign.getId());
-        msgBoardCampaign.setmTextColor(dBmsgBoardCampaign.getTextColor());
-        msgBoardCampaign.setmPlayDay(dBmsgBoardCampaign.getPlayDay());
-        msgBoardCampaign.setmRightBkgURL(dBmsgBoardCampaign.getRightBkgURL());
-        msgBoardCampaign.setmStartDate(simpleDateFormat.format(new Date(dBmsgBoardCampaign.getStartDate())));
-        msgBoardCampaign.setmEndDate(simpleDateFormat.format(new Date(dBmsgBoardCampaign.getEndDate())));
-        msgBoardCampaign.setmMessages(createMessagesList(dBmsgBoardCampaign.getMessages()));
+        msgBoardCampaign.bottomBkgURL = dBmsgBoardCampaign.getBottomBkgURL();
+        msgBoardCampaign.crcVersion = dBmsgBoardCampaign.getCrcVersion();
+        msgBoardCampaign.msgBoardId = dBmsgBoardCampaign.getMsgBoardId();
+        msgBoardCampaign.textColor = dBmsgBoardCampaign.getTextColor();
+        msgBoardCampaign.playDay = dBmsgBoardCampaign.getPlayDay();
+        msgBoardCampaign.rightBkgURL = dBmsgBoardCampaign.getRightBkgURL();
+        msgBoardCampaign.startDate = simpleDateFormat.format(new Date(dBmsgBoardCampaign.getStartDate()));
+        msgBoardCampaign.endDate = simpleDateFormat.format(new Date(dBmsgBoardCampaign.getEndDate()));
+        msgBoardCampaign.messages = createMessagesList(dBmsgBoardCampaign.getMessages());
 
         return msgBoardCampaign;
     }
 
-    protected static List<DBAsset> createDBAssetsList(List<Asset> assetList, Long campaignId) {
+    protected static List<DBAsset> createDBAssetsList(List<Asset> assetList, Integer campaignId) {
         ArrayList<DBAsset> dbAssets = new ArrayList<>(assetList.size());
 
         DBAsset a;
@@ -127,7 +127,7 @@ public final class Transformer {
         return dbAssets;
     }
 
-    protected static List<DBMessage> createDBMessageList(List<Message> messageList, Long msgBoardID) {
+    protected static List<DBMessage> createDBMessageList(List<Message> messageList, Integer msgBoardID) {
         ArrayList<DBMessage> dbMessages = new ArrayList<>(messageList.size());
 
         DBMessage dbMessage;
@@ -160,20 +160,20 @@ public final class Transformer {
 
     private static DBAsset createDBAsset(Asset asset) {
         DBAsset dbAsset = new DBAsset();
-        dbAsset.setSequence(asset.getmSequence());
-        dbAsset.setDuration(asset.getmDuration());
-        dbAsset.setName(asset.getmName());
-        dbAsset.setUrl(asset.getmURL());
+        dbAsset.setSequence(asset.sequence);
+        dbAsset.setDuration(asset.duration);
+        dbAsset.setName(asset.name);
+        dbAsset.setUrl(asset.url);
 
         return dbAsset;
     }
 
     private static Asset createAsset(DBAsset dbAsset) {
         Asset asset = new Asset();
-        asset.setmSequence(dbAsset.getSequence());
-        asset.setmDuration(dbAsset.getDuration());
-        asset.setmName(dbAsset.getName());
-        asset.setmURL(dbAsset.getUrl());
+        asset.sequence = dbAsset.getSequence();
+        asset.duration = dbAsset.getDuration();
+        asset.name = dbAsset.getName();
+        asset.url = dbAsset.getUrl();
 
         return asset;
     }
@@ -182,18 +182,18 @@ public final class Transformer {
 
     private static Message createMessage(DBMessage dbMessage) {
         Message message = new Message();
-        message.setmPosition(dbMessage.getPosition());
-        message.setmSequenceL(dbMessage.getSequence());
-        message.setmText(dbMessage.getText());
+        message.position = dbMessage.getPosition();
+        message.sequence = dbMessage.getSequence();
+        message.text = dbMessage.getText();
 
         return message;
     }
 
     private static DBMessage createDBMessage(Message message) {
         DBMessage dbMessage = new DBMessage();
-        dbMessage.setPosition(message.getmPosition());
-        dbMessage.setSequence(message.getmSequenceL());
-        dbMessage.setText(message.getmText());
+        dbMessage.setPosition(message.position);
+        dbMessage.setSequence(message.sequence);
+        dbMessage.setText(message.text);
 
         return dbMessage;
     }
