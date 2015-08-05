@@ -118,12 +118,6 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
             printMessage("Has campaigns to play: not implemented yet");
         } else {
             mCampaignsWorker.doInitialCampaignDownload();
-//            mCampaignsWorker.doCampaignLogic(new ICampaignPrepareCallback() {
-//                @Override
-//                public final void onPrepared() {
-//                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-//                }
-//            });
         }
 
     }

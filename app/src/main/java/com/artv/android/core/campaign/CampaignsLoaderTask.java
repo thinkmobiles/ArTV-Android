@@ -8,6 +8,7 @@ import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
+import com.artv.android.database.DbWorker;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,10 +16,11 @@ import java.util.List;
 /**
  * Created by ZOG on 8/3/2015.
  */
-public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> implements IAssetLoadProgressListener {
+public final class CampaignsLoaderTask extends AsyncTask<Void, Void, CampaignsLoadResult> implements IAssetLoadProgressListener {
 
     private List<Campaign> mCampaigns;
     private AssetHelper mAssetHelper;
+    private DbWorker mDbWorker;
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
 
@@ -34,6 +36,10 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
         mCampaigns = _campaigns;
     }
 
+    public void setDbWorker(final DbWorker _dbWorker) {
+        mDbWorker = _dbWorker;
+    }
+
     public final void setUiLogger(final ILogger _logger) {
         mUiLogger = _logger;
     }
@@ -43,25 +49,50 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
     }
 
     @Override
-    protected final Void doInBackground(final Void... params) {
+    protected final CampaignsLoadResult doInBackground(final Void... params) {
+        CampaignsLoadResult campaignsLoadResult = new CampaignsLoadResult();
+
         final int assetsCount = CampaignHelper.getAssetsCount(mCampaigns);
         final double progressPerAsset = MAX_PROGRESS / assetsCount;
 
         for (final Campaign campaign : mCampaigns) {
             postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
+            if (mDbWorker.contains(campaign)) {
+                postOnUiThread(false, ": already contains");
+                continue;
+            }
+
             for (final Asset asset : campaign.assets) {
-                postOnUiThread(true, "Loading asset " + asset.name + "...");
                 AssetLoadResult result = new AssetLoadResult();
+
+                postOnUiThread(true, "Loading asset " + asset.name + "...");
+                if (mDbWorker.contains(asset)) {
+                    result.success = true;
+                    postOnUiThread(false, "already contains");
+                    continue;
+                }
+
                 try {
                     result = mAssetHelper.loadAsset(asset, progressPerAsset);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    result.success = false;
+                    result.message = e.toString();
                 }
-                if (!result.success) {
+                if (result.success) {
+                    postOnUiThread(false, "finished: " + result.success);
+                    mDbWorker.write(asset);
+                } else {
                     onProgressLoaded(progressPerAsset);
+                    postOnUiThread(false, "finished: " + result.success);
+
+                    campaignsLoadResult.success = result.success;
+                    campaignsLoadResult.message = result.message;
+                    return campaignsLoadResult;
                 }
-                postOnUiThread(false, "finished: " + result.success);
             }
+
+            mDbWorker.write(campaign);
         }
         postOnUiThread(true, "All campaigns loaded");
 
