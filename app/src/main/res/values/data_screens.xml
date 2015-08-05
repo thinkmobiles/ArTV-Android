@@ -18,6 +18,7 @@
     <dimen name="cis_logo_width">200dp</dimen>
 
     <dimen name="cis_edit_text_height">35dp</dimen>
+    <dimen name="cis_edit_text_padding_horizontal">3dp</dimen>
     <color name="cis_edit_text_bg">@android:color/white</color>
     <color name="cis_edit_text_border">#D5D9DC</color>
 
@@ -50,6 +51,7 @@
         <item name="android:textColor">@color/text</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/cis_bg_edit_text</item>
+        <item name="android:singleLine">true</item>
     </style>
 
 </resources>

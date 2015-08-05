@@ -14,7 +14,6 @@ import retrofit.converter.SimpleXMLConverter;
 public abstract class TestRestClient {
 
     private static MainTVApi REST_CLIENT;
-    public static final String API_URL = ApiConst.PROTOCOL + "://" + ApiConst.SERVER_AUTHORITY;
 
     static {
         setupRestClient();
@@ -26,8 +25,8 @@ public abstract class TestRestClient {
         return REST_CLIENT;
     }
 
-    private static void setupRestClient() {
-        RestAdapter restAdapter = getAdapter(API_URL);
+    public static void setupRestClient() {
+        final RestAdapter restAdapter = getAdapter(ApiConst.getProtocol() + "://" + ApiConst.getAuthority());
         REST_CLIENT = restAdapter.create(MainTVApi.class);
     }
 

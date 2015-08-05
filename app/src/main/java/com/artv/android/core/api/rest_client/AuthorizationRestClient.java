@@ -26,7 +26,7 @@ public class AuthorizationRestClient extends BaseRestClient {
     private static void setupRestClient() {
 
         RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setEndpoint(ApiConst.SERVER_AUTHORITY)
+                .setEndpoint(ApiConst.getAuthority())
                 .setClient(getDefaultClient())
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new SimpleXMLConverter())

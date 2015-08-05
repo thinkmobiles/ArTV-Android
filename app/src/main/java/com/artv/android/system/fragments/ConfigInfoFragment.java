@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.artv.android.R;
+import com.artv.android.core.api.ApiConst;
+import com.artv.android.core.api.UrlHelper;
 import com.artv.android.core.config_info.ConfigInfo;
 
 /**
@@ -19,6 +21,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
     private EditText etMasterDeviceIp;
     private EditText etUserName;
     private EditText etPassword;
+    private EditText etAddress;
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
@@ -28,6 +31,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
         etMasterDeviceIp = (EditText) view.findViewById(R.id.etMasterDeviceIp_FCI);
         etUserName = (EditText) view.findViewById(R.id.etUserName_FCI);
         etPassword = (EditText) view.findViewById(R.id.etPassword_FCI);
+        etAddress = (EditText) view.findViewById(R.id.etAddress_FCI);
 
         view.findViewById(R.id.btnSave_FCI).setOnClickListener(this);
 
@@ -52,6 +56,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
         final String masterDeviceIp = etMasterDeviceIp.getText().toString();
         final String userName = etUserName.getText().toString();
         final String password = etPassword.getText().toString();
+        final String address = etAddress.getText().toString();
 
         final ConfigInfo configInfo = new ConfigInfo.Builder()
                 .setDeviceId(deviceId)
@@ -63,6 +68,17 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
         if (!configInfo.hasConfigInfo()) {
             Toast.makeText(getActivity().getApplicationContext(), "Fill all fields", Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        if (!address.isEmpty()) {       //user want another server
+            if (!UrlHelper.isValidAddress(address)) {
+                Toast.makeText(getActivity().getApplicationContext(), "Bad address, enter like \n\"http://site.com\"", Toast.LENGTH_SHORT).show();
+                return;
+            } else {
+                ApiConst.setProtocol(UrlHelper.getProtocolFrom(address));
+                ApiConst.setAuthority(UrlHelper.getAuthorityFrom(address));
+                ApiConst.addressUpdated();
+            }
         }
 
         getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(configInfo);

@@ -96,8 +96,8 @@ public final class AssetHelper {
         }
 
         final Uri uri = new Uri.Builder()
-                .scheme(ApiConst.PROTOCOL)
-                .authority(ApiConst.SERVER_AUTHORITY)
+                .scheme(ApiConst.getProtocol())
+                .authority(ApiConst.getAuthority())
                 .path(_path)
                 .build();
 

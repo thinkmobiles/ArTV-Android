@@ -27,7 +27,7 @@ public class MainRestClient extends BaseRestClient {
 
     private MainRestClient(final String userToken){
         RestAdapter.Builder builder = new RestAdapter.Builder()
-                .setEndpoint(ApiConst.SERVER_AUTHORITY)
+                .setEndpoint(ApiConst.getAuthority())
                 .setClient(getDefaultClient())
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setConverter(new SimpleXMLConverter())

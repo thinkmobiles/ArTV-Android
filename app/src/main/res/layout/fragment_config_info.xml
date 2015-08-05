@@ -35,14 +35,14 @@
                 android:layout_marginBottom="@dimen/main_distance"
                 style="@style/TextMedium"
                 android:text="@string/device_id"
-                android:gravity="center|right" />
+                android:gravity="center_vertical|right" />
 
             <EditText
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etDeviceId_FCI"
                 android:layout_alignParentRight="true"
-                android:text="1"
+                android:text="1234"
                 style="@style/CIS_EditText"
                 android:layout_marginBottom="@dimen/main_distance" />
 
@@ -55,7 +55,7 @@
                 style="@style/TextSmall"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:gravity="center|right" />
+                android:gravity="center_vertical|right" />
 
             <EditText
                 android:layout_width="@dimen/element_width"
@@ -63,7 +63,28 @@
                 android:id="@+id/etMasterDeviceIp_FCI"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tvMasterDeviceIp_FCI"
-                style="@style/CIS_EditText" />
+                style="@style/CIS_EditText"
+                android:layout_marginBottom="@dimen/main_distance" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/cis_edit_text_height"
+                android:text="Address"
+                android:id="@+id/tvAddress_FCI"
+                android:layout_below="@+id/etMasterDeviceIp_FCI"
+                android:layout_toLeftOf="@+id/etAddress_FCI"
+                style="@style/TextMedium"
+                android:layout_marginRight="@dimen/main_distance"
+                android:gravity="center_vertical|right" />
+
+            <EditText
+                android:layout_width="@dimen/element_width"
+                android:layout_height="@dimen/cis_edit_text_height"
+                android:id="@+id/etAddress_FCI"
+                android:layout_alignTop="@+id/tvAddress_FCI"
+                android:layout_alignParentRight="true"
+                style="@style/CIS_EditText"
+                android:text="http://tvm.hasbrain.ru" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -79,14 +100,14 @@
                 android:id="@+id/tvUserName_FCI"
                 android:layout_marginRight="@dimen/main_distance"
                 style="@style/TextMedium"
-                android:gravity="center|right"
+                android:gravity="center_vertical|right"
                 android:layout_marginBottom="@dimen/main_distance" />
 
             <EditText
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etUserName_FCI"
-                android:text="testdev"
+                android:text="testandroid"
                 android:layout_toRightOf="@+id/tvUserName_FCI"
                 style="@style/CIS_EditText"
                 android:layout_marginBottom="@dimen/main_distance" />
@@ -99,17 +120,16 @@
                 android:layout_below="@+id/etUserName_FCI"
                 android:layout_marginRight="@dimen/main_distance"
                 style="@style/TextMedium"
-                android:gravity="center|right" />
+                android:gravity="center_vertical|right" />
 
             <EditText
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
                 android:id="@+id/etPassword_FCI"
                 android:layout_alignTop="@+id/tvPassword_FCI"
-                android:text="testdev123"
+                android:text="test1234"
                 android:layout_toRightOf="@+id/tvPassword_FCI"
-                style="@style/CIS_EditText"
-                android:inputType="textPassword" />
+                style="@style/CIS_EditText" />
 
         </RelativeLayout>
     </LinearLayout>
