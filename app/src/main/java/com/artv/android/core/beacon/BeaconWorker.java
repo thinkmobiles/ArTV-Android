@@ -7,7 +7,6 @@ import com.artv.android.core.api.api_model.request.BeaconRequestObject;
 import com.artv.android.core.api.api_model.response.BeaconResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
-import com.artv.android.core.init.InitResult;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Beacon;
 import com.artv.android.core.model.MsgBoardCampaign;

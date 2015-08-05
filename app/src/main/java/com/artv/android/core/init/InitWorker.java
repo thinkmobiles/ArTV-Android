@@ -1,5 +1,6 @@
 package com.artv.android.core.init;
 
+import com.artv.android.core.ArTvResult;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -139,8 +140,8 @@ public final class InitWorker {
         });
     }
 
-    private final InitResult buildInitResult(final boolean _success, final String _message) {
-        return new InitResult.Builder()
+    private final ArTvResult buildInitResult(final boolean _success, final String _message) {
+        return new ArTvResult.Builder()
                 .setSuccess(_success)
                 .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
                 .build();
