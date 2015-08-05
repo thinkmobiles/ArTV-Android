@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
+import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.gen.DBAsset;
@@ -28,7 +29,7 @@ import de.greenrobot.dao.async.AsyncSession;
 /**
  * Created by Misha on 7/16/2015.
  */
-public class DBManager implements AsyncOperationListener {
+public class DBManager implements AsyncOperationListener, DbWorker {
     private static final String TAG = DBManager.class.getSimpleName();
 
     private static DBManager instance;
@@ -185,6 +186,85 @@ public class DBManager implements AsyncOperationListener {
     }
 
 
+    @Override
+    public boolean contains(Campaign _campaign) {
+        try {
+            openReadableDb();
+            DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
+            List<DBCampaign> resCampaigns = dbCampaignDao.queryBuilder()
+                    .where(DBCampaignDao.Properties.CampaignId.eq(_campaign.campaignId))
+                    .build().list();
+            daoSession.clear();
+            return resCampaigns.size() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean contains(Asset _asset) {
+        try {
+            openReadableDb();
+            DBAssetDao dao = daoSession.getDBAssetDao();
+            List<DBAsset> resAssets = dao.queryBuilder()
+                    .where(DBAssetDao.Properties.Url.eq(_asset.url), DBAssetDao.Properties.Name.eq(_asset.name))
+                    .build().list();
+            daoSession.clear();
+            return resAssets.size() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public void write(Campaign _campaign) {
+        if(_campaign == null) return;
+        try {
+            openWritableDb();
+
+            DBCampaign dbCampaign = Transformer.createDBCampaign(_campaign);
+            DBCampaignDao dao = daoSession.getDBCampaignDao();
+            dao.insertOrReplace(dbCampaign);
+
+//            LinkedList<DBMessage> dbMessages = new LinkedList<>();
+//            for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
+//                dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.messages,
+//                        msgBoardCampaign.msgBoardId));
+//
+//            DBMessageDao messageDao = daoSession.getDBMessageDao();
+//            messageDao.insertOrReplaceInTx(dbMessages);
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void write(Asset _asset) {
+        if(_asset == null) return;
+        try {
+            openWritableDb();
+
+            DBAsset dbAsset = Transformer.createDBAsset(_asset);
+            DBAssetDao dao = daoSession.getDBAssetDao();
+            dao.insertOrReplace(dbAsset);
+
+//            LinkedList<DBMessage> dbMessages = new LinkedList<>();
+//            for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
+//                dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.messages,
+//                        msgBoardCampaign.msgBoardId));
+//
+//            DBMessageDao messageDao = daoSession.getDBMessageDao();
+//            messageDao.insertOrReplaceInTx(dbMessages);
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public List<Campaign> getAllCampaigns() {
         List<Campaign> campaigns = new LinkedList<>();
         try {
@@ -197,6 +277,38 @@ public class DBManager implements AsyncOperationListener {
             e.printStackTrace();
         }
         return campaigns;
+    }
+
+    @Override
+    public List<Asset> getAllAssets() {
+        List<Asset> assets = new LinkedList<>();
+        try {
+            openReadableDb();
+            DBAssetDao dao = daoSession.getDBAssetDao();
+            assets = Transformer.createAssetsList(dao.loadAll());
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return assets;
+    }
+
+    @Override
+    public List<Asset> getAssets(Campaign _campaign) {
+        if(_campaign == null) return null;
+        List<Asset> resAssets = new LinkedList<>();
+        try {
+            openReadableDb();
+            DBAssetDao dao = daoSession.getDBAssetDao();
+            List<DBAsset> resDBAssets = dao.queryBuilder()
+                    .where(DBAssetDao.Properties.CampaignId.eq(_campaign.campaignId))
+                    .build().list();
+            daoSession.clear();
+            return Transformer.createAssetsList(resDBAssets);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resAssets;
     }
 
     public List<MsgBoardCampaign> getAllMsgBoardCampaigns() {

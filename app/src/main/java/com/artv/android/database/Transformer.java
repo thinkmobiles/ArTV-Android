@@ -158,7 +158,7 @@ public final class Transformer {
         return messages;
     }
 
-    private static DBAsset createDBAsset(Asset asset) {
+    protected static DBAsset createDBAsset(Asset asset) {
         DBAsset dbAsset = new DBAsset();
         dbAsset.setSequence(asset.sequence);
         dbAsset.setDuration(asset.duration);
@@ -168,7 +168,7 @@ public final class Transformer {
         return dbAsset;
     }
 
-    private static Asset createAsset(DBAsset dbAsset) {
+    protected static Asset createAsset(DBAsset dbAsset) {
         Asset asset = new Asset();
         asset.sequence = dbAsset.getSequence();
         asset.duration = dbAsset.getDuration();
