@@ -60,11 +60,11 @@ public final class BeaconWorker {
         return msgBoardCampaign;
     }
 
-    private final InitResult buildInitResult(final boolean _success, final String _message) {
-        return new InitResult.Builder()
-                .setSuccess(_success)
-                .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
-                .build();
-    }
+//    private final InitResult buildInitResult(final boolean _success, final String _message) {
+//        return new InitResult.Builder()
+//                .setSuccess(_success)
+//                .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
+//                .build();
+//    }
 
 }

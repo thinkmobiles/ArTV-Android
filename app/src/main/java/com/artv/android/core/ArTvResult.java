@@ -10,7 +10,7 @@ public class ArTvResult {
     private boolean mSuccess = false;
     private String mMessage;
 
-    protected ArTvResult() {}
+    private ArTvResult() {}
 
     public final boolean getSuccess() {
         return mSuccess;
@@ -39,7 +39,7 @@ public class ArTvResult {
             return this;
         }
 
-        public ArTvResult build() {
+        public final ArTvResult build() {
             return mArTvResult;
         }
 

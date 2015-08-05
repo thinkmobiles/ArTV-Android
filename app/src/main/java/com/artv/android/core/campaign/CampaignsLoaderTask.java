@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.model.Asset;
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by ZOG on 8/3/2015.
  */
-public final class CampaignsLoaderTask extends AsyncTask<Void, Void, CampaignsLoadResult> implements IAssetLoadProgressListener {
+public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult> implements IAssetLoadProgressListener {
 
     private List<Campaign> mCampaigns;
     private AssetHelper mAssetHelper;
@@ -49,8 +50,8 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, CampaignsLo
     }
 
     @Override
-    protected final CampaignsLoadResult doInBackground(final Void... params) {
-        CampaignsLoadResult campaignsLoadResult = new CampaignsLoadResult();
+    protected final ArTvResult doInBackground(final Void... params) {
+        ArTvResult.Builder totalResult = new ArTvResult.Builder();
 
         final int assetsCount = CampaignHelper.getAssetsCount(mCampaigns);
         final double progressPerAsset = MAX_PROGRESS / assetsCount;
@@ -63,32 +64,31 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, CampaignsLo
             }
 
             for (final Asset asset : campaign.assets) {
-                AssetLoadResult result = new AssetLoadResult();
-
                 postOnUiThread(true, "Loading asset " + asset.name + "...");
                 if (mDbWorker.contains(asset)) {
-                    result.success = true;
                     postOnUiThread(false, "already contains");
                     continue;
                 }
 
+                ArTvResult assetResult;
                 try {
-                    result = mAssetHelper.loadAsset(asset, progressPerAsset);
-                } catch (IOException e) {
+                    assetResult = mAssetHelper.loadAsset(asset, progressPerAsset);
+                } catch (final IOException e) {
                     e.printStackTrace();
-                    result.success = false;
-                    result.message = e.toString();
+                    totalResult.setSuccess(false);
+                    totalResult.setMessage(e.toString());
+                    return totalResult.build();
                 }
-                if (result.success) {
-                    postOnUiThread(false, "finished: " + result.success);
+                if (assetResult.getSuccess()) {
+                    postOnUiThread(false, "finished: " + assetResult.getSuccess());
                     mDbWorker.write(asset);
                 } else {
                     onProgressLoaded(progressPerAsset);
-                    postOnUiThread(false, "finished: " + result.success);
+                    postOnUiThread(false, "finished: " + assetResult.getSuccess());
 
-                    campaignsLoadResult.success = result.success;
-                    campaignsLoadResult.message = result.message;
-                    return campaignsLoadResult;
+                    totalResult.setSuccess(assetResult.getSuccess());
+                    totalResult.setMessage(assetResult.getMessage());
+                    return totalResult.build();
                 }
             }
 
