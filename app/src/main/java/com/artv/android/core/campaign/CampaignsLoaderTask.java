@@ -5,8 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.artv.android.core.ArTvResult;
-import com.artv.android.core.ILogger;
-import com.artv.android.core.IPercentListener;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.database.DbWorker;
@@ -21,8 +20,6 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
     private List<Campaign> mCampaigns;
     private AssetHelper mAssetHelper;
     private DbWorker mDbWorker;
-    private ILogger mUiLogger;
-    private IPercentListener mPercentListener;
     private ICampaignDownloadListener mCampaignDownloadListener;
 
     private static final double MAX_PROGRESS = 10000;
@@ -41,60 +38,41 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
         mDbWorker = _dbWorker;
     }
 
-    public final void setUiLogger(final ILogger _logger) {
-        mUiLogger = _logger;
-    }
-
-    public final void setPercentListener(final IPercentListener _listener) {
-        mPercentListener = _listener;
-    }
-
     public final void setCampaignDownloadListener(final ICampaignDownloadListener _listener) {
         mCampaignDownloadListener = _listener;
     }
 
     @Override
     protected final ArTvResult doInBackground(final Void... params) {
-        ArTvResult.Builder totalResult = new ArTvResult.Builder();
-
         final int assetsCount = CampaignHelper.getAssetsCount(mCampaigns);
         final double progressPerAsset = MAX_PROGRESS / assetsCount;
 
         for (final Campaign campaign : mCampaigns) {
-            postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
+            ArTvLogger.printMessage("Loading campaign with id = " + campaign.campaignId);
             if (mDbWorker.contains(campaign)) {
-                postOnUiThread(false, ": already contains");
+                ArTvLogger.printMessage(false, ": already contains");
                 continue;
             }
 
             for (final Asset asset : campaign.assets) {
-                postOnUiThread(true, "Loading asset " + asset.name + "...");
+                ArTvLogger.printMessage("Loading asset " + asset.name + "...");
                 if (mDbWorker.contains(asset)) {
-                    postOnUiThread(false, "already contains");
+                    ArTvLogger.printMessage(false, "already contains");
                     continue;
                 }
 
                 final ArTvResult assetResult = mAssetHelper.loadAsset(this, asset, progressPerAsset);
+                ArTvLogger.printMessage(false, "finished: " + assetResult.getSuccess());
 
-                if (assetResult.getSuccess()) {
-                    postOnUiThread(false, "finished: " + assetResult.getSuccess());
-                    mDbWorker.write(asset);
-                } else {
-                    onProgressLoaded(progressPerAsset);
-                    postOnUiThread(false, "finished: " + assetResult.getSuccess());
-
-                    totalResult.setSuccess(assetResult.getSuccess());
-                    totalResult.setMessage(assetResult.getMessage());
-                    return totalResult.build();
-                }
+                if (assetResult.getSuccess()) mDbWorker.write(asset);
+                else return assetResult;
             }
 
             mDbWorker.write(campaign);
         }
-        postOnUiThread(true, "All campaigns loaded");
+        ArTvLogger.printMessage("All campaigns loaded");
 
-        totalResult.setSuccess(true);
-        return totalResult.build();
+        return new ArTvResult.Builder().setSuccess(true).build();
     }
 
     @Override
@@ -115,20 +93,11 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
         mCampaignDownloadListener.onCampaignDownloadFinished(_result);
     }
 
-    private final void postOnUiThread(final boolean _newLine, final String _message) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public final void run() {
-                mUiLogger.printMessage(_newLine, _message);
-            }
-        });
-    }
-
     private final void postOnUiThread(final double _progress) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public final void run() {
-                mPercentListener.onPercentUpdate(_progress);
+//                mPercentListener.onPercentUpdate(_progress);
             }
         });
     }

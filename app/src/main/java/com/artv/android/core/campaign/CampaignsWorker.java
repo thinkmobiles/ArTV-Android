@@ -1,7 +1,6 @@
 package com.artv.android.core.campaign;
 
-import com.artv.android.core.ILogger;
-import com.artv.android.core.IPercentListener;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -27,8 +26,6 @@ public final class CampaignsWorker {
     private ApiWorker mApiWorker;
     private InitData mInitData;
     private ConfigInfo mConfigInfo;
-    private ILogger mUiLogger;
-    private IPercentListener mPercentListener;
     private DbWorker mDbWorker;
     private CampaignsLoaderTask mCampaignsLoaderTask;
 
@@ -44,14 +41,6 @@ public final class CampaignsWorker {
         mConfigInfo = _configInfo;
     }
 
-    public final void setUiLogger(final ILogger _logger) {
-        mUiLogger = _logger;
-    }
-
-    public final void setPercentListener(final IPercentListener _listener) {
-        mPercentListener = _listener;
-    }
-
     public void setDbWorker(final DbWorker _dbWorker) {
         mDbWorker = _dbWorker;
     }
@@ -65,11 +54,11 @@ public final class CampaignsWorker {
             @Override
             public final void onFinished(final GetCampaignsResult _result) {
                 if (_result.getSuccess()) {
-                    mUiLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
-                    mUiLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
+                    ArTvLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
+                    ArTvLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
                     loadCampaigns(_result.getCampaigns(), _listener);
                 } else {
-                    mUiLogger.printMessage("Error loading campaigns: " + _result.getMessage());
+                    ArTvLogger.printMessage("Error loading campaigns: " + _result.getMessage());
                 }
             }
         });
@@ -85,7 +74,7 @@ public final class CampaignsWorker {
         mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
             @Override
             public final void onSuccess(final GetCampaignResponseObject _respObj) {
-                mUiLogger.printMessage(_respObj.apiType + " : success");
+                ArTvLogger.printMessage(_respObj.apiType + " : success");
 
                 _callback.onFinished(
                         new GetCampaignsResult.Builder()
@@ -98,7 +87,7 @@ public final class CampaignsWorker {
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
-                mUiLogger.printMessage(_errorResp.apiType + ": " + _errorResp.error);
+                ArTvLogger.printMessage(_errorResp.apiType + ": " + _errorResp.error);
 
                 _callback.onFinished(
                         new GetCampaignsResult.Builder()
@@ -115,8 +104,6 @@ public final class CampaignsWorker {
         mCampaignsLoaderTask.setCampaigns(_campaigns);
         mCampaignsLoaderTask.setDbWorker(mDbWorker);
         mCampaignsLoaderTask.setCampaignDownloadListener(_listener);
-        mCampaignsLoaderTask.setUiLogger(mUiLogger);
-        mCampaignsLoaderTask.setPercentListener(mPercentListener);
         mCampaignsLoaderTask.execute();
     }
 

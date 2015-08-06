@@ -11,20 +11,20 @@ import android.widget.TextView;
 
 import com.artv.android.R;
 import com.artv.android.core.ArTvResult;
-import com.artv.android.core.ILogger;
-import com.artv.android.core.IPercentListener;
+import com.artv.android.core.log.ILogger;
 import com.artv.android.core.campaign.CampaignsWorker;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, ILogger, IPercentListener {
+public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, ILogger {
 
     private ProgressBar pbLoading;
     private Button btnClearConfigInfo;
@@ -51,6 +51,8 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
+        ArTvLogger.addLogger(this);
+
         final View view = _inflater.inflate(R.layout.fragment_splash_screen, _container, false);
         prepareViews(view);
         return view;
@@ -103,11 +105,17 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     }
 
     @Override
+    public final void onDestroyView() {
+        super.onDestroyView();
+        ArTvLogger.removeLogger(this);
+    }
+
+    @Override
     public final void onClick(final View _v) {
         switch (_v.getId()) {
             case R.id.btnClearConfigInfo_FSS:
                 mCampaignsWorker.cancelLoading();
-//                mConfigInfoWorker.notifyNeedRemoveConfigInfo();
+                mConfigInfoWorker.notifyNeedRemoveConfigInfo();
                 break;
         }
     }
@@ -115,8 +123,6 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     private final void beginCampaignLogic() {
         mCampaignsWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mCampaignsWorker.setInitData(mInitWorker.getInitData());
-        mCampaignsWorker.setUiLogger(this);
-        mCampaignsWorker.setPercentListener(this);
 
         if (mCampaignsWorker.hasCampaignToPlay()) {
             printMessage("Has campaigns to play");
@@ -130,6 +136,11 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                     } else {
                         printMessage("Initial loading failed, reason: " + _result.getMessage());
                     }
+                }
+
+                @Override
+                public final void onPercentLoaded(final double _percent) {
+                    tvPercent.setText(String.format("%.2f%%", _percent));
                 }
             });
         }
@@ -146,9 +157,4 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         tvLog.append((_fromNewLine ? "\n " : "") + _message);
     }
 
-    @Override
-    public final void onPercentUpdate(final double _percent) {
-        tvPercent.setText(String.format("%.2f%%", _percent / 100));
-        pbLoading.setProgress((int) _percent);
-    }
 }

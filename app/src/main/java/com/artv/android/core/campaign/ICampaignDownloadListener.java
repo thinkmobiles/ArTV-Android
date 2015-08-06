@@ -8,5 +8,6 @@ import com.artv.android.core.ArTvResult;
 public interface ICampaignDownloadListener {
 
     void onCampaignDownloadFinished(final ArTvResult _result);
+    void onPercentLoaded(final double _percent);
 
 }

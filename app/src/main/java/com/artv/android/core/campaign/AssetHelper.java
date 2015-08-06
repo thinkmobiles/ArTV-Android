@@ -29,12 +29,7 @@ import java.util.concurrent.Executors;
  */
 public final class AssetHelper {
 
-    private ExecutorService mExecutor;
     private IAssetLoadProgressListener mProgressListener;
-
-    public AssetHelper() {
-        mExecutor = Executors.newSingleThreadExecutor();
-    }
 
     public void setProgressListener(IAssetLoadProgressListener _progressListener) {
         mProgressListener = _progressListener;
@@ -77,7 +72,6 @@ public final class AssetHelper {
                 inputStream.close();
 
                 result.setSuccess(true);
-                return result.build();
             } else {
                 result.setSuccess(false);
                 result.setMessage("Error: response code = " + respCode);

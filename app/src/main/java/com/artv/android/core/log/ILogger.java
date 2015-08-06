@@ -1,4 +1,4 @@
-package com.artv.android.core;
+package com.artv.android.core.log;
 
 /**
  * Created by ZOG on 7/30/2015.
