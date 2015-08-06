@@ -1,5 +1,6 @@
 package com.artv.android.core.campaign;
 
+import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.api.ApiWorker;
@@ -22,12 +23,16 @@ import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
  */
 public final class CampaignsWorker {
 
+    private static final int ID_ALL_CAMPAIGN = 0;
+
     private ApiWorker mApiWorker;
     private InitData mInitData;
     private ConfigInfo mConfigInfo;
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
     private DbWorker mDbWorker;
+
+    private IInitialDownloadListener mInitialDownloadListener;
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -57,14 +62,21 @@ public final class CampaignsWorker {
         return !mDbWorker.getAllCampaigns().isEmpty();
     }
 
-    public final void doInitialCampaignDownload() {
-        getCampaign(0, new IGetCampaignsCallback() {
+    public final void doInitialCampaignDownload(final IInitialDownloadListener _listener) {
+        mInitialDownloadListener = _listener;
+
+        getCampaign(ID_ALL_CAMPAIGN, new IGetCampaignsCallback() {
             @Override
             public final void onFinished(final GetCampaignsResult _result) {
                 if (_result.getSuccess()) {
                     mUiLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
                     mUiLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
-                    loadCampaigns(_result.getCampaigns());
+                    loadCampaigns(_result.getCampaigns(), new ICampaignDownloadListener() {
+                        @Override
+                        public final void onCampaignDownloaded(final ArTvResult _result) {
+                            _listener.onInitialDownloadFinished(_result);
+                        }
+                    });
                 } else {
                     mUiLogger.printMessage("Error loading campaigns: " + _result.getMessage());
                 }
@@ -107,10 +119,11 @@ public final class CampaignsWorker {
         });
     }
 
-    public final void loadCampaigns(final List<Campaign> _campaigns) {
+    public final void loadCampaigns(final List<Campaign> _campaigns, final ICampaignDownloadListener _listener) {
         final CampaignsLoaderTask task = new CampaignsLoaderTask();
         task.setCampaigns(_campaigns);
         task.setDbWorker(mDbWorker);
+        task.setCampaignDownloadListener(_listener);
         task.setUiLogger(mUiLogger);
         task.setPercentListener(mPercentListener);
         task.execute();

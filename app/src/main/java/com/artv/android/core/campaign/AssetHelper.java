@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Environment;
 
 import com.artv.android.core.ArTvResult;
+import com.artv.android.core.Constants;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.model.Asset;
 
@@ -29,9 +30,6 @@ public final class AssetHelper {
     private ExecutorService mExecutor;
     private IAssetLoadProgressListener mProgressListener;
 
-    private static final String FOLDER_NAME = "artv_data";
-    private static final String PATH = Environment.getExternalStorageDirectory() + File.separator + FOLDER_NAME;
-
     public AssetHelper() {
         mExecutor = Executors.newSingleThreadExecutor();
     }
@@ -54,7 +52,7 @@ public final class AssetHelper {
         final int fileLength = conn.getContentLength();
 
         if (respCode == 200) {
-            final File file = new File(PATH + _asset.url);
+            final File file = new File(Constants.PATH + _asset.url);
 
             //if exist - publish progress and return
             final boolean reload = needReloadFile(file, fileLength);

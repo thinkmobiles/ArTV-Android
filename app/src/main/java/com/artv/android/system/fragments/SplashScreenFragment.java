@@ -14,9 +14,11 @@ import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.campaign.CampaignsWorker;
+import com.artv.android.core.campaign.IInitialDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
+import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 
 /**
@@ -115,9 +117,15 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mCampaignsWorker.setUiLogger(this);
         mCampaignsWorker.setPercentListener(this);
         if (mCampaignsWorker.hasCampaignToPlay()) {
-            printMessage("Has campaigns to play: not implemented yet");
+            printMessage("Has campaigns to play");
+            mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
         } else {
-            mCampaignsWorker.doInitialCampaignDownload();
+            mCampaignsWorker.doInitialCampaignDownload(new IInitialDownloadListener() {
+                @Override
+                public final void onInitialDownloadFinished(final ArTvResult _result) {
+                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                }
+            });
         }
 
     }

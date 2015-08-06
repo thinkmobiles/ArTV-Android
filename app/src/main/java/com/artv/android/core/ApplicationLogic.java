@@ -11,6 +11,7 @@ import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.database.DBManager;
+import com.artv.android.database.DbWorker;
 import com.artv.android.system.SpHelper;
 
 /**
@@ -29,6 +30,7 @@ public final class ApplicationLogic {
     private DisplaySwitcher mDisplaySwitcher;
     private BeaconWorker mBeaconWorker;
     private CampaignsWorker mCampaignsWorker;
+    private DbWorker mDbWorker;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -51,9 +53,11 @@ public final class ApplicationLogic {
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
+        mDbWorker = DBManager.getInstance(mContext);
+
         mCampaignsWorker = new CampaignsWorker();
         mCampaignsWorker.setApiWorker(mApiWorker);
-        mCampaignsWorker.setDbWorker(DBManager.getInstance(mContext));
+        mCampaignsWorker.setDbWorker(mDbWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -78,6 +82,10 @@ public final class ApplicationLogic {
 
     public final CampaignsWorker getCampaignWorker() {
         return mCampaignsWorker;
+    }
+
+    public final DbWorker getDbWorker() {
+        return mDbWorker;
     }
 
     /**

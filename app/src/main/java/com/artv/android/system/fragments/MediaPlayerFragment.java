@@ -17,10 +17,18 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
+import com.artv.android.core.Constants;
+import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.MsgBoardCampaign;
+import com.artv.android.database.DBManager;
+import com.artv.android.database.DbWorker;
 import com.artv.android.system.custom_views.CustomMediaController;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -34,9 +42,19 @@ public final class MediaPlayerFragment extends BaseFragment {
 
     private SurfaceHolder mSurfaceHolder;
 
+    private DbWorker mDbWorker;
+    private List<File> mFiles;
+
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
+
+        mDbWorker = getApplicationLogic().getDbWorker();
+        mFiles = new ArrayList<>();
+        for (final Asset asset : mDbWorker.getAllAssets()) {
+            final File file = new File(Constants.PATH + asset.url);
+            if (file.exists()) mFiles.add(file);
+        }
     }
 
     @Override
@@ -161,18 +179,18 @@ public final class MediaPlayerFragment extends BaseFragment {
     private int mCurrentVideo = 0;
 
     private final void playNextVideo() {
-//        final int videosCount = mVideoFilesHolder.getFiles().size();
-//        if (videosCount == 0) {
-//            Toast.makeText(getActivity().getApplicationContext(), "No video to play", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        if (mCurrentVideo >= videosCount) {
-//            mCurrentVideo = 0;
-//        }
-//
-//        final File file = mVideoFilesHolder.getFiles().get(mCurrentVideo);
-//        mVideoWindow.setVideoPath(file.getPath());
+        final int videosCount = mFiles.size();
+        if (videosCount == 0) {
+            Toast.makeText(getActivity().getApplicationContext(), "No video to play", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (mCurrentVideo >= videosCount) {
+            mCurrentVideo = 0;
+        }
+
+        final File file = mFiles.get(mCurrentVideo);
+        mVideoWindow.setVideoPath(file.getPath());
     }
 
 }

@@ -24,6 +24,7 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
     private DbWorker mDbWorker;
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
+    private ICampaignDownloadListener mCampaignDownloadListener;
 
     private static final double MAX_PROGRESS = 10000;
     private double currentProgress = 0;
@@ -47,6 +48,10 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
 
     public final void setPercentListener(final IPercentListener _listener) {
         mPercentListener = _listener;
+    }
+
+    public final void setCampaignDownloadListener(final ICampaignDownloadListener _listener) {
+        mCampaignDownloadListener = _listener;
     }
 
     @Override
@@ -96,7 +101,13 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
         }
         postOnUiThread(true, "All campaigns loaded");
 
-        return null;
+        totalResult.setSuccess(true);
+        return totalResult.build();
+    }
+
+    @Override
+    protected final void onPostExecute(final ArTvResult _result) {
+        mCampaignDownloadListener.onCampaignDownloaded(_result);
     }
 
     private final void postOnUiThread(final boolean _newLine, final String _message) {
