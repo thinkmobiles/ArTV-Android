@@ -1,9 +1,11 @@
 package com.artv.android.system.fragments;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +30,8 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +44,7 @@ public final class MediaPlayerFragment extends BaseFragment {
     private LinearLayout mRightContainer, mBottomContainer;
     private TextView mRightText, mBottomText;
     private VideoView mVideoWindow;
+    private ImageView ivImage;
 
     private SurfaceHolder mSurfaceHolder;
 
@@ -74,6 +80,7 @@ public final class MediaPlayerFragment extends BaseFragment {
         mRightText = (TextView) _view.findViewById(R.id.tvRightText_FMP);
         mBottomText = (TextView) _view.findViewById(R.id.tvBottomText_FMP);
         mVideoWindow = (VideoView) _view.findViewById(R.id.vvPlayerWindow_FMP);
+        ivImage = (ImageView) _view.findViewById(R.id.ivImage_FMP);
     }
 
     private final void prepareVideoViews() {
@@ -96,21 +103,13 @@ public final class MediaPlayerFragment extends BaseFragment {
             }
         });
 
-        mVideoWindow.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public final void onCompletion(final MediaPlayer _mp) {
-                mCurrentVideo++;
-                playNextVideo();
-            }
-        });
-
         mVideoWindow.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public final boolean onError(final MediaPlayer _mp, final int _what, final int _extra) {
                 Toast.makeText(getActivity().getApplicationContext(),
                         "Error playing: what = " + _what + ", extra = " + _extra,
                         Toast.LENGTH_SHORT).show();
-                return false;
+                return true;
             }
         });
     }
@@ -118,7 +117,7 @@ public final class MediaPlayerFragment extends BaseFragment {
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        if (_savedInstanceState == null) playNextVideo();
+        if (_savedInstanceState == null) doShowLogic();
     }
 
     @Override
@@ -176,21 +175,41 @@ public final class MediaPlayerFragment extends BaseFragment {
 
     }
 
-    private int mCurrentVideo = 0;
-
-    private final void playNextVideo() {
-        final int videosCount = mFiles.size();
-        if (videosCount == 0) {
-            Toast.makeText(getActivity().getApplicationContext(), "No video to play", Toast.LENGTH_SHORT).show();
+    private int mCurrentAsset = 0;
+    private final void doShowLogic() {
+        final int assetsCount = mFiles.size();
+        if (assetsCount == 0 ) {
+            Toast.makeText(getActivity().getApplicationContext(), "No assets to show", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (mCurrentVideo >= videosCount) {
-            mCurrentVideo = 0;
+        if (mCurrentAsset >= assetsCount) {
+            mCurrentAsset = 0;
+        }
+        final File file = mFiles.get(mCurrentAsset);
+        if (file.getName().endsWith("jpg")) {
+            mVideoWindow.stopPlayback();
+            ivImage.setVisibility(View.VISIBLE);
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 8;
+            try {
+                ivImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(file), null, options));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            ivImage.setVisibility(View.INVISIBLE);
+            mVideoWindow.setVideoPath(file.getPath());
         }
 
-        final File file = mFiles.get(mCurrentVideo);
-        mVideoWindow.setVideoPath(file.getPath());
+        ivImage.postDelayed(new Runnable() {
+            @Override
+            public final void run() {
+                mCurrentAsset++;
+                doShowLogic();
+            }
+        }, 5000);
     }
 
 }

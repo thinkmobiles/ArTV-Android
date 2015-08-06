@@ -14,7 +14,7 @@ import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.campaign.CampaignsWorker;
-import com.artv.android.core.campaign.IInitialDownloadListener;
+import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
@@ -120,10 +120,14 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
             printMessage("Has campaigns to play");
             mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
         } else {
-            mCampaignsWorker.doInitialCampaignDownload(new IInitialDownloadListener() {
+            mCampaignsWorker.doInitialCampaignDownload(new ICampaignDownloadListener() {
                 @Override
-                public final void onInitialDownloadFinished(final ArTvResult _result) {
-                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                public final void onCampaignDownloaded(final ArTvResult _result) {
+                    if (_result.getSuccess()) {
+                        mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                    } else {
+                        printMessage("Initial loading failed, reason: " + _result.getMessage());
+                    }
                 }
             });
         }

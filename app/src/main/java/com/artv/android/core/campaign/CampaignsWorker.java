@@ -32,8 +32,6 @@ public final class CampaignsWorker {
     private IPercentListener mPercentListener;
     private DbWorker mDbWorker;
 
-    private IInitialDownloadListener mInitialDownloadListener;
-
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
     }
@@ -62,21 +60,14 @@ public final class CampaignsWorker {
         return !mDbWorker.getAllCampaigns().isEmpty();
     }
 
-    public final void doInitialCampaignDownload(final IInitialDownloadListener _listener) {
-        mInitialDownloadListener = _listener;
-
+    public final void doInitialCampaignDownload(final ICampaignDownloadListener _listener) {
         getCampaign(ID_ALL_CAMPAIGN, new IGetCampaignsCallback() {
             @Override
             public final void onFinished(final GetCampaignsResult _result) {
                 if (_result.getSuccess()) {
                     mUiLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
                     mUiLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
-                    loadCampaigns(_result.getCampaigns(), new ICampaignDownloadListener() {
-                        @Override
-                        public final void onCampaignDownloaded(final ArTvResult _result) {
-                            _listener.onInitialDownloadFinished(_result);
-                        }
-                    });
+                    loadCampaigns(_result.getCampaigns(), _listener);
                 } else {
                     mUiLogger.printMessage("Error loading campaigns: " + _result.getMessage());
                 }
