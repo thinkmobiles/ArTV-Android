@@ -228,13 +228,11 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             DBCampaignDao dao = daoSession.getDBCampaignDao();
             dao.insertOrReplace(dbCampaign);
 
-//            LinkedList<DBMessage> dbMessages = new LinkedList<>();
-//            for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
-//                dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.messages,
-//                        msgBoardCampaign.msgBoardId));
-//
-//            DBMessageDao messageDao = daoSession.getDBMessageDao();
-//            messageDao.insertOrReplaceInTx(dbMessages);
+            List<DBAsset> dbAssets = Transformer.createDBAssetsList(_campaign.assets, _campaign.campaignId);
+            DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
+            dbAssetDao.insertOrReplaceInTx(dbAssets);
+            daoSession.clear();
+
             daoSession.clear();
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,13 +249,6 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             DBAssetDao dao = daoSession.getDBAssetDao();
             dao.insertOrReplace(dbAsset);
 
-//            LinkedList<DBMessage> dbMessages = new LinkedList<>();
-//            for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
-//                dbMessages.addAll(Transformer.createDBMessageList(msgBoardCampaign.messages,
-//                        msgBoardCampaign.msgBoardId));
-//
-//            DBMessageDao messageDao = daoSession.getDBMessageDao();
-//            messageDao.insertOrReplaceInTx(dbMessages);
             daoSession.clear();
         } catch (Exception e) {
             e.printStackTrace();

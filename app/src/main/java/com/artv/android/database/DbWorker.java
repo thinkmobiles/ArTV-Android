@@ -19,5 +19,4 @@ public interface DbWorker {
     List<Asset> getAllAssets();
 
     List<Asset> getAssets(final Campaign _campaign);
-
 }
