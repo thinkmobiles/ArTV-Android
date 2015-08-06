@@ -89,8 +89,8 @@ public final class Transformer {
         Campaign campaign = new Campaign();
         campaign.campaignId = dbCampaign.getCampaignId();
         campaign.crcVersion = dbCampaign.getCrcVersion();
-        campaign.startDate = simpleDateFormat.format(new Date(dbCampaign.getStartDate()));
-        campaign.endDate = simpleDateFormat.format(new Date(dbCampaign.getEndDate()));
+        campaign.startDate = dbCampaign.getStartDate();
+        campaign.endDate = dbCampaign.getEndDate();
         campaign.overrideTime = dbCampaign.getOverrideTime();
         campaign.sequence = dbCampaign.getSequence();
         campaign.playDay = dbCampaign.getPlayDay();
@@ -107,8 +107,8 @@ public final class Transformer {
         msgBoardCampaign.textColor = dBmsgBoardCampaign.getTextColor();
         msgBoardCampaign.playDay = dBmsgBoardCampaign.getPlayDay();
         msgBoardCampaign.rightBkgURL = dBmsgBoardCampaign.getRightBkgURL();
-        msgBoardCampaign.startDate = simpleDateFormat.format(new Date(dBmsgBoardCampaign.getStartDate()));
-        msgBoardCampaign.endDate = simpleDateFormat.format(new Date(dBmsgBoardCampaign.getEndDate()));
+        msgBoardCampaign.startDate = dBmsgBoardCampaign.getStartDate();
+        msgBoardCampaign.endDate = dBmsgBoardCampaign.getEndDate();
         msgBoardCampaign.messages = createMessagesList(dBmsgBoardCampaign.getMessages());
 
         return msgBoardCampaign;
