@@ -1,14 +1,16 @@
-package com.artv.android.core.init;
+package com.artv.android.core;
 
 /**
- * Created by ZOG on 7/8/2015.
+ * General class for delivering result of an operation.
+ *
+ * Created by ZOG on 8/5/2015.
  */
-public final class InitResult {
+public class ArTvResult {
 
     private boolean mSuccess = false;
     private String mMessage;
 
-    private InitResult() {}
+    private ArTvResult() {}
 
     public final boolean getSuccess() {
         return mSuccess;
@@ -19,28 +21,29 @@ public final class InitResult {
     }
 
 
-    public static final class Builder {
+    public static class Builder {
 
-        private InitResult mInitResult;
+        private ArTvResult mArTvResult;
 
         public Builder() {
-            mInitResult = new InitResult();
+            mArTvResult = new ArTvResult();
         }
 
         public final Builder setSuccess(final boolean _success) {
-            mInitResult.mSuccess = _success;
+            mArTvResult.mSuccess = _success;
             return this;
         }
 
         public final Builder setMessage(final String _message) {
-            mInitResult.mMessage = _message;
+            mArTvResult.mMessage = _message;
             return this;
         }
 
-        public final InitResult build() {
-            return mInitResult;
+        public final ArTvResult build() {
+            return mArTvResult;
         }
 
     }
+
 
 }

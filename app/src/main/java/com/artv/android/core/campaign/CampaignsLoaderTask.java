@@ -4,10 +4,12 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
+import com.artv.android.database.DbWorker;
 
 import java.io.IOException;
 import java.util.List;
@@ -15,10 +17,11 @@ import java.util.List;
 /**
  * Created by ZOG on 8/3/2015.
  */
-public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> implements IAssetLoadProgressListener {
+public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult> implements IAssetLoadProgressListener {
 
     private List<Campaign> mCampaigns;
     private AssetHelper mAssetHelper;
+    private DbWorker mDbWorker;
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
 
@@ -34,6 +37,10 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
         mCampaigns = _campaigns;
     }
 
+    public void setDbWorker(final DbWorker _dbWorker) {
+        mDbWorker = _dbWorker;
+    }
+
     public final void setUiLogger(final ILogger _logger) {
         mUiLogger = _logger;
     }
@@ -43,25 +50,49 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, Void> imple
     }
 
     @Override
-    protected final Void doInBackground(final Void... params) {
+    protected final ArTvResult doInBackground(final Void... params) {
+        ArTvResult.Builder totalResult = new ArTvResult.Builder();
+
         final int assetsCount = CampaignHelper.getAssetsCount(mCampaigns);
         final double progressPerAsset = MAX_PROGRESS / assetsCount;
 
         for (final Campaign campaign : mCampaigns) {
             postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
+            if (mDbWorker.contains(campaign)) {
+                postOnUiThread(false, ": already contains");
+                continue;
+            }
+
             for (final Asset asset : campaign.assets) {
                 postOnUiThread(true, "Loading asset " + asset.name + "...");
-                AssetLoadResult result = new AssetLoadResult();
+                if (mDbWorker.contains(asset)) {
+                    postOnUiThread(false, "already contains");
+                    continue;
+                }
+
+                ArTvResult assetResult;
                 try {
-                    result = mAssetHelper.loadAsset(asset, progressPerAsset);
-                } catch (IOException e) {
+                    assetResult = mAssetHelper.loadAsset(asset, progressPerAsset);
+                } catch (final IOException e) {
                     e.printStackTrace();
+                    totalResult.setSuccess(false);
+                    totalResult.setMessage(e.toString());
+                    return totalResult.build();
                 }
-                if (!result.success) {
+                if (assetResult.getSuccess()) {
+                    postOnUiThread(false, "finished: " + assetResult.getSuccess());
+                    mDbWorker.write(asset);
+                } else {
                     onProgressLoaded(progressPerAsset);
+                    postOnUiThread(false, "finished: " + assetResult.getSuccess());
+
+                    totalResult.setSuccess(assetResult.getSuccess());
+                    totalResult.setMessage(assetResult.getMessage());
+                    return totalResult.build();
                 }
-                postOnUiThread(false, "finished: " + result.success);
             }
+
+            mDbWorker.write(campaign);
         }
         postOnUiThread(true, "All campaigns loaded");
 

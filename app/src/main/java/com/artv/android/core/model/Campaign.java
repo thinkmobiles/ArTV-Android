@@ -5,7 +5,6 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by

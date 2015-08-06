@@ -36,12 +36,12 @@ public final class GetCampaignsResult {
             mGetCampaignsResult = new GetCampaignsResult();
         }
 
-        public final Builder setSuccess(final boolean _success) {
+        public Builder setSuccess(final boolean _success) {
             mGetCampaignsResult.mSuccess = _success;
             return this;
         }
 
-        public final Builder setMessage(final String _message) {
+        public Builder setMessage(final String _message) {
             mGetCampaignsResult.mMessage = _message;
             return this;
         }
@@ -56,4 +56,5 @@ public final class GetCampaignsResult {
         }
 
     }
+
 }

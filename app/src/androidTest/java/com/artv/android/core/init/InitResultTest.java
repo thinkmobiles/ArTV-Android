@@ -2,6 +2,8 @@ package com.artv.android.core.init;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.artv.android.core.ArTvResult;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -15,7 +17,7 @@ public final class InitResultTest {
 
     @Test
     public final void InitResult_Builder_GetSetWorks() {
-        final InitResult result = new InitResult.Builder()
+        final ArTvResult result = new ArTvResult.Builder()
                 .setSuccess(true)
                 .setMessage("success")
                 .build();

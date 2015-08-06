@@ -3,6 +3,7 @@ package com.artv.android.core.campaign;
 import android.net.Uri;
 import android.os.Environment;
 
+import com.artv.android.core.ArTvResult;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.model.Asset;
 
@@ -39,8 +40,8 @@ public final class AssetHelper {
         mProgressListener = _progressListener;
     }
 
-    public final AssetLoadResult loadAsset(final Asset _asset, final double _progressPerAsset) throws IOException {
-        final AssetLoadResult result = new AssetLoadResult();
+    public final ArTvResult loadAsset(final Asset _asset, final double _progressPerAsset) throws IOException {
+        final ArTvResult.Builder result = new ArTvResult.Builder();
         final URL url = buildUrlFrom(_asset.url);
 
         final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -59,31 +60,31 @@ public final class AssetHelper {
             final boolean reload = needReloadFile(file, fileLength);
             if (!reload) {
                 mProgressListener.onProgressLoaded(_progressPerAsset);
-                result.success = true;
-                return result;
+                result.setSuccess(true);
+                return result.build();
             }
             file.getParentFile().mkdirs();
 
             final InputStream inputStream = conn.getInputStream();
             final FileOutputStream fos = new FileOutputStream(file);
 
-            int readed;
+            int read;
             byte[] buffer = new byte[buffLength];
-            while ((readed = inputStream.read(buffer)) != -1) {
-                fos.write(buffer, 0, readed);
-                final double writeProgress = readed / (double) fileLength * _progressPerAsset;
+            while ((read = inputStream.read(buffer)) != -1) {
+                fos.write(buffer, 0, read);
+                final double writeProgress = read / (double) fileLength * _progressPerAsset;
                 mProgressListener.onProgressLoaded(writeProgress);
             }
             fos.close();
             inputStream.close();
 
-            result.success = true;
-            return result;
+            result.setSuccess(true);
+            return result.build();
         }
 
-        result.success = false;
-        result.message = "Erorr: response code = " + respCode;
-        return result;
+        result.setSuccess(false);
+        result.setMessage("Erorr: response code = " + respCode);
+        return result.build();
     }
 
     private final URL buildUrlFrom(final String _path) throws UnsupportedEncodingException, MalformedURLException {

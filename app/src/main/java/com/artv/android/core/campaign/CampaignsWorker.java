@@ -10,6 +10,7 @@ import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
 import com.artv.android.core.model.Campaign;
+import com.artv.android.database.DbWorker;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public final class CampaignsWorker {
     private ConfigInfo mConfigInfo;
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
-
+    private DbWorker mDbWorker;
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -48,8 +49,12 @@ public final class CampaignsWorker {
         mPercentListener = _listener;
     }
 
+    public void setDbWorker(final DbWorker _dbWorker) {
+        mDbWorker = _dbWorker;
+    }
+
     public final boolean hasCampaignToPlay() {
-        return false;
+        return !mDbWorker.getAllCampaigns().isEmpty();
     }
 
     public final void doInitialCampaignDownload() {
@@ -105,6 +110,7 @@ public final class CampaignsWorker {
     public final void loadCampaigns(final List<Campaign> _campaigns) {
         final CampaignsLoaderTask task = new CampaignsLoaderTask();
         task.setCampaigns(_campaigns);
+        task.setDbWorker(mDbWorker);
         task.setUiLogger(mUiLogger);
         task.setPercentListener(mPercentListener);
         task.execute();

@@ -10,12 +10,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.artv.android.R;
+import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.campaign.CampaignsWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
-import com.artv.android.core.init.InitResult;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.StateWorker;
 
@@ -76,19 +76,19 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mInitWorker.startInitializing(
                 new IInitCallback() {
                     @Override
-                    public final void onInitSuccess(final InitResult _result) {
+                    public final void onInitSuccess(final ArTvResult _result) {
                         printMessage(_result.getMessage());
                         showProgressUi();
                         beginCampaignLogic();
                     }
 
                     @Override
-                    public final void onProgress(final InitResult _result) {
+                    public final void onProgress(final ArTvResult _result) {
                         printMessage(_result.getMessage());
                     }
 
                     @Override
-                    public final void onInitFail(final InitResult _result) {
+                    public final void onInitFail(final ArTvResult _result) {
                         printMessage(_result.getMessage());
                     }
                 }
@@ -118,12 +118,6 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
             printMessage("Has campaigns to play: not implemented yet");
         } else {
             mCampaignsWorker.doInitialCampaignDownload();
-//            mCampaignsWorker.doCampaignLogic(new ICampaignPrepareCallback() {
-//                @Override
-//                public final void onPrepared() {
-//                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-//                }
-//            });
         }
 
     }

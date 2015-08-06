@@ -22,8 +22,6 @@ import com.artv.android.system.custom_views.CustomMediaController;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.File;
-
 /**
  * Created by Misha on 6/30/2015.
  */

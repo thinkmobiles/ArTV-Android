@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.artv.android.core.ApplicationLogic;
 import com.artv.android.system.BaseActivity;
-import com.artv.android.system.MyApplication;
 
 /**
  * Created by ZOG on 7/7/2015.
