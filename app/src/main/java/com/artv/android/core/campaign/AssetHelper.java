@@ -11,12 +11,14 @@ import com.artv.android.core.model.Asset;
 import org.apache.http.client.methods.HttpGet;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.concurrent.ExecutorService;
@@ -38,50 +40,52 @@ public final class AssetHelper {
         mProgressListener = _progressListener;
     }
 
-    public final ArTvResult loadAsset(final Asset _asset, final double _progressPerAsset) throws IOException {
+    public final ArTvResult loadAsset(final CampaignsLoaderTask _task, final Asset _asset, final double _progressPerAsset) {
         final ArTvResult.Builder result = new ArTvResult.Builder();
-        final URL url = buildUrlFrom(_asset.url);
 
-        final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(10000);
-        conn.setRequestMethod(HttpGet.METHOD_NAME);
+        try {
+            final URL url = buildUrlFrom(_asset.url);
 
-        final int respCode = conn.getResponseCode();
+            final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(10000);
+            conn.setRequestMethod(HttpGet.METHOD_NAME);
 
-        final int buffLength = 4096;
-        final int fileLength = conn.getContentLength();
+            final int respCode = conn.getResponseCode();
 
-        if (respCode == 200) {
-            final File file = new File(Constants.PATH + _asset.url);
+            final int buffLength = 4096;
+            final int fileLength = conn.getContentLength();
 
-            //if exist - publish progress and return
-            final boolean reload = needReloadFile(file, fileLength);
-            if (!reload) {
-                mProgressListener.onProgressLoaded(_progressPerAsset);
+            if (respCode == 200) {
+                final File file = new File(Constants.PATH + _asset.url);
+                file.getParentFile().mkdirs();
+
+                final InputStream inputStream = conn.getInputStream();
+                final FileOutputStream fos = new FileOutputStream(file);
+
+                int read;
+                byte[] buffer = new byte[buffLength];
+                while ((read = inputStream.read(buffer)) != -1) {
+                    if (_task.isCancelled()) {
+                        result.setSuccess(false);
+                        return result.build();
+                    }
+                    fos.write(buffer, 0, read);
+                    final double writeProgress = read / (double) fileLength * _progressPerAsset;
+                    mProgressListener.onProgressLoaded(writeProgress);
+                }
+                fos.close();
+                inputStream.close();
+
                 result.setSuccess(true);
                 return result.build();
+            } else {
+                result.setSuccess(false);
+                result.setMessage("Error: response code = " + respCode);
             }
-            file.getParentFile().mkdirs();
-
-            final InputStream inputStream = conn.getInputStream();
-            final FileOutputStream fos = new FileOutputStream(file);
-
-            int read;
-            byte[] buffer = new byte[buffLength];
-            while ((read = inputStream.read(buffer)) != -1) {
-                fos.write(buffer, 0, read);
-                final double writeProgress = read / (double) fileLength * _progressPerAsset;
-                mProgressListener.onProgressLoaded(writeProgress);
-            }
-            fos.close();
-            inputStream.close();
-
-            result.setSuccess(true);
-            return result.build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            result.setSuccess(false);
         }
-
-        result.setSuccess(false);
-        result.setMessage("Erorr: response code = " + respCode);
         return result.build();
     }
 

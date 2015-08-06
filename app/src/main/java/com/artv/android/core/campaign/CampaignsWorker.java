@@ -123,6 +123,7 @@ public final class CampaignsWorker {
     public final void cancelLoading() {
         if (mCampaignsLoaderTask != null) {
             mCampaignsLoaderTask.cancel(true);
+            mCampaignsLoaderTask = null;
         }
     }
 

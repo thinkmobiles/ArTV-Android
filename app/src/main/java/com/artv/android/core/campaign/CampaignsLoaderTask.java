@@ -11,7 +11,6 @@ import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.database.DbWorker;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -62,8 +61,6 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
         final double progressPerAsset = MAX_PROGRESS / assetsCount;
 
         for (final Campaign campaign : mCampaigns) {
-            if (isCancelled()) return buildCancelledResult();
-
             postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
             if (mDbWorker.contains(campaign)) {
                 postOnUiThread(false, ": already contains");
@@ -71,23 +68,14 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
             }
 
             for (final Asset asset : campaign.assets) {
-                if (isCancelled()) return buildCancelledResult();
-
                 postOnUiThread(true, "Loading asset " + asset.name + "...");
                 if (mDbWorker.contains(asset)) {
                     postOnUiThread(false, "already contains");
                     continue;
                 }
 
-                ArTvResult assetResult;
-                try {
-                    assetResult = mAssetHelper.loadAsset(asset, progressPerAsset);
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                    totalResult.setSuccess(false);
-                    totalResult.setMessage(e.toString());
-                    return totalResult.build();
-                }
+                final ArTvResult assetResult = mAssetHelper.loadAsset(this, asset, progressPerAsset);
+
                 if (assetResult.getSuccess()) {
                     postOnUiThread(false, "finished: " + assetResult.getSuccess());
                     mDbWorker.write(asset);
@@ -121,7 +109,6 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
                 .setMessage("Loading task cancelled")
                 .build();
     }
-
 
     @Override
     protected final void onPostExecute(final ArTvResult _result) {
