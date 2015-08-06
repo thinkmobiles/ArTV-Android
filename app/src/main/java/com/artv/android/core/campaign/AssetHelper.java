@@ -76,9 +76,10 @@ public final class AssetHelper {
                 result.setSuccess(false);
                 result.setMessage("Error: response code = " + respCode);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (final IOException _e) {
+            _e.printStackTrace();
             result.setSuccess(false);
+            result.setMessage(_e.toString());
         }
         return result.build();
     }

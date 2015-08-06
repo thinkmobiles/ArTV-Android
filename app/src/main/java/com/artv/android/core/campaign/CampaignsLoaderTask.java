@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Created by ZOG on 8/3/2015.
+ *
+ * todo: add percent progress showing
  */
 public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult> implements IAssetLoadProgressListener {
 
