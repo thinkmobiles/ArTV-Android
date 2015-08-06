@@ -62,6 +62,8 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
         final double progressPerAsset = MAX_PROGRESS / assetsCount;
 
         for (final Campaign campaign : mCampaigns) {
+            if (isCancelled()) return buildCancelledResult();
+
             postOnUiThread(true, "Loading campaign with id = " + campaign.campaignId);
             if (mDbWorker.contains(campaign)) {
                 postOnUiThread(false, ": already contains");
@@ -69,6 +71,8 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
             }
 
             for (final Asset asset : campaign.assets) {
+                if (isCancelled()) return buildCancelledResult();
+
                 postOnUiThread(true, "Loading asset " + asset.name + "...");
                 if (mDbWorker.contains(asset)) {
                     postOnUiThread(false, "already contains");
@@ -106,8 +110,22 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
     }
 
     @Override
+    protected final void onCancelled() {
+        super.onCancelled();
+        mCampaignDownloadListener.onCampaignDownloadFinished(buildCancelledResult());
+    }
+
+    private final ArTvResult buildCancelledResult() {
+        return new ArTvResult.Builder()
+                .setSuccess(false)
+                .setMessage("Loading task cancelled")
+                .build();
+    }
+
+
+    @Override
     protected final void onPostExecute(final ArTvResult _result) {
-        mCampaignDownloadListener.onCampaignDownloaded(_result);
+        mCampaignDownloadListener.onCampaignDownloadFinished(_result);
     }
 
     private final void postOnUiThread(final boolean _newLine, final String _message) {

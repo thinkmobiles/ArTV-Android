@@ -106,7 +106,8 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
     public final void onClick(final View _v) {
         switch (_v.getId()) {
             case R.id.btnClearConfigInfo_FSS:
-                mConfigInfoWorker.notifyNeedRemoveConfigInfo();
+                mCampaignsWorker.cancelLoading();
+//                mConfigInfoWorker.notifyNeedRemoveConfigInfo();
                 break;
         }
     }
@@ -116,13 +117,14 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mCampaignsWorker.setInitData(mInitWorker.getInitData());
         mCampaignsWorker.setUiLogger(this);
         mCampaignsWorker.setPercentListener(this);
+
         if (mCampaignsWorker.hasCampaignToPlay()) {
             printMessage("Has campaigns to play");
             mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
         } else {
             mCampaignsWorker.doInitialCampaignDownload(new ICampaignDownloadListener() {
                 @Override
-                public final void onCampaignDownloaded(final ArTvResult _result) {
+                public final void onCampaignDownloadFinished(final ArTvResult _result) {
                     if (_result.getSuccess()) {
                         mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
                     } else {

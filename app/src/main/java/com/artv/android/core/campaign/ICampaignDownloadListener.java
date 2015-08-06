@@ -7,6 +7,6 @@ import com.artv.android.core.ArTvResult;
  */
 public interface ICampaignDownloadListener {
 
-    void onCampaignDownloaded(final ArTvResult _result);
+    void onCampaignDownloadFinished(final ArTvResult _result);
 
 }

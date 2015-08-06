@@ -1,6 +1,5 @@
 package com.artv.android.core.campaign;
 
-import com.artv.android.core.ArTvResult;
 import com.artv.android.core.ILogger;
 import com.artv.android.core.IPercentListener;
 import com.artv.android.core.api.ApiWorker;
@@ -31,6 +30,7 @@ public final class CampaignsWorker {
     private ILogger mUiLogger;
     private IPercentListener mPercentListener;
     private DbWorker mDbWorker;
+    private CampaignsLoaderTask mCampaignsLoaderTask;
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -111,13 +111,19 @@ public final class CampaignsWorker {
     }
 
     public final void loadCampaigns(final List<Campaign> _campaigns, final ICampaignDownloadListener _listener) {
-        final CampaignsLoaderTask task = new CampaignsLoaderTask();
-        task.setCampaigns(_campaigns);
-        task.setDbWorker(mDbWorker);
-        task.setCampaignDownloadListener(_listener);
-        task.setUiLogger(mUiLogger);
-        task.setPercentListener(mPercentListener);
-        task.execute();
+        mCampaignsLoaderTask = new CampaignsLoaderTask();
+        mCampaignsLoaderTask.setCampaigns(_campaigns);
+        mCampaignsLoaderTask.setDbWorker(mDbWorker);
+        mCampaignsLoaderTask.setCampaignDownloadListener(_listener);
+        mCampaignsLoaderTask.setUiLogger(mUiLogger);
+        mCampaignsLoaderTask.setPercentListener(mPercentListener);
+        mCampaignsLoaderTask.execute();
+    }
+
+    public final void cancelLoading() {
+        if (mCampaignsLoaderTask != null) {
+            mCampaignsLoaderTask.cancel(true);
+        }
     }
 
     public final void doRegularDownload() {
