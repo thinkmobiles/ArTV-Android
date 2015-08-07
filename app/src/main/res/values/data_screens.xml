@@ -52,6 +52,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/cis_bg_edit_text</item>
         <item name="android:singleLine">true</item>
+        <item name="android:imeOptions">flagNoExtractUi</item>
     </style>
 
 </resources>
