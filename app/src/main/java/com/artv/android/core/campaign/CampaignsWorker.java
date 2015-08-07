@@ -17,6 +17,9 @@ import static com.artv.android.core.campaign.CampaignHelper.getAssetsCount;
 import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
 
 /**
+ * Class that handle application campaign logic, i.e. getCampaign request, loading campaign, cancel
+ * loading showing progress, writing to db etc.
+ *
  * Created by ZOG on 7/28/2015.
  */
 public final class CampaignsWorker {
@@ -49,6 +52,10 @@ public final class CampaignsWorker {
         return !mDbWorker.getAllCampaigns().isEmpty();
     }
 
+    /**
+     * Used when application launch for first time, downloading all assigned campaigns.
+     * @param _listener listen for finishing operation.
+     */
     public final void doInitialCampaignDownload(final ICampaignDownloadListener _listener) {
         getCampaign(ID_ALL_CAMPAIGN, new IGetCampaignsCallback() {
             @Override
@@ -64,6 +71,11 @@ public final class CampaignsWorker {
         });
     }
 
+    /**
+     * GET request to server, returns result through callback.
+     * @param _campaignId campaign id to get.
+     * @param _callback callback for operarion result.
+     */
     public final void getCampaign(final int _campaignId, final IGetCampaignsCallback _callback) {
         final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
                 .setToken(mInitData.getToken())

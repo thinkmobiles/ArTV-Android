@@ -141,6 +141,7 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
                 @Override
                 public final void onPercentLoaded(final double _percent) {
                     tvPercent.setText(String.format("%.2f%%", _percent));
+                    pbLoading.setProgress((int) (_percent * 100));
                 }
             });
         }

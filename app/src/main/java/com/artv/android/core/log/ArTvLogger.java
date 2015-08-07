@@ -12,7 +12,6 @@ import java.util.Set;
 public abstract class ArTvLogger {
 
     private static final Set<ILogger> mLoggers = new HashSet<>();
-    private static final PrintMessageRunnable printRunnable = new PrintMessageRunnable();
 
     public static final boolean addLogger(final ILogger _logger) {
         return mLoggers.add(_logger);
@@ -27,12 +26,13 @@ public abstract class ArTvLogger {
     }
 
     public static final void printMessage(final boolean _fromNewLine, final String _message) {
-        printRunnable.setFromNewLine(_fromNewLine);
-        printRunnable.setMessage(_message);
+        final PrintMessageRunnable runnable = new PrintMessageRunnable()
+                .setFromNewLine(_fromNewLine)
+                .setMessage(_message);
         if (Thread.currentThread().getName().equals("main")) {
-            printRunnable.run();
+            runnable.run();
         } else {
-            new Handler(Looper.getMainLooper()).post(printRunnable);
+            new Handler(Looper.getMainLooper()).post(runnable);
         }
     }
 
@@ -40,12 +40,14 @@ public abstract class ArTvLogger {
         private boolean mFromNewLine;
         private String mMessage;
 
-        public final void setFromNewLine(final boolean _fromNewLine) {
+        public final PrintMessageRunnable setFromNewLine(final boolean _fromNewLine) {
             mFromNewLine = _fromNewLine;
+            return this;
         }
 
-        public final void setMessage(final String _message) {
+        public final PrintMessageRunnable setMessage(final String _message) {
             mMessage = _message;
+            return this;
         }
 
         @Override
