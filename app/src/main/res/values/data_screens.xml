@@ -5,7 +5,7 @@
     <dimen name="element_width">120dp</dimen>
     <dimen name="border_width">1dp</dimen>
 
-    <color name="text">@android:color/black</color>
+    <color name="text">#191919</color>
     <color name="focused">#dcab19</color>
 
     <color name="button">#3A77FC</color>
@@ -52,6 +52,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/cis_bg_edit_text</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textCursorDrawable">@null</item>
     </style>
 
 </resources>
