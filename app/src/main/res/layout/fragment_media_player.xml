@@ -95,5 +95,6 @@
         android:layout_height="match_parent"
         android:id="@+id/ivImage_FMP"
         android:scaleType="fitCenter"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:background="@color/text" />
 </RelativeLayout>

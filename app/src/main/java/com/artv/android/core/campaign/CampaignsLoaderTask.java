@@ -120,13 +120,13 @@ public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult>
 
             final int respCode = conn.getResponseCode();
 
-            final int buffLength = 4096;
+            final int buffLength = 4096 * 2;
             final int fileLength = conn.getContentLength();
 
             if (respCode == 200) {
                 final File file = new File(Constants.PATH + _asset.url);
                 file.getParentFile().mkdirs();
-                if (file.exists()) {        //temporary
+                if (file.exists() && file.length() == conn.getContentLength()) {        //temporary
                     result.setSuccess(true);
                     mTotalProgress += _progressPerAsset;
                     publishProgress();
