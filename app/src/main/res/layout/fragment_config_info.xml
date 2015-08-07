@@ -44,7 +44,11 @@
                 android:layout_alignParentRight="true"
                 android:text="1234"
                 style="@style/CIS_EditText"
-                android:layout_marginBottom="@dimen/main_distance" />
+                android:layout_marginBottom="@dimen/main_distance"
+                android:nextFocusForward="@+id/etMasterDeviceIp_FCI"
+                android:imeOptions="flagNoExtractUi|actionNext">
+                <requestFocus/>
+            </EditText>
 
             <TextView
                 android:text="@string/master_device_ip"
@@ -64,7 +68,9 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tvMasterDeviceIp_FCI"
                 style="@style/CIS_EditText"
-                android:layout_marginBottom="@dimen/main_distance" />
+                android:layout_marginBottom="@dimen/main_distance"
+                android:nextFocusForward="@+id/etAddress_FCI"
+                android:imeOptions="flagNoExtractUi|actionNext"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -84,7 +90,9 @@
                 android:layout_alignTop="@+id/tvAddress_FCI"
                 android:layout_alignParentRight="true"
                 style="@style/CIS_EditText"
-                android:text="http://tvm.hasbrain.ru" />
+                android:text="http://tvm.hasbrain.ru"
+                android:nextFocusForward="@+id/etUserName_FCI"
+                android:imeOptions="flagNoExtractUi|actionNext"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -110,7 +118,9 @@
                 android:text="testandroid"
                 android:layout_toRightOf="@+id/tvUserName_FCI"
                 style="@style/CIS_EditText"
-                android:layout_marginBottom="@dimen/main_distance" />
+                android:layout_marginBottom="@dimen/main_distance"
+                android:nextFocusForward="@+id/etPassword_FCI"
+                android:imeOptions="flagNoExtractUi|actionNext"/>
 
             <TextView
                 android:layout_width="@dimen/element_width"
@@ -129,7 +139,8 @@
                 android:layout_alignTop="@+id/tvPassword_FCI"
                 android:text="test1234"
                 android:layout_toRightOf="@+id/tvPassword_FCI"
-                style="@style/CIS_EditText" />
+                style="@style/CIS_EditText"
+                android:imeOptions="flagNoExtractUi|actionDone"/>
 
         </RelativeLayout>
     </LinearLayout>
@@ -141,6 +152,6 @@
         android:id="@+id/btnSave_FCI"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        style="@style/Button" />
+        style="@style/Button"/>
 
 </RelativeLayout>

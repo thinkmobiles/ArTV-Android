@@ -6,6 +6,7 @@
     <dimen name="border_width">1dp</dimen>
 
     <color name="text">@android:color/black</color>
+    <color name="focused">#dcab19</color>
 
     <color name="button">#3A77FC</color>
     <color name="button_bg">@android:color/transparent</color>
@@ -21,7 +22,6 @@
     <dimen name="cis_edit_text_padding_horizontal">3dp</dimen>
     <color name="cis_edit_text_bg">@android:color/white</color>
     <color name="cis_edit_text_border">#D5D9DC</color>
-
 
     <style name="TextSmall">
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
@@ -52,7 +52,6 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/cis_bg_edit_text</item>
         <item name="android:singleLine">true</item>
-        <item name="android:imeOptions">flagNoExtractUi</item>
     </style>
 
 </resources>
