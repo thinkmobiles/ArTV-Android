@@ -3,6 +3,7 @@ package com.artv.android.database;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.CampaignInfo;
+import com.artv.android.core.model.MsgBoardCampaign;
 
 import java.util.List;
 
@@ -20,7 +21,6 @@ public interface DbWorker {
     List<Campaign> getAllCampaigns();
     List<Asset> getAssets(final Campaign _campaign);
 
-    void write(final CampaignInfo _campaignInfo);
-    boolean contains(final CampaignInfo _campaignInfo);
-    List<CampaignInfo> getAllCampaignInfos();
+    void write(final MsgBoardCampaign _msgBoardCampaign);
+    MsgBoardCampaign getMsgBoardCampaign();
 }
