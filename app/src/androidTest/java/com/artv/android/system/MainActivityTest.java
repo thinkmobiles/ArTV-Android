@@ -9,7 +9,7 @@ import com.artv.android.R;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.system.fragments.ConfigInfoFragment;
-import com.artv.android.system.fragments.SplashScreenFragment;
+import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
 import junit.framework.Assert;
 

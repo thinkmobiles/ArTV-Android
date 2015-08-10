@@ -1,7 +1,5 @@
 package com.artv.android.core.model;
 
-import com.artv.android.core.init.InitResultTest;
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 

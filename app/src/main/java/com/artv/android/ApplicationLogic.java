@@ -1,7 +1,8 @@
-package com.artv.android.core;
+package com.artv.android;
 
 import android.content.Context;
 
+import com.artv.android.app.start.StartWorker;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignsWorker;
@@ -32,6 +33,8 @@ public final class ApplicationLogic {
     private CampaignsWorker mCampaignsWorker;
     private DbWorker mDbWorker;
 
+    private StartWorker mStartWorker;
+
     public ApplicationLogic(final Context _context) {
         mContext = _context;
 
@@ -58,6 +61,12 @@ public final class ApplicationLogic {
         mCampaignsWorker = new CampaignsWorker();
         mCampaignsWorker.setApiWorker(mApiWorker);
         mCampaignsWorker.setDbWorker(mDbWorker);
+
+        mStartWorker = new StartWorker();
+        mStartWorker.setInitWorker(mInitWorker);
+        mStartWorker.setConfigInfoWorker(mConfigInfoWorker);
+        mStartWorker.setStateWorker(mStateWorker);
+        mStartWorker.setCampaignsWorker(mCampaignsWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -86,6 +95,10 @@ public final class ApplicationLogic {
 
     public final DbWorker getDbWorker() {
         return mDbWorker;
+    }
+
+    public final StartWorker getStartWorker() {
+        return mStartWorker;
     }
 
     /**

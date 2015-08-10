@@ -3,7 +3,7 @@ package com.artv.android.core.campaign;
 import android.net.Uri;
 import android.os.AsyncTask;
 
-import com.artv.android.core.ArTvResult;
+import com.artv.android.ArTvResult;
 import com.artv.android.core.Constants;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.log.ArTvLogger;

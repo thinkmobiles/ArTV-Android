@@ -12,7 +12,6 @@ import com.artv.android.database.gen.DBmsgBoardCampaign;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

@@ -1,6 +1,6 @@
 package com.artv.android.core.campaign;
 
-import com.artv.android.core.ArTvResult;
+import com.artv.android.ArTvResult;
 
 /**
  * Created by ZOG on 8/6/2015.

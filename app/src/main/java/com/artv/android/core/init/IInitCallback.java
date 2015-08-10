@@ -1,6 +1,6 @@
 package com.artv.android.core.init;
 
-import com.artv.android.core.ArTvResult;
+import com.artv.android.ArTvResult;
 
 /**
  * Created by ZOG on 7/8/2015.

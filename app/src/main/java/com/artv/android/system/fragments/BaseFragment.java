@@ -3,7 +3,7 @@ package com.artv.android.system.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 
-import com.artv.android.core.ApplicationLogic;
+import com.artv.android.ApplicationLogic;
 import com.artv.android.system.BaseActivity;
 
 /**

@@ -1,5 +1,6 @@
 package com.artv.android.core;
 
+import com.artv.android.ApplicationLogicTest;
 import com.artv.android.core.api.AllApiTests;
 import com.artv.android.core.config_info.AllConfigInfoTests;
 import com.artv.android.core.init.AllInitTests;

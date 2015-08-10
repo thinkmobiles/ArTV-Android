@@ -1,4 +1,4 @@
-package com.artv.android.core;
+package com.artv.android;
 
 /**
  * General class for delivering result of an operation.

@@ -1,6 +1,6 @@
 package com.artv.android.core.init;
 
-import com.artv.android.core.ArTvResult;
+import com.artv.android.ArTvResult;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;

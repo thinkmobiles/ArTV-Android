@@ -1,6 +1,5 @@
 package com.artv.android.core.campaign;
 
-import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -8,6 +7,7 @@ import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.init.InitData;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.database.DbWorker;
 

@@ -2,7 +2,7 @@ package com.artv.android.system;
 
 import android.app.Application;
 
-import com.artv.android.core.ApplicationLogic;
+import com.artv.android.ApplicationLogic;
 //import com.crashlytics.android.Crashlytics;
 //import io.fabric.sdk.android.Fabric;
 
