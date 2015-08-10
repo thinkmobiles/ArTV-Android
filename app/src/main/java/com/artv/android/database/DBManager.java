@@ -124,6 +124,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             mHelper.onCreate(database);              // creates the tables
             asyncSession.deleteAll(DBAsset.class);    // clear all elements from a table
             asyncSession.deleteAll(DBCampaign.class);
+            asyncSession.waitForCompletion();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -208,7 +209,12 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             openReadableDb();
             DBAssetDao dao = daoSession.getDBAssetDao();
             List<DBAsset> resAssets = dao.queryBuilder()
-                    .where(DBAssetDao.Properties.Url.eq(_asset.url), DBAssetDao.Properties.Name.eq(_asset.name))
+                    .where(_asset.url != null ? DBAssetDao.Properties.Url.eq(_asset.url) :
+                                    DBAssetDao.Properties.Url.isNull(),
+                            _asset.name != null ? DBAssetDao.Properties.Name.eq(_asset.name) :
+                                    DBAssetDao.Properties.Name.isNull(),
+                            DBAssetDao.Properties.Sequence.eq(_asset.sequence),
+                            DBAssetDao.Properties.Duration.eq(_asset.duration))
                     .build().list();
             daoSession.clear();
             return resAssets.size() > 0;
@@ -220,7 +226,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
 
     @Override
     public void write(Campaign _campaign) {
-        if(_campaign == null) return;
+        if(_campaign == null) throw new NullPointerException("Campaign object or campaign id is zero");
         try {
             openWritableDb();
 
@@ -231,8 +237,6 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             List<DBAsset> dbAssets = Transformer.createDBAssetsList(_campaign.assets, _campaign.campaignId);
             DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
             dbAssetDao.insertOrReplaceInTx(dbAssets);
-            daoSession.clear();
-
             daoSession.clear();
         } catch (Exception e) {
             e.printStackTrace();

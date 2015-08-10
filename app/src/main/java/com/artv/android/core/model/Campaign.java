@@ -1,5 +1,7 @@
 package com.artv.android.core.model;
 
+import android.text.TextUtils;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -46,10 +48,10 @@ public final class Campaign {
         Campaign campaign = (Campaign) o;
         if(campaignId != campaign.campaignId) return false;
         if(crcVersion != campaign.crcVersion) return false;
-        if(!endDate.equals(campaign.endDate)) return false;
-        if(!startDate.equals(campaign.startDate)) return false;
-        if(!overrideTime.equals(campaign.overrideTime)) return false;
-        if(!playDay.equals(campaign.playDay)) return false;
+        if(!TextUtils.equals(endDate,campaign.endDate)) return false;
+        if(!TextUtils.equals(startDate,campaign.startDate)) return false;
+        if(!TextUtils.equals(overrideTime,campaign.overrideTime)) return false;
+        if(!TextUtils.equals(playDay,campaign.playDay)) return false;
         if(sequence != campaign.sequence) return false;
 
         for (int i=0; i < assets.size(); i++) {

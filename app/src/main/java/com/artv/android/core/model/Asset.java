@@ -1,5 +1,7 @@
 package com.artv.android.core.model;
 
+import android.text.TextUtils;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -30,8 +32,8 @@ public final class Asset {
 
         Asset asset = (Asset) o;
 
-        if(!name.equals(asset.name)) return false;
-        if(!url.equals(asset.url)) return false;
+        if(!TextUtils.equals(name,asset.name)) return false;
+        if(!TextUtils.equals(url,asset.url)) return false;
         if(duration != asset.duration) return false;
         if(sequence != asset.sequence) return false;
 
