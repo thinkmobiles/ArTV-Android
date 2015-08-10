@@ -101,12 +101,22 @@ public final class MediaPlayerFragment extends BaseFragment {
             }
         });
 
+        mVideoWindow.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public final void onCompletion(final MediaPlayer _mp) {
+                mCurrentAsset++;
+                doShowLogic();
+            }
+        });
+
         mVideoWindow.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public final boolean onError(final MediaPlayer _mp, final int _what, final int _extra) {
                 Toast.makeText(getActivity().getApplicationContext(),
                         "Error playing: what = " + _what + ", extra = " + _extra,
                         Toast.LENGTH_SHORT).show();
+                mCurrentAsset++;
+                doShowLogic();
                 return true;
             }
         });
@@ -176,7 +186,7 @@ public final class MediaPlayerFragment extends BaseFragment {
     private int mCurrentAsset = 0;
     private final void doShowLogic() {
         final int assetsCount = mFiles.size();
-        if (assetsCount == 0 ) {
+        if (assetsCount == 0) {
             Toast.makeText(getActivity().getApplicationContext(), "No assets to show", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -196,18 +206,19 @@ public final class MediaPlayerFragment extends BaseFragment {
                 e.printStackTrace();
                 Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
             }
+
+            ivImage.postDelayed(new Runnable() {
+                @Override
+                public final void run() {
+                    mCurrentAsset++;
+                    doShowLogic();
+                }
+            }, 5000);
+
         } else {
             ivImage.setVisibility(View.INVISIBLE);
             mVideoWindow.setVideoPath(file.getPath());
         }
-
-        ivImage.postDelayed(new Runnable() {
-            @Override
-            public final void run() {
-                mCurrentAsset++;
-                doShowLogic();
-            }
-        }, 5000);
     }
 
 }
