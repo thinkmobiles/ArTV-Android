@@ -1,6 +1,7 @@
 package com.artv.android.app.start;
 
 import com.artv.android.ArTvResult;
+import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignsWorker;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
@@ -20,6 +21,7 @@ public final class StartWorker {
     private ConfigInfoWorker mConfigInfoWorker;
     private StateWorker mStateWorker;
     private CampaignsWorker mCampaignsWorker;
+    private BeaconWorker mBeaconWorker;
 
     private ISplashFragmentListener mSplashFragmentListener;
 
@@ -37,6 +39,10 @@ public final class StartWorker {
 
     public final void setCampaignsWorker(final CampaignsWorker _worker) {
         mCampaignsWorker = _worker;
+    }
+
+    public final void setBeaconWorker(final BeaconWorker _beaconWorker) {
+        mBeaconWorker = _beaconWorker;
     }
 
     public final void setSplashFragmentListener(final ISplashFragmentListener _listener) {
@@ -80,6 +86,7 @@ public final class StartWorker {
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printMessage("Has campaigns to play");
                 mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                doBeaconRequest();
                 break;
         }
     }
@@ -104,6 +111,12 @@ public final class StartWorker {
 
     public final void cancel() {
         mCampaignsWorker.cancelLoading();
+    }
+
+    private final void doBeaconRequest() {
+        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mBeaconWorker.setInitData(mInitWorker.getInitData());
+        mBeaconWorker.doBeacon();
     }
 
 }

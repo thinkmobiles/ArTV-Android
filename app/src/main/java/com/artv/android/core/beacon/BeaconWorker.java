@@ -23,6 +23,18 @@ public final class BeaconWorker {
     private ApiWorker mApiWorker;
     private IBeaconCallback mCallback;
 
+    public void setConfigInfo(final ConfigInfo _configInfo) {
+        mConfigInfo = _configInfo;
+    }
+
+    public void setInitData(final InitData _initData) {
+        mInitData = _initData;
+    }
+
+    public void setApiWorker(final ApiWorker _apiWorker) {
+        mApiWorker = _apiWorker;
+    }
+
     public final void doBeacon() {
         final BeaconRequestObject requestObject = new BeaconRequestObject();
         requestObject.token = mInitData.getToken();

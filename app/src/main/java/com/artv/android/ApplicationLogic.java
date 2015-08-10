@@ -52,6 +52,7 @@ public final class ApplicationLogic {
         mDisplaySwitcher = new DisplaySwitcher();
 
         mBeaconWorker = new BeaconWorker();
+        mBeaconWorker.setApiWorker(mApiWorker);
 
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
@@ -67,6 +68,7 @@ public final class ApplicationLogic {
         mStartWorker.setConfigInfoWorker(mConfigInfoWorker);
         mStartWorker.setStateWorker(mStateWorker);
         mStartWorker.setCampaignsWorker(mCampaignsWorker);
+        mStartWorker.setBeaconWorker(mBeaconWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
