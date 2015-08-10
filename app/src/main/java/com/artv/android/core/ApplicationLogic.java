@@ -94,8 +94,8 @@ public final class ApplicationLogic {
     public final void determineStateWhenAppStart() {
         mConfigInfoWorker.loadConfigInfo();
 
-        if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo()
-                || !mCampaignsWorker.hasCampaignToPlay()) {
+        if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo() ||
+                !mCampaignsWorker.hasCampaignToPlay()) {
             mStateWorker.setState(ArTvState.STATE_APP_START);
         } else {
             mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);

@@ -74,7 +74,7 @@ public final class CampaignsWorker {
     /**
      * GET request to server, returns result through callback.
      * @param _campaignId campaign id to get.
-     * @param _callback callback for operarion result.
+     * @param _callback callback for operation result.
      */
     public final void getCampaign(final int _campaignId, final IGetCampaignsCallback _callback) {
         final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
