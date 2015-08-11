@@ -70,11 +70,6 @@ public final class StartWorker {
                     }
 
                     @Override
-                    public final void onProgress(final ArTvResult _result) {
-                        ArTvLogger.printMessage(_result.getMessage());
-                    }
-
-                    @Override
                     public final void onInitFail(final ArTvResult _result) {
                         ArTvLogger.printMessage(_result.getMessage());
                     }

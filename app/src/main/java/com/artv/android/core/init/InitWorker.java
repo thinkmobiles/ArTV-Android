@@ -13,6 +13,7 @@ import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
+import com.artv.android.core.log.ArTvLogger;
 
 import java.util.ArrayList;
 
@@ -58,14 +59,14 @@ public final class InitWorker {
 
     public final void turnOnDisplayIfNeed() {
         if (mDisplaySwitcher.isDisplayTurnedOn()) {
-            mCallback.onProgress(buildInitResult(true, "Display already turned on"));
+            ArTvLogger.printMessage("Display already turned on");
             getToken();
         } else {
             mDisplaySwitcher.turnOn(new DisplaySwitcherAdapterCallback() {
 
                 @Override
                 public final void turnedOn() {
-                    mCallback.onProgress(buildInitResult(true, "Turned on display"));
+                    ArTvLogger.printMessage("Turned on display");
                     getToken();
                 }
 
@@ -88,7 +89,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
                 mInitData.setToken(_respObj.token);
-                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
+                ArTvLogger.printMessage(_respObj.apiType + " : success");
                 getGlobalConfig();
             }
 
@@ -108,7 +109,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetGlobalConfigResponseObject _respObj) {
                 mInitData.setGlobalConfig(new ArrayList<>(_respObj.list));
-                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
+                ArTvLogger.printMessage(_respObj.apiType + " : success");
                 getDeviceConfig();
             }
 
@@ -129,7 +130,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetDeviceConfigResponseObject _respObj) {
                 mInitData.setDeviceConfig(_respObj.getDeviceConfig());
-                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
+                ArTvLogger.printMessage(_respObj.apiType + " : success");
                 mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
             }
 
