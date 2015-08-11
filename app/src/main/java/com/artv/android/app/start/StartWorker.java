@@ -119,18 +119,20 @@ public final class StartWorker {
     private final void doBeaconRequest() {
         mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mBeaconWorker.setInitData(mInitWorker.getInitData());
-        mBeaconWorker.doBeacon(new ICampaignCallback() {
-            @Override
-            public final void onFinished(final CampaignResult _result) {
-                if (_result.getSuccess()) {
-                    ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
-                    ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
-                    mDbWorker.write(_result.getMsgBoardCampaign());
-                } else {
-                    ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
-                }
-            }
-        });
+        mBeaconWorker.doBeacon(beaconCallback);
     }
+
+    private final ICampaignCallback beaconCallback = new ICampaignCallback() {
+        @Override
+        public final void onFinished(final CampaignResult _result) {
+            if (_result.getSuccess()) {
+                ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
+                ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
+                mDbWorker.write(_result.getMsgBoardCampaign());
+            } else {
+                ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
+            }
+        }
+    };
 
 }

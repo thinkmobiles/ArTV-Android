@@ -57,27 +57,13 @@ public final class MsgBoardCampaign {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (getClass() != o.getClass()) return false;
+    public final boolean equals(final Object _o) {
+        if (this == _o) return true;
+        if (_o == null) return false;
+        if (getClass() != _o.getClass()) return false;
 
-        MsgBoardCampaign msgBoardCampaign = (MsgBoardCampaign) o;
-        if(msgBoardId != msgBoardCampaign.msgBoardId) return false;
-        if(!TextUtils.equals(crcVersion,msgBoardCampaign.crcVersion)) return false;
-        if(!TextUtils.equals(endDate,msgBoardCampaign.endDate)) return false;
-        if(!TextUtils.equals(startDate,msgBoardCampaign.startDate)) return false;
-        if(!TextUtils.equals(textColor,msgBoardCampaign.textColor)) return false;
-        if(!TextUtils.equals(playDay,msgBoardCampaign.playDay)) return false;
-        if(!TextUtils.equals(bottomBkgURL,msgBoardCampaign.bottomBkgURL)) return false;
-        if(!TextUtils.equals(rightBkgURL,msgBoardCampaign.rightBkgURL)) return false;
-
-        if(messages.size() != msgBoardCampaign.messages.size()) return false;
-        for (int i=0; i < messages.size(); i++) {
-            if(!messages.get(i).equals(msgBoardCampaign.messages.get(i))) return false;
-        }
-
-        return true;
+        final MsgBoardCampaign msg = (MsgBoardCampaign) _o;
+        return msgBoardId == msg.msgBoardId && String.valueOf(crcVersion).equals(String.valueOf(msg.crcVersion));
     }
 
 }

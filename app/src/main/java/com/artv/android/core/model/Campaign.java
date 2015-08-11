@@ -1,7 +1,5 @@
 package com.artv.android.core.model;
 
-import android.text.TextUtils;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -40,25 +38,13 @@ public final class Campaign {
     public List<Asset> assets;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (getClass() != o.getClass()) return false;
+    public final boolean equals(final Object _o) {
+        if (this == _o) return true;
+        if (_o == null) return false;
+        if (getClass() != _o.getClass()) return false;
 
-        Campaign campaign = (Campaign) o;
-        if(campaignId != campaign.campaignId) return false;
-        if(crcVersion != campaign.crcVersion) return false;
-        if(!TextUtils.equals(endDate,campaign.endDate)) return false;
-        if(!TextUtils.equals(startDate,campaign.startDate)) return false;
-        if(!TextUtils.equals(overrideTime,campaign.overrideTime)) return false;
-        if(!TextUtils.equals(playDay,campaign.playDay)) return false;
-        if(sequence != campaign.sequence) return false;
-
-        for (int i=0; i < assets.size(); i++) {
-            if(!assets.get(i).equals(campaign.assets.get(i))) return false;
-        }
-
-        return true;
+        final Campaign campaign = (Campaign) _o;
+        return campaignId == campaign.campaignId && String.valueOf(crcVersion).equals(String.valueOf(campaign.crcVersion));
     }
 
     @Override
