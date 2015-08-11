@@ -6,10 +6,10 @@ import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.BeaconRequestObject;
 import com.artv.android.core.api.api_model.response.BeaconResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.init.InitData;
-import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Beacon;
-import com.artv.android.core.model.MsgBoardCampaign;
+import com.artv.android.database.DbWorker;
 
 import java.util.ArrayList;
 
@@ -21,6 +21,9 @@ public final class BeaconWorker {
     private ConfigInfo mConfigInfo;
     private InitData mInitData;
     private ApiWorker mApiWorker;
+    private DateWorker mDateWorker;
+    private DbWorker mDbWorker;
+
     private IBeaconCallback mCallback;
 
     public void setConfigInfo(final ConfigInfo _configInfo) {
@@ -35,11 +38,19 @@ public final class BeaconWorker {
         mApiWorker = _apiWorker;
     }
 
+    public void setDateWorker(final DateWorker _dateWorker) {
+        mDateWorker = _dateWorker;
+    }
+
+    public void setDbWorker(final DbWorker _dbWorker) {
+        mDbWorker = _dbWorker;
+    }
+
     public final void doBeacon() {
         final BeaconRequestObject requestObject = new BeaconRequestObject();
         requestObject.token = mInitData.getToken();
         requestObject.tagId = mConfigInfo.getDeviceId();
-        requestObject.beacon = buildEmptyBeacon();
+        requestObject.beacon = buildBeacon();
 
         mApiWorker.doBeacon(requestObject, new WebRequestCallback<BeaconResponseObject>() {
             @Override
@@ -55,28 +66,14 @@ public final class BeaconWorker {
         });
     }
 
-    private final Beacon buildEmptyBeacon() {
+    private final Beacon buildBeacon() {
         final Beacon beacon = new Beacon();
         beacon.tagId = mConfigInfo.getDeviceId();
-        beacon.currentDateTime = "";
-        beacon.currentCampaign = 0;
-        beacon.currentAsset = new Asset();
-        beacon.campaigns = new ArrayList<>();
-        beacon.msgBoardCampaign = buildMsgBoardCampaign();
+        beacon.currentDateTime = mDateWorker.getCurrentFormattedDate();
+        beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
+        beacon.msgBoardCampaign = null;
         beacon.errorLog = "";
         return beacon;
     }
-
-    private final MsgBoardCampaign buildMsgBoardCampaign() {
-        final MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
-        return msgBoardCampaign;
-    }
-
-//    private final InitResult buildInitResult(final boolean _success, final String _message) {
-//        return new InitResult.Builder()
-//                .setSuccess(_success)
-//                .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
-//                .build();
-//    }
 
 }

@@ -7,6 +7,7 @@ import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignsWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
@@ -32,6 +33,7 @@ public final class ApplicationLogic {
     private BeaconWorker mBeaconWorker;
     private CampaignsWorker mCampaignsWorker;
     private DbWorker mDbWorker;
+    private DateWorker mDateWorker;
 
     private StartWorker mStartWorker;
 
@@ -51,13 +53,17 @@ public final class ApplicationLogic {
         mInitWorker = new InitWorker();
         mDisplaySwitcher = new DisplaySwitcher();
 
+        mDbWorker = DBManager.getInstance(mContext);
+
+        mDateWorker = new DateWorker();
+
         mBeaconWorker = new BeaconWorker();
         mBeaconWorker.setApiWorker(mApiWorker);
+        mBeaconWorker.setDateWorker(mDateWorker);
+        mBeaconWorker.setDbWorker(mDbWorker);
 
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
-
-        mDbWorker = DBManager.getInstance(mContext);
 
         mCampaignsWorker = new CampaignsWorker();
         mCampaignsWorker.setApiWorker(mApiWorker);

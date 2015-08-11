@@ -9,7 +9,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by
@@ -26,7 +26,7 @@ public final class GetCampaignResponseObject extends BaseResponseObject {
     public String errorDescription;
 
     @ElementList(name = "Campaigns", required = false)
-    public List<Campaign> campaigns;
+    public ArrayList<Campaign> campaigns;
 
     @Element(name = "MsgBoardCampaign", required = false)
     public MsgBoardCampaign msgBoardCampaign;

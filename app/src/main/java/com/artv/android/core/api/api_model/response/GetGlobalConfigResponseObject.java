@@ -7,7 +7,7 @@ import com.artv.android.core.model.Entry;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by
@@ -18,7 +18,7 @@ import java.util.List;
 public final class GetGlobalConfigResponseObject extends BaseResponseObject {
 
     @ElementList (entry = "Entry", inline = true)
-    public List<Entry> list;
+    public ArrayList<Entry> list;
 
     public GetGlobalConfigResponseObject() {
         apiType = ApiType.GET_GLOBAL_CONFIG;

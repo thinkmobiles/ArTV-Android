@@ -5,6 +5,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ZOG on 7/10/2015.
@@ -22,15 +23,15 @@ public final class Beacon {
     public int currentCampaign;
 
     @Element(name = "CurrentAsset")
-    public Asset currentAsset;
+    public int currentAsset;
 
     @ElementList(name = "Campaigns")
-    public ArrayList<Campaign> campaigns;
+    public List<Campaign> campaigns;
 
-    @Element(name = "MsgBoardCampaign")
+    @Element(name = "MsgBoardCampaign", required = false)
     public MsgBoardCampaign msgBoardCampaign;
 
     @Element(name = "ErrorLog")
-    public String errorLog;
+    public String errorLog = "";
 
 }
