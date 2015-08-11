@@ -2,7 +2,9 @@ package com.artv.android.app.start;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.core.beacon.BeaconWorker;
-import com.artv.android.core.campaign.CampaignsWorker;
+import com.artv.android.core.campaign.CampaignResult;
+import com.artv.android.core.campaign.CampaignWorker;
+import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
@@ -20,7 +22,7 @@ public final class StartWorker {
     private InitWorker mInitWorker;
     private ConfigInfoWorker mConfigInfoWorker;
     private StateWorker mStateWorker;
-    private CampaignsWorker mCampaignsWorker;
+    private CampaignWorker mCampaignWorker;
     private BeaconWorker mBeaconWorker;
 
     private ISplashFragmentListener mSplashFragmentListener;
@@ -37,8 +39,8 @@ public final class StartWorker {
         mStateWorker = _worker;
     }
 
-    public final void setCampaignsWorker(final CampaignsWorker _worker) {
-        mCampaignsWorker = _worker;
+    public final void setCampaignsWorker(final CampaignWorker _worker) {
+        mCampaignWorker = _worker;
     }
 
     public final void setBeaconWorker(final BeaconWorker _beaconWorker) {
@@ -75,8 +77,8 @@ public final class StartWorker {
     }
 
     private final void beginCampaignLogic() {
-        mCampaignsWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
-        mCampaignsWorker.setInitData(mInitWorker.getInitData());
+        mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mCampaignWorker.setInitData(mInitWorker.getInitData());
 
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
@@ -92,7 +94,7 @@ public final class StartWorker {
     }
 
     private final void doInitialCampaignDownload() {
-        mCampaignsWorker.doInitialCampaignDownload(new ICampaignDownloadListener() {
+        mCampaignWorker.doInitialCampaignDownload(new ICampaignDownloadListener() {
             @Override
             public final void onCampaignDownloadFinished(final ArTvResult _result) {
                 if (_result.getSuccess()) {
@@ -110,13 +112,18 @@ public final class StartWorker {
     }
 
     public final void cancel() {
-        mCampaignsWorker.cancelLoading();
+        mCampaignWorker.cancelLoading();
     }
 
     private final void doBeaconRequest() {
         mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mBeaconWorker.setInitData(mInitWorker.getInitData());
-        mBeaconWorker.doBeacon();
+        mBeaconWorker.doBeacon(new ICampaignCallback() {
+            @Override
+            public final void onFinished(final CampaignResult _result) {
+
+            }
+        });
     }
 
 }

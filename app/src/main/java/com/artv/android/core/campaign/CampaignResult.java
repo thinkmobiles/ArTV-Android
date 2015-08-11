@@ -7,13 +7,13 @@ import java.util.List;
 /**
  * Created by ZOG on 7/29/2015.
  */
-public final class GetCampaignsResult {
+public final class CampaignResult {
 
     private boolean mSuccess = false;
     private String mMessage;
     private List<Campaign> mCampaigns;
 
-    private GetCampaignsResult() {}
+    private CampaignResult() {}
 
     public final boolean getSuccess() {
         return mSuccess;
@@ -30,29 +30,29 @@ public final class GetCampaignsResult {
 
     public static final class Builder {
 
-        private GetCampaignsResult mGetCampaignsResult;
+        private CampaignResult mCampaignResult;
 
         public Builder() {
-            mGetCampaignsResult = new GetCampaignsResult();
+            mCampaignResult = new CampaignResult();
         }
 
         public Builder setSuccess(final boolean _success) {
-            mGetCampaignsResult.mSuccess = _success;
+            mCampaignResult.mSuccess = _success;
             return this;
         }
 
         public Builder setMessage(final String _message) {
-            mGetCampaignsResult.mMessage = _message;
+            mCampaignResult.mMessage = _message;
             return this;
         }
 
         public final Builder setCampaigns(final List<Campaign> _campaigns) {
-            mGetCampaignsResult.mCampaigns = _campaigns;
+            mCampaignResult.mCampaigns = _campaigns;
             return this;
         }
 
-        public final GetCampaignsResult build() {
-            return mGetCampaignsResult;
+        public final CampaignResult build() {
+            return mCampaignResult;
         }
 
     }

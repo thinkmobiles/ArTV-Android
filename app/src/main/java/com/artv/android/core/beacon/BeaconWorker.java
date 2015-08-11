@@ -5,6 +5,8 @@ import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.BeaconRequestObject;
 import com.artv.android.core.api.api_model.response.BeaconResponseObject;
+import com.artv.android.core.campaign.CampaignResult;
+import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.init.InitData;
@@ -24,7 +26,7 @@ public final class BeaconWorker {
     private DateWorker mDateWorker;
     private DbWorker mDbWorker;
 
-    private IBeaconCallback mCallback;
+    private ICampaignCallback mCallback;
 
     public void setConfigInfo(final ConfigInfo _configInfo) {
         mConfigInfo = _configInfo;
@@ -46,7 +48,7 @@ public final class BeaconWorker {
         mDbWorker = _dbWorker;
     }
 
-    public final void doBeacon() {
+    public final void doBeacon(final ICampaignCallback _callback) {
         final BeaconRequestObject requestObject = new BeaconRequestObject();
         requestObject.token = mInitData.getToken();
         requestObject.tagId = mConfigInfo.getDeviceId();
@@ -55,13 +57,21 @@ public final class BeaconWorker {
         mApiWorker.doBeacon(requestObject, new WebRequestCallback<BeaconResponseObject>() {
             @Override
             public final void onSuccess(final BeaconResponseObject _respObj) {
-//                mCallback.onProgress(buildInitResult(true, _respObj.apiType + " : success"));
-//                getCampaign();
+                final CampaignResult.Builder builder = new CampaignResult.Builder();
+
+                if (_respObj.errorNumber == 0) {
+
+                } else {
+
+                }
             }
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
-//                mCallback.onInitFail(buildInitResult(false, _errorResp.apiType + ": " + _errorResp.error));
+                _callback.onFinished(new CampaignResult.Builder()
+                        .setSuccess(false)
+                        .setMessage(_errorResp.apiType.name() + _errorResp.error)
+                        .build());
             }
         });
     }
@@ -70,9 +80,11 @@ public final class BeaconWorker {
         final Beacon beacon = new Beacon();
         beacon.tagId = mConfigInfo.getDeviceId();
         beacon.currentDateTime = mDateWorker.getCurrentFormattedDate();
+        beacon.currentCampaign = 0; //set current playing campaign id
+        beacon.currentAsset = 0; //set current playing asset id
         beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
-        beacon.msgBoardCampaign = null;
-        beacon.errorLog = "";
+        beacon.msgBoardCampaign = mDbWorker.getMsgBoardCampaign();
+        beacon.errorLog = "All ok";
         return beacon;
     }
 

@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by ZOG on 8/3/2015.
  */
-public final class CampaignsLoaderTask extends AsyncTask<Void, Void, ArTvResult> {
+public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> {
 
     private List<Campaign> mCampaigns;
     private DbWorker mDbWorker;

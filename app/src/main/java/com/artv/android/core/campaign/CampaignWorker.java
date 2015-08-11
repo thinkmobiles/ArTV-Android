@@ -22,7 +22,7 @@ import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
  *
  * Created by ZOG on 7/28/2015.
  */
-public final class CampaignsWorker {
+public final class CampaignWorker {
 
     private static final int ID_ALL_CAMPAIGN = 0;
 
@@ -30,7 +30,7 @@ public final class CampaignsWorker {
     private InitData mInitData;
     private ConfigInfo mConfigInfo;
     private DbWorker mDbWorker;
-    private CampaignsLoaderTask mCampaignsLoaderTask;
+    private CampaignLoaderTask mCampaignLoaderTask;
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
@@ -57,9 +57,9 @@ public final class CampaignsWorker {
      * @param _listener listen for finishing operation.
      */
     public final void doInitialCampaignDownload(final ICampaignDownloadListener _listener) {
-        getCampaign(ID_ALL_CAMPAIGN, new IGetCampaignsCallback() {
+        getCampaign(ID_ALL_CAMPAIGN, new ICampaignCallback() {
             @Override
-            public final void onFinished(final GetCampaignsResult _result) {
+            public final void onFinished(final CampaignResult _result) {
                 if (_result.getSuccess()) {
                     ArTvLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
                     ArTvLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
@@ -76,7 +76,7 @@ public final class CampaignsWorker {
      * @param _campaignId campaign id to get.
      * @param _callback callback for operation result.
      */
-    public final void getCampaign(final int _campaignId, final IGetCampaignsCallback _callback) {
+    public final void getCampaign(final int _campaignId, final ICampaignCallback _callback) {
         final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
                 .setToken(mInitData.getToken())
                 .setTagID(mConfigInfo.getDeviceId())
@@ -89,7 +89,7 @@ public final class CampaignsWorker {
                 ArTvLogger.printMessage(_respObj.apiType + " : success");
 
                 _callback.onFinished(
-                        new GetCampaignsResult.Builder()
+                        new CampaignResult.Builder()
                                 .setSuccess(true)
                                 .setMessage("Success")
                                 .setCampaigns(_respObj.campaigns)
@@ -102,7 +102,7 @@ public final class CampaignsWorker {
                 ArTvLogger.printMessage(_errorResp.apiType + ": " + _errorResp.error);
 
                 _callback.onFinished(
-                        new GetCampaignsResult.Builder()
+                        new CampaignResult.Builder()
                                 .setSuccess(false)
                                 .setMessage(_errorResp.error)
                                 .build()
@@ -112,17 +112,17 @@ public final class CampaignsWorker {
     }
 
     public final void loadCampaigns(final List<Campaign> _campaigns, final ICampaignDownloadListener _listener) {
-        mCampaignsLoaderTask = new CampaignsLoaderTask();
-        mCampaignsLoaderTask.setCampaigns(_campaigns);
-        mCampaignsLoaderTask.setDbWorker(mDbWorker);
-        mCampaignsLoaderTask.setCampaignDownloadListener(_listener);
-        mCampaignsLoaderTask.execute();
+        mCampaignLoaderTask = new CampaignLoaderTask();
+        mCampaignLoaderTask.setCampaigns(_campaigns);
+        mCampaignLoaderTask.setDbWorker(mDbWorker);
+        mCampaignLoaderTask.setCampaignDownloadListener(_listener);
+        mCampaignLoaderTask.execute();
     }
 
     public final void cancelLoading() {
-        if (mCampaignsLoaderTask != null) {
-            mCampaignsLoaderTask.cancel(true);
-            mCampaignsLoaderTask = null;
+        if (mCampaignLoaderTask != null) {
+            mCampaignLoaderTask.cancel(true);
+            mCampaignLoaderTask = null;
         }
     }
 

@@ -12,10 +12,10 @@ import org.simpleframework.xml.Root;
 @Root
 public final class BeaconResponseObject extends BaseResponseObject {
 
-    @Element(name = "CampaignInfoXML")
+    @Element(name = "CampaignInfoXML", required = false)
     public CampaignInfo campaignInfo;
 
-    @Element(name = "ErrorNumber")
+    @Element(name = "ErrorNumber", required = false)
     public int errorNumber;
 
     @Element(name = "ErrorDescription", required = false)
