@@ -14,7 +14,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         AllCoreTests.class,
         Database.class,
-        AllSystemTests.class
+        AllSystemTests.class,
+        ApplicationLogicTest.class,
+        ArTvResultTest.class
 })
 public final class AllTests {
 }
