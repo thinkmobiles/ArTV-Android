@@ -19,6 +19,7 @@ public interface DbWorker {
     boolean contains(final Campaign _campaign);
     List<Campaign> getAllCampaigns();
     List<Asset> getAssets(final Campaign _campaign);
+    Campaign getCampaignById(final int _campaignId);
 
     void write(final MsgBoardCampaign _msgBoardCampaign);
     MsgBoardCampaign getMsgBoardCampaign();
