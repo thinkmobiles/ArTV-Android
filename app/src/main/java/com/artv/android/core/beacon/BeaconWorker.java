@@ -10,6 +10,7 @@ import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.init.InitData;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Beacon;
 import com.artv.android.database.DbWorker;
 
@@ -25,8 +26,6 @@ public final class BeaconWorker {
     private ApiWorker mApiWorker;
     private DateWorker mDateWorker;
     private DbWorker mDbWorker;
-
-    private ICampaignCallback mCallback;
 
     public void setConfigInfo(final ConfigInfo _configInfo) {
         mConfigInfo = _configInfo;
@@ -60,14 +59,20 @@ public final class BeaconWorker {
                 final CampaignResult.Builder builder = new CampaignResult.Builder();
 
                 if (_respObj.errorNumber == 0) {
-
+                    ArTvLogger.printMessage(_respObj.apiType + " : success");
+                    builder.setSuccess(true).setCampaigns(_respObj.campaigns).setMsgBoardCampaign(_respObj.msgBoardCampaign);
                 } else {
-
+                    ArTvLogger.printMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);
+                    builder.setSuccess(false).setMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);
                 }
+
+                _callback.onFinished(builder.build());
             }
 
             @Override
             public final void onFailure(final ErrorResponseObject _errorResp) {
+                ArTvLogger.printMessage(_errorResp.apiType + " : " + _errorResp.error);
+
                 _callback.onFinished(new CampaignResult.Builder()
                         .setSuccess(false)
                         .setMessage(_errorResp.apiType.name() + _errorResp.error)

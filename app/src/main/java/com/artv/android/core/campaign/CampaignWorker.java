@@ -63,6 +63,7 @@ public final class CampaignWorker {
                 if (_result.getSuccess()) {
                     ArTvLogger.printMessage("Campaigns: " + getCampaignsCount(_result.getCampaigns()));
                     ArTvLogger.printMessage("Assets: " + getAssetsCount(_result.getCampaigns()));
+                    mDbWorker.write(_result.getMsgBoardCampaign());
                     loadCampaigns(_result.getCampaigns(), _listener);
                 } else {
                     ArTvLogger.printMessage("Error loading campaigns: " + _result.getMessage());

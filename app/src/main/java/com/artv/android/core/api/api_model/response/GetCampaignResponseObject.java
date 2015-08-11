@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 
 @Root(name = "CampaignInfoXML")
-public final class GetCampaignResponseObject extends BaseResponseObject {
+public class GetCampaignResponseObject extends BaseResponseObject {
 
     @Element(name = "ErrorNumber", required = false)
     public int errorNumber;

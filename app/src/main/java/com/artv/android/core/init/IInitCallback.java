@@ -4,6 +4,8 @@ import com.artv.android.ArTvResult;
 
 /**
  * Created by ZOG on 7/8/2015.
+ *
+ * todo: remove onProgress, use logger instead
  */
 public interface IInitCallback {
 

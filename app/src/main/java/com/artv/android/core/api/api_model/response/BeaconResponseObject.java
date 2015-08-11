@@ -1,20 +1,17 @@
 package com.artv.android.core.api.api_model.response;
 
-import com.artv.android.core.api.api_model.BaseResponseObject;
 
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
+import com.artv.android.core.api.ApiType;
 
 /**
  * Created by ZOG on 7/10/2015.
+ *
+ * todo: check BeaconResponseObject and replace with GetCampaignResponseObject if possible
  */
-@Root
-public final class BeaconResponseObject extends BaseResponseObject {
 
-    @Element(name = "ErrorNumber", required = false)
-    public int errorNumber;
+public final class BeaconResponseObject extends GetCampaignResponseObject {
 
-    @Element(name = "ErrorDescription", required = false)
-    public String errorDescription;
-
+    public BeaconResponseObject() {
+        apiType = ApiType.BEACON;
+    }
 }
