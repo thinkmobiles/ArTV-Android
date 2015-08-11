@@ -129,7 +129,10 @@ public final class StartWorker {
                 ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
                 ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
                 mDbWorker.write(_result.getMsgBoardCampaign());
-                mCampaignWorker.loadCampaigns(_result.getCampaigns(), regularCampaignDownloadListener);
+                if (!_result.getCampaigns().isEmpty()) {
+                    mCampaignWorker.loadCampaigns(_result.getCampaigns(),
+                            regularCampaignDownloadListener);
+                }
             } else {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
             }
