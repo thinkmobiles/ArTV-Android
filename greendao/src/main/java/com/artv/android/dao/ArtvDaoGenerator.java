@@ -5,19 +5,20 @@ import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 import de.greenrobot.daogenerator.ToMany;
+import de.greenrobot.daogenerator.ToOne;
 
 public class ArtvDaoGenerator {
 
     private static final String PROJECT_DIR = System.getProperty("user.dir").replace("\\", "/");
 
-    private static final String OUT_DIR = PROJECT_DIR + "/app/src/main/java/";
+    private static final String OUT_DIR = PROJECT_DIR + "/src/main/java/";
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1, "com.artv.android.database.gen");
 
         addTables(schema);
 
-        new DaoGenerator().generateAll(schema, OUT_DIR);
+        new DaoGenerator().generateAll(schema, OUT_DIR.replace("greendao","app"));
     }
 
     /**
@@ -33,6 +34,7 @@ public class ArtvDaoGenerator {
         /* properties */
         Property campaignIdForAssets = assets.addLongProperty("campaignId").notNull().getProperty();
         Property msgBoardIDForMessages = message.addLongProperty("msgBoardID").notNull().getProperty();
+
 
         /* relationships between entities */
         ToMany campaignToAssets = campaigns.addToMany(assets, campaignIdForAssets);
@@ -79,7 +81,6 @@ public class ArtvDaoGenerator {
     private static Entity addMsgBoardCampaign(Schema schema) {
         Entity msgBoardCampaign = schema.addEntity("DBmsgBoardCampaign");
         msgBoardCampaign.addIdProperty().primaryKey();
-        msgBoardCampaign.addIntProperty("msgBoardId");
         msgBoardCampaign.addStringProperty("crcVersion");
         msgBoardCampaign.addStringProperty("startDate");
         msgBoardCampaign.addStringProperty("endDate");
@@ -93,6 +94,7 @@ public class ArtvDaoGenerator {
 
     private static Entity addMessage(Schema schema) {
         Entity message = schema.addEntity("DBMessage");
+        message.addIdProperty().primaryKey().autoincrement();
         message.addStringProperty("text");
         message.addStringProperty("position");
         message.addIntProperty("sequence");

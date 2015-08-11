@@ -1,5 +1,8 @@
 package com.artv.android.core.model;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -63,14 +66,15 @@ public final class MsgBoardCampaign {
 
         MsgBoardCampaign msgBoardCampaign = (MsgBoardCampaign) o;
         if(msgBoardId != msgBoardCampaign.msgBoardId) return false;
-        if(crcVersion != msgBoardCampaign.crcVersion) return false;
-        if(!endDate.equals(msgBoardCampaign.endDate)) return false;
-        if(!startDate.equals(msgBoardCampaign.startDate)) return false;
-        if(!textColor.equals(msgBoardCampaign.textColor)) return false;
-        if(!playDay.equals(msgBoardCampaign.playDay)) return false;
-        if(!bottomBkgURL.equals(msgBoardCampaign.bottomBkgURL)) return false;
-        if(!rightBkgURL.equals(msgBoardCampaign.rightBkgURL)) return false;
+        if(!TextUtils.equals(crcVersion,msgBoardCampaign.crcVersion)) return false;
+        if(!TextUtils.equals(endDate,msgBoardCampaign.endDate)) return false;
+        if(!TextUtils.equals(startDate,msgBoardCampaign.startDate)) return false;
+        if(!TextUtils.equals(textColor,msgBoardCampaign.textColor)) return false;
+        if(!TextUtils.equals(playDay,msgBoardCampaign.playDay)) return false;
+        if(!TextUtils.equals(bottomBkgURL,msgBoardCampaign.bottomBkgURL)) return false;
+        if(!TextUtils.equals(rightBkgURL,msgBoardCampaign.rightBkgURL)) return false;
 
+        if(messages.size() != msgBoardCampaign.messages.size()) return false;
         for (int i=0; i < messages.size(); i++) {
             if(!messages.get(i).equals(msgBoardCampaign.messages.get(i))) return false;
         }

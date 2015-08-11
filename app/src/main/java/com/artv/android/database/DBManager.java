@@ -3,9 +3,11 @@ package com.artv.android.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Message;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
+import com.artv.android.core.model.CampaignInfo;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBAssetDao;
@@ -18,6 +20,7 @@ import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
+import java.security.AlgorithmParameterGenerator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -124,6 +127,8 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             mHelper.onCreate(database);              // creates the tables
             asyncSession.deleteAll(DBAsset.class);    // clear all elements from a table
             asyncSession.deleteAll(DBCampaign.class);
+            asyncSession.deleteAll(DBmsgBoardCampaign.class);
+            asyncSession.deleteAll(DBMessage.class);
             asyncSession.waitForCompletion();
         } catch (Exception e) {
             e.printStackTrace();
@@ -306,6 +311,53 @@ public class DBManager implements AsyncOperationListener, DbWorker {
         return resAssets;
     }
 
+    @Override
+    public void write(MsgBoardCampaign _msgBoardCampaign) {
+        try {
+            openWritableDb();
+
+            DBmsgBoardCampaignDao dBmsgBoardCampaignDao = daoSession.getDBmsgBoardCampaignDao();
+            DBMessageDao messageDao = daoSession.getDBMessageDao();
+            dBmsgBoardCampaignDao.deleteAll();
+            messageDao.deleteAll();
+
+            if(_msgBoardCampaign != null) {
+                //firstly add msgBoardCampaign
+//                DBmsgBoardCampaignDao dBmsgBoardCampaignDao = daoSession.getDBmsgBoardCampaignDao();
+                DBmsgBoardCampaign dBmsgBoardCampaign = Transformer.createDBmsgBoardCampaign(_msgBoardCampaign);
+                dBmsgBoardCampaignDao.insertOrReplace(dBmsgBoardCampaign);
+
+                //then add Messages
+//                DBMessageDao messageDao = daoSession.getDBMessageDao();
+                LinkedList<DBMessage> dbMessages = new LinkedList<>();
+                dbMessages.addAll(Transformer.createDBMessageList(_msgBoardCampaign.messages,
+                        _msgBoardCampaign.msgBoardId));
+                messageDao.insertOrReplaceInTx(dbMessages);
+            }
+
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public MsgBoardCampaign getMsgBoardCampaign() {
+        MsgBoardCampaign msgBoardCampaign = null;
+        try {
+            openReadableDb();
+            DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
+            List<MsgBoardCampaign> msgBoardCampaigns = Transformer.createMsgBoardCampaignList(dao.loadAll());
+            if(msgBoardCampaigns.size() != 0) msgBoardCampaign = msgBoardCampaigns.get(0);
+
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return msgBoardCampaign;
+    }
+
     public List<MsgBoardCampaign> getAllMsgBoardCampaigns() {
         List<MsgBoardCampaign> msgBoardCampaigns = new LinkedList<>();
         try {
@@ -373,17 +425,4 @@ public class DBManager implements AsyncOperationListener, DbWorker {
     }
 
 
-    public MsgBoardCampaign getMsgBoardCampaignById(Long id) {
-        MsgBoardCampaign msgBoardCampaign = null;
-        try {
-            openReadableDb();
-            DBmsgBoardCampaignDao dao = daoSession.getDBmsgBoardCampaignDao();
-            msgBoardCampaign = Transformer.createMsgBoardCampaign(dao.load(id));
-            daoSession.clear();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return msgBoardCampaign;
-    }
 }

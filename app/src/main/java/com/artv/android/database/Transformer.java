@@ -72,7 +72,7 @@ public final class Transformer {
 
     protected static DBmsgBoardCampaign createDBmsgBoardCampaign(MsgBoardCampaign msgBoardCampaign) {
         DBmsgBoardCampaign dBmsgBoardCampaign = new DBmsgBoardCampaign();
-        dBmsgBoardCampaign.setMsgBoardId(msgBoardCampaign.msgBoardId);
+        dBmsgBoardCampaign.setId((long) msgBoardCampaign.msgBoardId);
         dBmsgBoardCampaign.setBottomBkgURL(msgBoardCampaign.bottomBkgURL);
         dBmsgBoardCampaign.setRightBkgURL(msgBoardCampaign.rightBkgURL);
         dBmsgBoardCampaign.setCrcVersion(msgBoardCampaign.crcVersion);
@@ -102,7 +102,7 @@ public final class Transformer {
         MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
         msgBoardCampaign.bottomBkgURL = dBmsgBoardCampaign.getBottomBkgURL();
         msgBoardCampaign.crcVersion = dBmsgBoardCampaign.getCrcVersion();
-        msgBoardCampaign.msgBoardId = dBmsgBoardCampaign.getMsgBoardId();
+        msgBoardCampaign.msgBoardId = dBmsgBoardCampaign.getId().intValue();
         msgBoardCampaign.textColor = dBmsgBoardCampaign.getTextColor();
         msgBoardCampaign.playDay = dBmsgBoardCampaign.getPlayDay();
         msgBoardCampaign.rightBkgURL = dBmsgBoardCampaign.getRightBkgURL();
@@ -179,7 +179,7 @@ public final class Transformer {
 
 
 
-    private static Message createMessage(DBMessage dbMessage) {
+    protected static Message createMessage(DBMessage dbMessage) {
         Message message = new Message();
         message.position = dbMessage.getPosition();
         message.sequence = dbMessage.getSequence();
@@ -188,7 +188,7 @@ public final class Transformer {
         return message;
     }
 
-    private static DBMessage createDBMessage(Message message) {
+    protected static DBMessage createDBMessage(Message message) {
         DBMessage dbMessage = new DBMessage();
         dbMessage.setPosition(message.position);
         dbMessage.setSequence(message.sequence);

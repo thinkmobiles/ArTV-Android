@@ -6,6 +6,7 @@ package com.artv.android.database.gen;
  */
 public class DBMessage {
 
+    private Long id;
     private String text;
     private String position;
     private Integer sequence;
@@ -14,11 +15,24 @@ public class DBMessage {
     public DBMessage() {
     }
 
-    public DBMessage(String text, String position, Integer sequence, long msgBoardID) {
+    public DBMessage(Long id) {
+        this.id = id;
+    }
+
+    public DBMessage(Long id, String text, String position, Integer sequence, long msgBoardID) {
+        this.id = id;
         this.text = text;
         this.position = position;
         this.sequence = sequence;
         this.msgBoardID = msgBoardID;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getText() {
