@@ -1,7 +1,6 @@
 package com.artv.android.core.api.api_model.response;
 
 import com.artv.android.core.api.api_model.BaseResponseObject;
-import com.artv.android.core.model.CampaignInfo;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
@@ -11,9 +10,6 @@ import org.simpleframework.xml.Root;
  */
 @Root
 public final class BeaconResponseObject extends BaseResponseObject {
-
-    @Element(name = "CampaignInfoXML", required = false)
-    public CampaignInfo campaignInfo;
 
     @Element(name = "ErrorNumber", required = false)
     public int errorNumber;

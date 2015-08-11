@@ -3,11 +3,12 @@ package com.artv.android.core.model;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ZOG on 7/10/2015.
+ *
+ * Unused class. todo: delete CampaignInfo
  */
 @Root(name = "CampaignInfoXML")
 public final class CampaignInfo {

@@ -3,11 +3,9 @@ package com.artv.android.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.os.Message;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
-import com.artv.android.core.model.CampaignInfo;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBAssetDao;
@@ -20,7 +18,6 @@ import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
-import java.security.AlgorithmParameterGenerator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

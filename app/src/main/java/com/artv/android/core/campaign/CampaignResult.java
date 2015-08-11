@@ -1,6 +1,7 @@
 package com.artv.android.core.campaign;
 
 import com.artv.android.core.model.Campaign;
+import com.artv.android.core.model.MsgBoardCampaign;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public final class CampaignResult {
     private boolean mSuccess = false;
     private String mMessage;
     private List<Campaign> mCampaigns;
+    private MsgBoardCampaign mMsgBoardCampaign;
 
     private CampaignResult() {}
 
@@ -25,6 +27,10 @@ public final class CampaignResult {
 
     public final List<Campaign> getCampaigns() {
         return mCampaigns;
+    }
+
+    public final MsgBoardCampaign getMsgBoardCampaign() {
+        return mMsgBoardCampaign;
     }
 
 
@@ -48,6 +54,11 @@ public final class CampaignResult {
 
         public final Builder setCampaigns(final List<Campaign> _campaigns) {
             mCampaignResult.mCampaigns = _campaigns;
+            return this;
+        }
+
+        public final Builder setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
+            mCampaignResult.mMsgBoardCampaign = _msgBoardCampaign;
             return this;
         }
 

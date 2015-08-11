@@ -99,4 +99,5 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
     @Override
     public final void onNeedRemoveConfigInfo() {}
+
 }

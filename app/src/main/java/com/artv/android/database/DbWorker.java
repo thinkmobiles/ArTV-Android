@@ -2,7 +2,6 @@ package com.artv.android.database;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
-import com.artv.android.core.model.CampaignInfo;
 import com.artv.android.core.model.MsgBoardCampaign;
 
 import java.util.List;

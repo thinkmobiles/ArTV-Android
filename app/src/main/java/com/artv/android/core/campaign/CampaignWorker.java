@@ -93,6 +93,7 @@ public final class CampaignWorker {
                                 .setSuccess(true)
                                 .setMessage("Success")
                                 .setCampaigns(_respObj.campaigns)
+                                .setMsgBoardCampaign(_respObj.msgBoardCampaign)
                                 .build()
                 );
             }
