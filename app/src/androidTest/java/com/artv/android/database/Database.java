@@ -64,6 +64,25 @@ public class Database {
         }
     }
 
+    @Test
+    public void DataBase_WriteAndGet_MsgBoardCampaign() {
+        MsgBoardCampaign msgBoardCampaign = createSecondTestMsgBoardCampaign();
+
+        Assert.assertNull("Result is not null", dbManager.getMsgBoardCampaign());
+
+        dbManager.write(msgBoardCampaign);
+
+        MsgBoardCampaign msgBoardCampaignResult = dbManager.getMsgBoardCampaign();
+        Assert.assertNotNull("Result is null", msgBoardCampaignResult);
+        Assert.assertEquals("Messages1 not equals", msgBoardCampaign.messages.get(0), msgBoardCampaignResult.messages.get(0));
+        Assert.assertEquals("Messages2 not equals", msgBoardCampaign.messages.get(1),msgBoardCampaignResult.messages.get(1));
+        Assert.assertEquals("Messages sizes not equals", msgBoardCampaign.messages.size(),msgBoardCampaignResult.messages.size());
+        Assert.assertEquals("MsgBoardCampaigns not equals", msgBoardCampaign, msgBoardCampaignResult);
+
+        dbManager.write((MsgBoardCampaign) null);
+        Assert.assertNull("Result is not null",dbManager.getMsgBoardCampaign());
+    }
+
     private Campaign createFirstTestCampaign() {
         Campaign campaign1 = new Campaign();
         campaign1.campaignId = 23;
@@ -152,6 +171,9 @@ public class Database {
         message4.position = "pos4";
         message4.sequence = 244;
 
+        messages2.add(message3);
+        messages2.add(message4);
+
         msgBoardCampaign2.messages = messages2;
 
         return msgBoardCampaign2;
@@ -180,7 +202,10 @@ public class Database {
         message2.position = "pos2";
         message2.sequence = 24;
 
-        msgBoardCampaign1.messages = (messages1);
+        messages1.add(message1);
+        messages1.add(message2);
+
+        msgBoardCampaign1.messages = messages1;
 
         return msgBoardCampaign1;
     }
