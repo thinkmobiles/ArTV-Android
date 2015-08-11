@@ -55,7 +55,8 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
 
         for (final Campaign campaign : mCampaigns) {
             ArTvLogger.printMessage("Loading campaign with id = " + campaign.campaignId);
-            if (mDbWorker.contains(campaign)) {
+
+            if (mDbWorker.contains(campaign) && campaign.equals(getCampaignById(campaign.campaignId))) {
                 ArTvLogger.printMessage(false, ": already loaded");
                 mTotalProgress += campaign.assets.size() * progressPerAsset;
                 publishProgress();
@@ -64,6 +65,7 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
 
             for (final Asset asset : campaign.assets) {
                 ArTvLogger.printMessage("Loading asset " + asset.name + "...");
+
                 if (mDbWorker.contains(asset)) {
                     ArTvLogger.printMessage(false, "already loaded");
                     mTotalProgress += progressPerAsset;
@@ -181,4 +183,12 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
         final String address = URLDecoder.decode(uri.toString(), "utf-8");
         return new URL(address);
     }
+
+    private final Campaign getCampaignById(final int _campaignId) {
+        for (final Campaign campaign : mDbWorker.getAllCampaigns()) {
+            if (campaign.campaignId == _campaignId) return campaign;
+        }
+        throw new RuntimeException("No campaign with such id " + _campaignId);
+    }
+
 }

@@ -129,9 +129,22 @@ public final class StartWorker {
                 ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
                 ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
                 mDbWorker.write(_result.getMsgBoardCampaign());
+                mCampaignWorker.loadCampaigns(_result.getCampaigns(), regularCampaignDownloadListener);
             } else {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
             }
+        }
+    };
+
+    private final ICampaignDownloadListener regularCampaignDownloadListener = new ICampaignDownloadListener() {
+        @Override
+        public final void onCampaignDownloadFinished(final ArTvResult _result) {
+            ArTvLogger.printMessage("Campaigns load success: " + _result.getSuccess());
+        }
+
+        @Override
+        public final void onPercentLoaded(final double _percent) {
+            mSplashFragmentListener.onPercentLoaded(_percent);
         }
     };
 

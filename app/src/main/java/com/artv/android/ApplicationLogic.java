@@ -75,6 +75,7 @@ public final class ApplicationLogic {
         mStartWorker.setStateWorker(mStateWorker);
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
+        mStartWorker.setDbWorker(mDbWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
