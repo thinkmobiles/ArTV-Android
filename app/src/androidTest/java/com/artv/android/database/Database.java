@@ -45,6 +45,20 @@ public class Database {
     }
 
     @Test
+    public void DataBase_WriteAndEquals_Campaign() {
+        Campaign campaign = createFirstTestCampaign();
+
+        dbManager.write(campaign);
+
+        Campaign resultCampaign = dbManager.getCampaignById(campaign.campaignId);
+
+        Assert.assertEquals("Campaigns not equals",campaign,resultCampaign);
+        Assert.assertEquals("Campaigns assets sizes not equals", campaign.assets.size(), resultCampaign.assets.size());
+        Assert.assertEquals("Campaign assert1 not equal", campaign.assets.get(0), resultCampaign.assets.get(0));
+        Assert.assertEquals("Campaign assert2 not equal", campaign.assets.get(1), resultCampaign.assets.get(1));
+    }
+
+    @Test
     public void DataBase_WriteAndContains_Assert() {
         Campaign campaign = createFirstTestCampaign();
         dbManager.write(campaign.assets.get(0));
@@ -62,6 +76,24 @@ public class Database {
         for (int i=0; i<resAssets.size(); i++) {
             Assert.assertEquals("Asserts not equal", campaign.assets.get(i), resAssets.get(i));
         }
+    }
+
+    @Test
+    public void DataBase_GetCampaignByID() {
+        Campaign campaign = createFirstTestCampaign();
+        dbManager.write(campaign);
+
+        Assert.assertEquals("Campaign not equals",campaign,dbManager.getCampaignById(campaign.campaignId));
+    }
+
+    @Test
+    public void DataBase_GetCampaignByID_WriteWriteEquals() {
+        Campaign campaign = createFirstTestCampaign();
+        dbManager.write(campaign);
+        campaign.crcVersion = "55555";
+        dbManager.write(campaign);
+
+        Assert.assertEquals("Campaigns not equals", campaign, dbManager.getCampaignById(campaign.campaignId));
     }
 
     @Test

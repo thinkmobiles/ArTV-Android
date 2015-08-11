@@ -59,7 +59,7 @@ public final class Transformer {
 
     protected static DBCampaign createDBCampaign(Campaign campaign) {
         DBCampaign dbCampaign = new DBCampaign();
-        dbCampaign.setCampaignId(campaign.campaignId);
+        dbCampaign.setId((long) campaign.campaignId);
         dbCampaign.setCrcVersion(campaign.crcVersion);
         dbCampaign.setStartDate(campaign.startDate);
         dbCampaign.setEndDate(campaign.endDate);
@@ -86,7 +86,7 @@ public final class Transformer {
 
     protected static Campaign createCampaign(DBCampaign dbCampaign) {
         Campaign campaign = new Campaign();
-        campaign.campaignId = dbCampaign.getCampaignId();
+        campaign.campaignId = dbCampaign.getId().intValue();
         campaign.crcVersion = dbCampaign.getCrcVersion();
         campaign.startDate = dbCampaign.getStartDate();
         campaign.endDate = dbCampaign.getEndDate();

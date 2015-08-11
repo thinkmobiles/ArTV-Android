@@ -194,11 +194,13 @@ public class DBManager implements AsyncOperationListener, DbWorker {
         try {
             openReadableDb();
             DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
-            List<DBCampaign> resCampaigns = dbCampaignDao.queryBuilder()
-                    .where(DBCampaignDao.Properties.CampaignId.eq(_campaign.campaignId))
-                    .build().list();
+//            List<DBCampaign> resCampaigns = dbCampaignDao.queryBuilder()
+//                    .where(DBCampaignDao.Properties.CampaignId.eq(_campaign.campaignId))
+//                    .build().list();
+            DBCampaign campaign = dbCampaignDao.load((long) _campaign.campaignId);
             daoSession.clear();
-            return resCampaigns.size() > 0;
+
+            return campaign != null;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -306,6 +308,21 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             e.printStackTrace();
         }
         return resAssets;
+    }
+
+    @Override
+    public Campaign getCampaignById(int _campaignId) {
+        Campaign campaign = null;
+        try {
+            openReadableDb();
+            DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
+            campaign = Transformer.createCampaign(dbCampaignDao.load((long) _campaignId));
+            daoSession.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return campaign;
     }
 
     @Override

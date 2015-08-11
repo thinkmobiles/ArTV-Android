@@ -52,7 +52,6 @@ public class ArtvDaoGenerator {
     private static Entity addCampaign(Schema schema) {
         Entity campaign = schema.addEntity("DBCampaign");
         campaign.addIdProperty().primaryKey();
-        campaign.addIntProperty("campaignId");
         campaign.addStringProperty("crcVersion");
         campaign.addStringProperty("startDate");
         campaign.addStringProperty("endDate");
