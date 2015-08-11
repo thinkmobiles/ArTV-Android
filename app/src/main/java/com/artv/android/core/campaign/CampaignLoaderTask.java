@@ -101,7 +101,7 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
     private final ArTvResult buildCancelledResult() {
         return new ArTvResult.Builder()
                 .setSuccess(false)
-                .setMessage("Loading task cancelled")
+                .setMessage("Loading campaign cancelled")
                 .build();
     }
 

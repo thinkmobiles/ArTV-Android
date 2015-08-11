@@ -63,16 +63,15 @@ public final class InitWorker {
             getToken();
         } else {
             mDisplaySwitcher.turnOn(new DisplaySwitcherAdapterCallback() {
-
                 @Override
                 public final void turnedOn() {
-                    ArTvLogger.printMessage("Turned on display");
+                    ArTvLogger.printMessage("Display turned on");
                     getToken();
                 }
 
                 @Override
                 public final void switchFailed() {
-                    mCallback.onInitFail(buildInitResult(false, "Failed to turn on display"));
+                    mCallback.onInitFail(buildInitResult(false, "failed to turn on display"));
                 }
             });
         }
@@ -89,7 +88,7 @@ public final class InitWorker {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
                 mInitData.setToken(_respObj.token);
-                ArTvLogger.printMessage(_respObj.apiType + " : success");
+                ArTvLogger.printMessage(_respObj.apiType + ": success");
                 getGlobalConfig();
             }
 

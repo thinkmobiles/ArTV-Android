@@ -92,7 +92,6 @@ public final class CampaignWorker {
                 _callback.onFinished(
                         new CampaignResult.Builder()
                                 .setSuccess(true)
-                                .setMessage("Success")
                                 .setCampaigns(_respObj.campaigns)
                                 .setMsgBoardCampaign(_respObj.msgBoardCampaign)
                                 .build()

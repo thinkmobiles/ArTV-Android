@@ -49,7 +49,7 @@ public final class StartWorker {
         mBeaconWorker = _beaconWorker;
     }
 
-    public void setDbWorker(final DbWorker _dbWorker) {
+    public final void setDbWorker(final DbWorker _dbWorker) {
         mDbWorker = _dbWorker;
     }
 
@@ -59,19 +59,20 @@ public final class StartWorker {
 
     public final void beginInitializing() {
         mInitWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        ArTvLogger.printMessage("Start initializing");
 
         mInitWorker.startInitializing(
                 new IInitCallback() {
                     @Override
                     public final void onInitSuccess(final ArTvResult _result) {
-                        ArTvLogger.printMessage(_result.getMessage());
+                        ArTvLogger.printMessage("Initializing success");
                         mSplashFragmentListener.showProgressUi();
                         beginCampaignLogic();
                     }
 
                     @Override
                     public final void onInitFail(final ArTvResult _result) {
-                        ArTvLogger.printMessage(_result.getMessage());
+                        ArTvLogger.printMessage("Initializing failed, reason: " + _result.getMessage());
                     }
                 }
         );
@@ -95,13 +96,15 @@ public final class StartWorker {
     }
 
     private final void doInitialCampaignDownload() {
+        ArTvLogger.printMessage("Start initial campaign download");
         mCampaignWorker.doInitialCampaignDownload(new ICampaignDownloadListener() {
             @Override
             public final void onCampaignDownloadFinished(final ArTvResult _result) {
                 if (_result.getSuccess()) {
-                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                    ArTvLogger.printMessage("Initial campaign download success");
+//                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
                 } else {
-                    ArTvLogger.printMessage("Initial loading failed, reason: " + _result.getMessage());
+                    ArTvLogger.printMessage("Initial campaign download failed, reason: " + _result.getMessage());
                 }
             }
 
@@ -113,6 +116,7 @@ public final class StartWorker {
     }
 
     public final void cancel() {
+        ArTvLogger.printMessage("Cancel downloading campaign...");
         mCampaignWorker.cancelLoading();
     }
 
@@ -142,12 +146,12 @@ public final class StartWorker {
     private final ICampaignDownloadListener regularCampaignDownloadListener = new ICampaignDownloadListener() {
         @Override
         public final void onCampaignDownloadFinished(final ArTvResult _result) {
-            ArTvLogger.printMessage("Campaigns load success: " + _result.getSuccess());
+            ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
         }
 
         @Override
         public final void onPercentLoaded(final double _percent) {
-            mSplashFragmentListener.onPercentLoaded(_percent);
+            if (mSplashFragmentListener != null) mSplashFragmentListener.onPercentLoaded(_percent);
         }
     };
 
