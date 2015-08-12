@@ -107,6 +107,7 @@ public class InitWorker {
         mApiWorker.doGetGlobalConfig(requestObject, new WebRequestCallback<GetGlobalConfigResponseObject>() {
             @Override
             public final void onSuccess(final GetGlobalConfigResponseObject _respObj) {
+                _respObj.globalConfig.prepareEntries();
                 mInitData.setGlobalConfig(_respObj.globalConfig);
                 ArTvLogger.printMessage(_respObj.apiType + " : success");
                 getDeviceConfig();

@@ -19,18 +19,31 @@ public final class GlobalConfig {
     public ArrayList<Entry> entries;
 
     /**
+     * Replace "" with single ".
+     * ""key"" -> "key".
+     */
+    public final void prepareEntries() {
+        for (final Entry entry : entries) {
+            entry.setName(entry.getName().replaceAll("\"", ""));
+            entry.setValue(entry.getValue().replaceAll("\"", ""));
+        }
+    }
+
+    /**
      * Returns default time to play.
      * @return time in seconds.
      */
     public final int getServerDefaultPlayTime() {
         for (final Entry entry : entries) {
-            if (KEY_DEF_PLAY_TIME.equals(entry.name)) {
+            if (KEY_DEF_PLAY_TIME.equals(entry.getName())) {
+                int time;
                 try {
-                    return Integer.parseInt(entry.value);
+                    time = Integer.parseInt(entry.getValue());
                 } catch (final NumberFormatException _e) {
                     _e.printStackTrace();
-                    break;
+                    continue;
                 }
+                return time;
             }
         }
 

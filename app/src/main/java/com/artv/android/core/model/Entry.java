@@ -11,9 +11,24 @@ import org.simpleframework.xml.Root;
 public final class Entry {
 
     @Element(name = "Name")
-    public String name;
-
+    private String mName;
     @Element(name = "Value")
-    public String value;
+    private String mValue;
+
+    public final String getName() {
+        return mName;
+    }
+
+    public final void setName(final String _name) {
+        mName = _name;
+    }
+
+    public final String getValue() {
+        return mValue;
+    }
+
+    public final void setValue(final String _value) {
+        mValue = _value;
+    }
 
 }

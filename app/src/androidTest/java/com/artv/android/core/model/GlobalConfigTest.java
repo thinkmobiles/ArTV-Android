@@ -24,6 +24,19 @@ public final class GlobalConfigTest {
     }
 
     @Test
+    public final void BadDataFormat_RemovesRedundantQuotes() {
+        mGlobalConfig.entries = new ArrayList<>();
+        final Entry entry = new Entry();
+        entry.setName("\"" + GlobalConfig.KEY_DEF_PLAY_TIME + "\"");
+        entry.setValue("\"155\"");
+        mGlobalConfig.entries.add(entry);
+        mGlobalConfig.prepareEntries();
+
+        Assert.assertTrue(GlobalConfig.KEY_DEF_PLAY_TIME.equals(mGlobalConfig.entries.get(0).getName()));
+        Assert.assertTrue("155".equals(mGlobalConfig.entries.get(0).getValue()));
+    }
+
+    @Test
     public final void NoTimeInGonfig_ReturnDefaultTime() throws NoSuchFieldException, IllegalAccessException {
         mGlobalConfig.entries = new ArrayList<>();
         Assert.assertEquals(GlobalConfig.DEF_PLAY_TIME, mGlobalConfig.getServerDefaultPlayTime());
@@ -33,8 +46,8 @@ public final class GlobalConfigTest {
     public final void HasTimeInGonfig_ReturnThatTime() throws NoSuchFieldException, IllegalAccessException {
         mGlobalConfig.entries = new ArrayList<>();
         final Entry entry = new Entry();
-        entry.name = GlobalConfig.KEY_DEF_PLAY_TIME;
-        entry.value = "155";
+        entry.setName(GlobalConfig.KEY_DEF_PLAY_TIME);
+        entry.setValue("155");
         mGlobalConfig.entries.add(entry);
         Assert.assertEquals(155, mGlobalConfig.getServerDefaultPlayTime());
     }
