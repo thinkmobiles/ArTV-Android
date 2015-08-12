@@ -10,8 +10,8 @@ public final class ErrorResponseObject {
     public ApiType apiType;
     public String error;
 
-    private ErrorResponseObject() {
-    }
+    private ErrorResponseObject() {}
+
     public static final class Builder {
 
         private ErrorResponseObject mErrorResponseObject;

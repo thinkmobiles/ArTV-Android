@@ -3,7 +3,7 @@ package com.artv.android.core.config_info;
 /**
  * Created by ZOG on 7/6/2015.
  */
-public final class ConfigInfo {
+public class ConfigInfo {
 
     private String mDeviceId;
     private String mMasterDeviceIp;
@@ -31,7 +31,7 @@ public final class ConfigInfo {
         return mPassword;
     }
 
-    public final boolean hasConfigInfo() {
+    public boolean hasConfigInfo() {
         return mDeviceId != null && !mDeviceId.isEmpty()
 //                && mMasterDeviceIp != null && !mMasterDeviceIp.isEmpty()
                 && mUser != null && !mUser.isEmpty()

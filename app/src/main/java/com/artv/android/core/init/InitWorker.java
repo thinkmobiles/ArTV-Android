@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Class, used for initial authentication (getToken) and load configs (GetGlobalConfig, GetDeviceConfig).
  * todo: rework to queue
  */
-public final class InitWorker {
+public class InitWorker {
 
     private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;

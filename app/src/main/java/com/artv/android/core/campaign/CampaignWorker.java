@@ -22,7 +22,7 @@ import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
  *
  * Created by ZOG on 7/28/2015.
  */
-public final class CampaignWorker {
+public class CampaignWorker {
 
     private static final int ID_ALL_CAMPAIGN = 0;
 
@@ -48,7 +48,7 @@ public final class CampaignWorker {
         mDbWorker = _dbWorker;
     }
 
-    public final boolean hasCampaignToPlay() {
+    public boolean hasCampaignToPlay() {
         return !mDbWorker.getAllCampaigns().isEmpty();
     }
 

@@ -58,63 +58,63 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
                 .findFragmentById(R.id.flFragmentContainer_AM);
     }
 
-    @Ignore
-    @Test
-    public final void ActivityStart_StateAppStartWithConfigInfo_SplashScreenFragmentIsShown() {
-        final ConfigInfo ci = new ConfigInfo.Builder()
-                .setDeviceId("id")
-                .setMasterDeviceIp("ip")
-                .setUser("user")
-                .setPassword("password")
-                .build();
+//    @Ignore
+//    @Test
+//    public final void ActivityStart_StateAppStartWithConfigInfo_SplashScreenFragmentIsShown() {
+//        final ConfigInfo ci = new ConfigInfo.Builder()
+//                .setDeviceId("id")
+//                .setMasterDeviceIp("ip")
+//                .setUser("user")
+//                .setPassword("password")
+//                .build();
+//
+//        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
+//        Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getApplicationLogic().getStateWorker().getArTvState());
+//
+//        mMainActivity.finish();
+//        setActivity(null);
+//        mMainActivity = getActivity();
+//
+//        Fragment fragment = (SplashScreenFragment) mMainActivity
+//                .getFragmentManager()
+//                .findFragmentById(R.id.flFragmentContainer_AM);
+//
+//        mMainActivity.getApplicationLogic().getConfigInfoWorker().removeConfigInfo();
+//    }
 
-        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
-        Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getApplicationLogic().getStateWorker().getArTvState());
-
-        mMainActivity.finish();
-        setActivity(null);
-        mMainActivity = getActivity();
-
-        Fragment fragment = (SplashScreenFragment) mMainActivity
-                .getFragmentManager()
-                .findFragmentById(R.id.flFragmentContainer_AM);
-
-        mMainActivity.getApplicationLogic().getConfigInfoWorker().removeConfigInfo();
-    }
-
-    @Ignore
-    @Test
-    public final void SetAndRemoveConfigInfo_FragmentsChangeProperly() throws Throwable {
-        final ConfigInfo ci = new ConfigInfo.Builder()
-                .setDeviceId("id")
-                .setMasterDeviceIp("ip")
-                .setUser("user")
-                .setPassword("password")
-                .build();
-
-        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
-        runTestOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mMainActivity.getFragmentManager().executePendingTransactions();
-            }
-        });
-
-        Fragment fragment = (SplashScreenFragment) mMainActivity
-                .getFragmentManager()
-                .findFragmentById(R.id.flFragmentContainer_AM);
-
-        runTestOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyNeedRemoveConfigInfo();
-                mMainActivity.getFragmentManager().executePendingTransactions();
-            }
-        });
-
-        fragment = (ConfigInfoFragment) mMainActivity
-                .getFragmentManager()
-                .findFragmentById(R.id.flFragmentContainer_AM);
-    }
+//    @Ignore
+//    @Test
+//    public final void SetAndRemoveConfigInfo_FragmentsChangeProperly() throws Throwable {
+//        final ConfigInfo ci = new ConfigInfo.Builder()
+//                .setDeviceId("id")
+//                .setMasterDeviceIp("ip")
+//                .setUser("user")
+//                .setPassword("password")
+//                .build();
+//
+//        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
+//        runTestOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mMainActivity.getFragmentManager().executePendingTransactions();
+//            }
+//        });
+//
+//        Fragment fragment = (SplashScreenFragment) mMainActivity
+//                .getFragmentManager()
+//                .findFragmentById(R.id.flFragmentContainer_AM);
+//
+//        runTestOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyNeedRemoveConfigInfo();
+//                mMainActivity.getFragmentManager().executePendingTransactions();
+//            }
+//        });
+//
+//        fragment = (ConfigInfoFragment) mMainActivity
+//                .getFragmentManager()
+//                .findFragmentById(R.id.flFragmentContainer_AM);
+//    }
 
 }

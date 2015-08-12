@@ -86,20 +86,8 @@ public final class ApplicationLogic {
         return mStateWorker;
     }
 
-    public final ApiWorker getApiWorker() {
-        return mApiWorker;
-    }
-
-    public final InitWorker getInitWorker() {
-        return mInitWorker;
-    }
-
     public final DisplaySwitcher getDisplaySwitcher() {
         return mDisplaySwitcher;
-    }
-
-    public final CampaignWorker getCampaignWorker() {
-        return mCampaignWorker;
     }
 
     public final DbWorker getDbWorker() {

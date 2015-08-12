@@ -111,7 +111,7 @@ public final class ApiWorker {
 
     public final void doBeacon(final BeaconRequestObject _requestObject,
                                final WebRequestCallback<BeaconResponseObject> _callback) {
-        TestRestClient.getApiService().beacon(_requestObject.getQuery(), _requestObject.beacon,
+        TestRestClient.getApiService().beacon(_requestObject.getQuery(), _requestObject.getBeacon(),
                 new Callback<BeaconResponseObject>() {
                     @Override
                     public final void success(final BeaconResponseObject _beaconResponseObject, final Response _response) {

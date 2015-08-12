@@ -19,7 +19,7 @@ import java.util.ArrayList;
 /**
  * Created by ZOG on 7/27/2015.
  */
-public final class BeaconWorker {
+public class BeaconWorker {
 
     private ConfigInfo mConfigInfo;
     private InitData mInitData;
@@ -48,10 +48,11 @@ public final class BeaconWorker {
     }
 
     public final void doBeacon(final ICampaignCallback _callback) {
-        final BeaconRequestObject requestObject = new BeaconRequestObject();
-        requestObject.token = mInitData.getToken();
-        requestObject.tagId = mConfigInfo.getDeviceId();
-        requestObject.beacon = buildBeacon();
+        final BeaconRequestObject requestObject = new BeaconRequestObject.Builder()
+                .setToken(mInitData.getToken())
+                .setTagID(mConfigInfo.getDeviceId())
+                .setBeacon(buildBeacon())
+                .build();
 
         mApiWorker.doBeacon(requestObject, new WebRequestCallback<BeaconResponseObject>() {
             @Override

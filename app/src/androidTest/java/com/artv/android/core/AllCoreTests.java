@@ -19,7 +19,6 @@ import org.junit.runners.Suite;
         AllConfigInfoTests.class,
         AllInitTests.class,
         AllStateTests.class,
-        ApplicationLogicTest.class,
         AllModelTests.class
 })
 public final class AllCoreTests {

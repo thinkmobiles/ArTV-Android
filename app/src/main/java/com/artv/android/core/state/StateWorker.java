@@ -6,7 +6,7 @@ import java.util.Set;
 /**
  * Created by ZOG on 7/7/2015.
  */
-public final class StateWorker {
+public class StateWorker {
 
     private ArTvState mState = ArTvState.STATE_APP_START;
 

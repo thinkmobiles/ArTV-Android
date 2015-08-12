@@ -18,7 +18,7 @@ import com.artv.android.system.fragments.splash.ISplashFragmentListener;
 /**
  * Created by ZOG on 8/10/2015.
  */
-public final class StartWorker {
+public class StartWorker {
 
     private InitWorker mInitWorker;
     private ConfigInfoWorker mConfigInfoWorker;

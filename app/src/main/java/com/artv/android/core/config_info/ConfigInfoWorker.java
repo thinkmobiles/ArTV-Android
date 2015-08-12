@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * Created by ZOG on 7/6/2015.
  */
-public final class ConfigInfoWorker {
+public class ConfigInfoWorker {
 
     private static final String KEY_DEVICE_ID           = "key_device_id";
     private static final String KEY_MASTER_DEVICE_IP    = "key_master_device_ip";
@@ -40,7 +40,7 @@ public final class ConfigInfoWorker {
         mConfigInfo = _configInfo;
     }
 
-    public final ConfigInfo getConfigInfo() {
+    public ConfigInfo getConfigInfo() {
         return mConfigInfo;
     }
 
