@@ -7,6 +7,7 @@ import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.model.Beacon;
 import com.artv.android.core.model.DeviceConfig;
+import com.artv.android.core.model.GlobalConfig;
 
 import java.util.Map;
 
@@ -36,7 +37,7 @@ public interface MainTVApi {
     @GET(ApiConst.PATH_GET_GLOBAL_CONFIG)
     void getGlobalConfig(
             @QueryMap() Map<String, String> _query,
-            Callback<GetGlobalConfigResponseObject> _callback);
+            Callback<GlobalConfig> _callback);
 
     @GET(ApiConst.PATH_GET_DEVICE_CONFIG)
     void getDeviceConfig(

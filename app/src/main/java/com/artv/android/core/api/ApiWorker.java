@@ -15,6 +15,7 @@ import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.api.rest_client.TestRestClient;
 import com.artv.android.core.model.DeviceConfig;
+import com.artv.android.core.model.GlobalConfig;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -61,12 +62,14 @@ public final class ApiWorker {
 
     public final void doGetGlobalConfig(final GetGlobalConfigRequestObject _requestObject,
                                  final WebRequestCallback<GetGlobalConfigResponseObject> _callback) {
-        TestRestClient.getApiService().getGlobalConfig(_requestObject.getQuery(), new Callback<GetGlobalConfigResponseObject>() {
+        TestRestClient.getApiService().getGlobalConfig(_requestObject.getQuery(), new Callback<GlobalConfig>() {
 
             @Override
-            public void success(GetGlobalConfigResponseObject _getGlobalConfigResponseObject, Response _response) {
+            public void success(final GlobalConfig _globalConfig, final Response _response) {
                 if (_response != null) {
-                    _callback.onSuccess(_getGlobalConfigResponseObject);
+                    final GetGlobalConfigResponseObject responseObject = new GetGlobalConfigResponseObject();
+                    responseObject.globalConfig = _globalConfig;
+                    _callback.onSuccess(responseObject);
                 }
             }
 

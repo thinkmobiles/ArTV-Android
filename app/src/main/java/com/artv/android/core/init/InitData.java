@@ -2,6 +2,7 @@ package com.artv.android.core.init;
 
 import com.artv.android.core.model.DeviceConfig;
 import com.artv.android.core.model.Entry;
+import com.artv.android.core.model.GlobalConfig;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public final class InitData {
 
     private String mToken;
-    private ArrayList<Entry> mGlobalConfig;
+    private GlobalConfig mGlobalConfig;
     private DeviceConfig mDeviceConfig;
 
     public final String getToken() {
@@ -22,11 +23,11 @@ public final class InitData {
         mToken = _token;
     }
 
-    public final ArrayList<Entry> getGlobalConfig() {
+    public final GlobalConfig getGlobalConfig() {
         return mGlobalConfig;
     }
 
-    public final void setGlobalConfig(final ArrayList<Entry> _globalConfig) {
+    public final void setGlobalConfig(final GlobalConfig _globalConfig) {
         mGlobalConfig = _globalConfig;
     }
 

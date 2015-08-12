@@ -9,7 +9,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         AssetTest.class,
-        CampaignTest.class
+        CampaignTest.class,
+        GlobalConfig.class
 })
 public class AllModelTests {
 }

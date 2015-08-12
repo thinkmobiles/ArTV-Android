@@ -21,6 +21,7 @@ import android.widget.VideoView;
 import com.artv.android.R;
 import com.artv.android.core.Constants;
 import com.artv.android.core.model.Asset;
+import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.DbWorker;
 import com.artv.android.system.custom_views.CustomMediaController;
@@ -49,9 +50,13 @@ public final class MediaPlayerFragment extends BaseFragment {
     private DbWorker mDbWorker;
     private List<File> mFiles;
 
+    private GlobalConfig globalConfig;
+
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
+
+        globalConfig = getApplicationLogic().getInitWorker().getInitData().getGlobalConfig();
 
         mDbWorker = getApplicationLogic().getDbWorker();
         mFiles = new ArrayList<>();
@@ -63,7 +68,7 @@ public final class MediaPlayerFragment extends BaseFragment {
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
-        final View view = _inflater.inflate(R.layout.fragment_media_player, null);
+        final View view = _inflater.inflate(R.layout.fragment_media_player, _container, false);
 
         findViews(view);
         prepareVideoViews();
@@ -213,7 +218,7 @@ public final class MediaPlayerFragment extends BaseFragment {
                     mCurrentAsset++;
                     doShowLogic();
                 }
-            }, 5000);
+            }, globalConfig.getServerDefaultPlayTime() * 1000);
 
         } else {
             ivImage.setVisibility(View.INVISIBLE);

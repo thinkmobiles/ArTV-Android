@@ -98,6 +98,10 @@ public final class ApplicationLogic {
         return mStartWorker;
     }
 
+    public final InitWorker getInitWorker() {
+        return mInitWorker;
+    }
+
     /**
      * Determine state when application start. Next steps will be triggered from UI.
      */
