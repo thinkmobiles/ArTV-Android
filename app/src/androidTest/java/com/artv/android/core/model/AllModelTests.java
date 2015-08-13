@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         AssetTest.class,
         CampaignTest.class,
-        GlobalConfig.class
+        GlobalConfigTest.class
 })
 public class AllModelTests {
 }
