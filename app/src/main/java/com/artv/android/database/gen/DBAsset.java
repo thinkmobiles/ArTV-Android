@@ -11,7 +11,7 @@ public class DBAsset {
     private String url;
     private Integer duration;
     private Integer sequence;
-    private long campaignId;
+    private long campaignsAssetsId;
 
     public DBAsset() {
     }
@@ -20,13 +20,13 @@ public class DBAsset {
         this.id = id;
     }
 
-    public DBAsset(Long id, String name, String url, Integer duration, Integer sequence, long campaignId) {
+    public DBAsset(Long id, String name, String url, Integer duration, Integer sequence, long campaignsAssetsId) {
         this.id = id;
         this.name = name;
         this.url = url;
         this.duration = duration;
         this.sequence = sequence;
-        this.campaignId = campaignId;
+        this.campaignsAssetsId = campaignsAssetsId;
     }
 
     public Long getId() {
@@ -69,12 +69,12 @@ public class DBAsset {
         this.sequence = sequence;
     }
 
-    public long getCampaignId() {
-        return campaignId;
+    public long getCampaignsAssetsId() {
+        return campaignsAssetsId;
     }
 
-    public void setCampaignId(long campaignId) {
-        this.campaignId = campaignId;
+    public void setCampaignsAssetsId(long campaignsAssetsId) {
+        this.campaignsAssetsId = campaignsAssetsId;
     }
 
 }

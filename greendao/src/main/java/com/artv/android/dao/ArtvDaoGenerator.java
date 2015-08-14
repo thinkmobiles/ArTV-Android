@@ -5,20 +5,19 @@ import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 import de.greenrobot.daogenerator.ToMany;
-import de.greenrobot.daogenerator.ToOne;
 
 public class ArtvDaoGenerator {
 
     private static final String PROJECT_DIR = System.getProperty("user.dir").replace("\\", "/");
 
-    private static final String OUT_DIR = PROJECT_DIR + "/src/main/java/";
+    private static final String OUT_DIR = PROJECT_DIR + "/app/src/main/java/";
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1, "com.artv.android.database.gen");
 
         addTables(schema);
 
-        new DaoGenerator().generateAll(schema, OUT_DIR.replace("greendao","app"));
+        new DaoGenerator().generateAll(schema, OUT_DIR);
     }
 
     /**
@@ -26,21 +25,24 @@ public class ArtvDaoGenerator {
      */
     private static void addTables(Schema schema) {
         /* entities */
-        Entity campaigns = addCampaign(schema);
-        Entity assets = addAssets(schema);
+        Entity campaign = addCampaign(schema);
+        Entity asset = addAsset(schema);
+        Entity campaignsAssets = addCampaignsAssets(schema);
         Entity msgBoardCampaign = addMsgBoardCampaign(schema);
         Entity message = addMessage(schema);
 
         /* properties */
-        Property campaignIdForAssets = assets.addLongProperty("campaignId").notNull().getProperty();
-        Property msgBoardIDForMessages = message.addLongProperty("msgBoardID").notNull().getProperty();
-
+        final Property campaignsAssetsIdForCampaign = campaign.addLongProperty("campaignsAssetsId").notNull().getProperty();
+        final Property campaignsAssetsIdForAsset = asset.addLongProperty("campaignsAssetsId").notNull().getProperty();
+        final Property msgBoardIDForMessages = message.addLongProperty("msgBoardID").notNull().getProperty();
 
         /* relationships between entities */
-        ToMany campaignToAssets = campaigns.addToMany(assets, campaignIdForAssets);
-        campaignToAssets.setName("assets"); // one-to-many
+        final ToMany campaignsAssetsToCampaigns = campaignsAssets.addToMany(campaign, campaignsAssetsIdForCampaign);
+        campaignsAssetsToCampaigns.setName("campaigns");
+        final ToMany campaignsAssetsToAssets = campaignsAssets.addToMany(asset, campaignsAssetsIdForAsset);
+        campaignsAssetsToAssets.setName("assets");
 
-        ToMany msgBoardCampaignToMessages = msgBoardCampaign.addToMany(message,msgBoardIDForMessages);
+        ToMany msgBoardCampaignToMessages = msgBoardCampaign.addToMany(message, msgBoardIDForMessages);
         msgBoardCampaignToMessages.setName("messages");
     }
 
@@ -66,15 +68,24 @@ public class ArtvDaoGenerator {
      *
      * @return Assets entity
      */
-    private static Entity addAssets(Schema schema) {
+    private static Entity addAsset(Schema schema) {
         Entity asset = schema.addEntity("DBAsset");
-        asset.addIdProperty().primaryKey().autoincrement();
+        asset.addIdProperty().primaryKey();
         asset.addStringProperty("name");
         asset.addStringProperty("url");
         asset.addIntProperty("duration");
         asset.addIntProperty("sequence");
 
         return asset;
+    }
+
+    private static Entity addCampaignsAssets(final Schema _schema) {
+        Entity campaignsAssets = _schema.addEntity("DBCampaignsAssets");
+        campaignsAssets.addIdProperty().primaryKey().autoincrement();
+        campaignsAssets.addIntProperty("campaignId");
+        campaignsAssets.addIntProperty("assetId");
+
+        return campaignsAssets;
     }
 
     private static Entity addMsgBoardCampaign(Schema schema) {

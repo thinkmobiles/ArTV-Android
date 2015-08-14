@@ -1,5 +1,6 @@
 package com.artv.android.database.gen;
 
+import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -7,6 +8,8 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.internal.DaoConfig;
+import de.greenrobot.dao.query.Query;
+import de.greenrobot.dao.query.QueryBuilder;
 
 import com.artv.android.database.gen.DBCampaign;
 
@@ -30,10 +33,10 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
         public final static Property Sequence = new Property(4, Integer.class, "sequence", false, "SEQUENCE");
         public final static Property PlayDay = new Property(5, String.class, "playDay", false, "PLAY_DAY");
         public final static Property OverrideTime = new Property(6, String.class, "overrideTime", false, "OVERRIDE_TIME");
+        public final static Property CampaignsAssetsId = new Property(7, long.class, "campaignsAssetsId", false, "CAMPAIGNS_ASSETS_ID");
     };
 
-    private DaoSession daoSession;
-
+    private Query<DBCampaign> dBCampaignsAssets_CampaignsQuery;
 
     public DBCampaignDao(DaoConfig config) {
         super(config);
@@ -41,7 +44,6 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
     
     public DBCampaignDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
-        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -54,7 +56,8 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
                 "'END_DATE' TEXT," + // 3: endDate
                 "'SEQUENCE' INTEGER," + // 4: sequence
                 "'PLAY_DAY' TEXT," + // 5: playDay
-                "'OVERRIDE_TIME' TEXT);"); // 6: overrideTime
+                "'OVERRIDE_TIME' TEXT," + // 6: overrideTime
+                "'CAMPAIGNS_ASSETS_ID' INTEGER NOT NULL );"); // 7: campaignsAssetsId
     }
 
     /** Drops the underlying database table. */
@@ -102,12 +105,7 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
         if (overrideTime != null) {
             stmt.bindString(7, overrideTime);
         }
-    }
-
-    @Override
-    protected void attachEntity(DBCampaign entity) {
-        super.attachEntity(entity);
-        entity.__setDaoSession(daoSession);
+        stmt.bindLong(8, entity.getCampaignsAssetsId());
     }
 
     /** @inheritdoc */
@@ -126,7 +124,8 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // endDate
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // sequence
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // playDay
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // overrideTime
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // overrideTime
+            cursor.getLong(offset + 7) // campaignsAssetsId
         );
         return entity;
     }
@@ -141,6 +140,7 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
         entity.setSequence(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
         entity.setPlayDay(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setOverrideTime(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setCampaignsAssetsId(cursor.getLong(offset + 7));
      }
     
     /** @inheritdoc */
@@ -166,4 +166,18 @@ public class DBCampaignDao extends AbstractDao<DBCampaign, Long> {
         return true;
     }
     
+    /** Internal query to resolve the "campaigns" to-many relationship of DBCampaignsAssets. */
+    public List<DBCampaign> _queryDBCampaignsAssets_Campaigns(long campaignsAssetsId) {
+        synchronized (this) {
+            if (dBCampaignsAssets_CampaignsQuery == null) {
+                QueryBuilder<DBCampaign> queryBuilder = queryBuilder();
+                queryBuilder.where(Properties.CampaignsAssetsId.eq(null));
+                dBCampaignsAssets_CampaignsQuery = queryBuilder.build();
+            }
+        }
+        Query<DBCampaign> query = dBCampaignsAssets_CampaignsQuery.forCurrentThread();
+        query.setParameter(0, campaignsAssetsId);
+        return query.list();
+    }
+
 }

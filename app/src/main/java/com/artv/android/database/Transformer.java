@@ -93,7 +93,7 @@ public final class Transformer {
         campaign.overrideTime = dbCampaign.getOverrideTime();
         campaign.sequence = dbCampaign.getSequence();
         campaign.playDay = dbCampaign.getPlayDay();
-        campaign.assets = createAssetsList(dbCampaign.getAssets());
+//        campaign.assets = createAssetsList(dbCampaign.getAssets());
 
         return campaign;
     }
@@ -119,7 +119,7 @@ public final class Transformer {
         DBAsset a;
         for (Asset asset : assetList) {
             a = createDBAsset(asset);
-            a.setCampaignId(campaignId);
+//            a.setCampaignId(campaignId);
             dbAssets.add(a);
         }
 

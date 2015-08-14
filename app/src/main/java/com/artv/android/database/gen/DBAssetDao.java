@@ -31,10 +31,10 @@ public class DBAssetDao extends AbstractDao<DBAsset, Long> {
         public final static Property Url = new Property(2, String.class, "url", false, "URL");
         public final static Property Duration = new Property(3, Integer.class, "duration", false, "DURATION");
         public final static Property Sequence = new Property(4, Integer.class, "sequence", false, "SEQUENCE");
-        public final static Property CampaignId = new Property(5, long.class, "campaignId", false, "CAMPAIGN_ID");
+        public final static Property CampaignsAssetsId = new Property(5, long.class, "campaignsAssetsId", false, "CAMPAIGNS_ASSETS_ID");
     };
 
-    private Query<DBAsset> dBCampaign_AssetsQuery;
+    private Query<DBAsset> dBCampaignsAssets_AssetsQuery;
 
     public DBAssetDao(DaoConfig config) {
         super(config);
@@ -48,12 +48,12 @@ public class DBAssetDao extends AbstractDao<DBAsset, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'DBASSET' (" + //
-                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'NAME' TEXT," + // 1: name
                 "'URL' TEXT," + // 2: url
                 "'DURATION' INTEGER," + // 3: duration
                 "'SEQUENCE' INTEGER," + // 4: sequence
-                "'CAMPAIGN_ID' INTEGER NOT NULL );"); // 5: campaignId
+                "'CAMPAIGNS_ASSETS_ID' INTEGER NOT NULL );"); // 5: campaignsAssetsId
     }
 
     /** Drops the underlying database table. */
@@ -91,7 +91,7 @@ public class DBAssetDao extends AbstractDao<DBAsset, Long> {
         if (sequence != null) {
             stmt.bindLong(5, sequence);
         }
-        stmt.bindLong(6, entity.getCampaignId());
+        stmt.bindLong(6, entity.getCampaignsAssetsId());
     }
 
     /** @inheritdoc */
@@ -109,7 +109,7 @@ public class DBAssetDao extends AbstractDao<DBAsset, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // url
             cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // duration
             cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // sequence
-            cursor.getLong(offset + 5) // campaignId
+            cursor.getLong(offset + 5) // campaignsAssetsId
         );
         return entity;
     }
@@ -122,7 +122,7 @@ public class DBAssetDao extends AbstractDao<DBAsset, Long> {
         entity.setUrl(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setDuration(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setSequence(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setCampaignId(cursor.getLong(offset + 5));
+        entity.setCampaignsAssetsId(cursor.getLong(offset + 5));
      }
     
     /** @inheritdoc */
@@ -148,17 +148,17 @@ public class DBAssetDao extends AbstractDao<DBAsset, Long> {
         return true;
     }
     
-    /** Internal query to resolve the "assets" to-many relationship of DBCampaign. */
-    public List<DBAsset> _queryDBCampaign_Assets(long campaignId) {
+    /** Internal query to resolve the "assets" to-many relationship of DBCampaignsAssets. */
+    public List<DBAsset> _queryDBCampaignsAssets_Assets(long campaignsAssetsId) {
         synchronized (this) {
-            if (dBCampaign_AssetsQuery == null) {
+            if (dBCampaignsAssets_AssetsQuery == null) {
                 QueryBuilder<DBAsset> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.CampaignId.eq(null));
-                dBCampaign_AssetsQuery = queryBuilder.build();
+                queryBuilder.where(Properties.CampaignsAssetsId.eq(null));
+                dBCampaignsAssets_AssetsQuery = queryBuilder.build();
             }
         }
-        Query<DBAsset> query = dBCampaign_AssetsQuery.forCurrentThread();
-        query.setParameter(0, campaignId);
+        Query<DBAsset> query = dBCampaignsAssets_AssetsQuery.forCurrentThread();
+        query.setParameter(0, campaignsAssetsId);
         return query.list();
     }
 

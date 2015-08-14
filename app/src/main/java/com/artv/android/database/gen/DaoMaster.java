@@ -10,6 +10,7 @@ import de.greenrobot.dao.identityscope.IdentityScopeType;
 
 import com.artv.android.database.gen.DBCampaignDao;
 import com.artv.android.database.gen.DBAssetDao;
+import com.artv.android.database.gen.DBCampaignsAssetsDao;
 import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DBMessageDao;
 
@@ -24,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void createAllTables(SQLiteDatabase db, boolean ifNotExists) {
         DBCampaignDao.createTable(db, ifNotExists);
         DBAssetDao.createTable(db, ifNotExists);
+        DBCampaignsAssetsDao.createTable(db, ifNotExists);
         DBmsgBoardCampaignDao.createTable(db, ifNotExists);
         DBMessageDao.createTable(db, ifNotExists);
     }
@@ -32,6 +34,7 @@ public class DaoMaster extends AbstractDaoMaster {
     public static void dropAllTables(SQLiteDatabase db, boolean ifExists) {
         DBCampaignDao.dropTable(db, ifExists);
         DBAssetDao.dropTable(db, ifExists);
+        DBCampaignsAssetsDao.dropTable(db, ifExists);
         DBmsgBoardCampaignDao.dropTable(db, ifExists);
         DBMessageDao.dropTable(db, ifExists);
     }
@@ -67,6 +70,7 @@ public class DaoMaster extends AbstractDaoMaster {
         super(db, SCHEMA_VERSION);
         registerDaoClass(DBCampaignDao.class);
         registerDaoClass(DBAssetDao.class);
+        registerDaoClass(DBCampaignsAssetsDao.class);
         registerDaoClass(DBmsgBoardCampaignDao.class);
         registerDaoClass(DBMessageDao.class);
     }

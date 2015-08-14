@@ -11,11 +11,13 @@ import de.greenrobot.dao.internal.DaoConfig;
 
 import com.artv.android.database.gen.DBCampaign;
 import com.artv.android.database.gen.DBAsset;
+import com.artv.android.database.gen.DBCampaignsAssets;
 import com.artv.android.database.gen.DBmsgBoardCampaign;
 import com.artv.android.database.gen.DBMessage;
 
 import com.artv.android.database.gen.DBCampaignDao;
 import com.artv.android.database.gen.DBAssetDao;
+import com.artv.android.database.gen.DBCampaignsAssetsDao;
 import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DBMessageDao;
 
@@ -30,11 +32,13 @@ public class DaoSession extends AbstractDaoSession {
 
     private final DaoConfig dBCampaignDaoConfig;
     private final DaoConfig dBAssetDaoConfig;
+    private final DaoConfig dBCampaignsAssetsDaoConfig;
     private final DaoConfig dBmsgBoardCampaignDaoConfig;
     private final DaoConfig dBMessageDaoConfig;
 
     private final DBCampaignDao dBCampaignDao;
     private final DBAssetDao dBAssetDao;
+    private final DBCampaignsAssetsDao dBCampaignsAssetsDao;
     private final DBmsgBoardCampaignDao dBmsgBoardCampaignDao;
     private final DBMessageDao dBMessageDao;
 
@@ -48,6 +52,9 @@ public class DaoSession extends AbstractDaoSession {
         dBAssetDaoConfig = daoConfigMap.get(DBAssetDao.class).clone();
         dBAssetDaoConfig.initIdentityScope(type);
 
+        dBCampaignsAssetsDaoConfig = daoConfigMap.get(DBCampaignsAssetsDao.class).clone();
+        dBCampaignsAssetsDaoConfig.initIdentityScope(type);
+
         dBmsgBoardCampaignDaoConfig = daoConfigMap.get(DBmsgBoardCampaignDao.class).clone();
         dBmsgBoardCampaignDaoConfig.initIdentityScope(type);
 
@@ -56,11 +63,13 @@ public class DaoSession extends AbstractDaoSession {
 
         dBCampaignDao = new DBCampaignDao(dBCampaignDaoConfig, this);
         dBAssetDao = new DBAssetDao(dBAssetDaoConfig, this);
+        dBCampaignsAssetsDao = new DBCampaignsAssetsDao(dBCampaignsAssetsDaoConfig, this);
         dBmsgBoardCampaignDao = new DBmsgBoardCampaignDao(dBmsgBoardCampaignDaoConfig, this);
         dBMessageDao = new DBMessageDao(dBMessageDaoConfig, this);
 
         registerDao(DBCampaign.class, dBCampaignDao);
         registerDao(DBAsset.class, dBAssetDao);
+        registerDao(DBCampaignsAssets.class, dBCampaignsAssetsDao);
         registerDao(DBmsgBoardCampaign.class, dBmsgBoardCampaignDao);
         registerDao(DBMessage.class, dBMessageDao);
     }
@@ -68,6 +77,7 @@ public class DaoSession extends AbstractDaoSession {
     public void clear() {
         dBCampaignDaoConfig.getIdentityScope().clear();
         dBAssetDaoConfig.getIdentityScope().clear();
+        dBCampaignsAssetsDaoConfig.getIdentityScope().clear();
         dBmsgBoardCampaignDaoConfig.getIdentityScope().clear();
         dBMessageDaoConfig.getIdentityScope().clear();
     }
@@ -78,6 +88,10 @@ public class DaoSession extends AbstractDaoSession {
 
     public DBAssetDao getDBAssetDao() {
         return dBAssetDao;
+    }
+
+    public DBCampaignsAssetsDao getDBCampaignsAssetsDao() {
+        return dBCampaignsAssetsDao;
     }
 
     public DBmsgBoardCampaignDao getDBmsgBoardCampaignDao() {

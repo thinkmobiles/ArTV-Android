@@ -3,6 +3,7 @@ package com.artv.android.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Paint;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -11,6 +12,8 @@ import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBAssetDao;
 import com.artv.android.database.gen.DBCampaign;
 import com.artv.android.database.gen.DBCampaignDao;
+import com.artv.android.database.gen.DBCampaignsAssets;
+import com.artv.android.database.gen.DBCampaignsAssetsDao;
 import com.artv.android.database.gen.DBMessage;
 import com.artv.android.database.gen.DBMessageDao;
 import com.artv.android.database.gen.DBmsgBoardCampaign;
@@ -18,6 +21,9 @@ import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
+import junit.framework.Assert;
+
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,6 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import de.greenrobot.dao.async.AsyncOperation;
 import de.greenrobot.dao.async.AsyncOperationListener;
 import de.greenrobot.dao.async.AsyncSession;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by Misha on 7/16/2015.
@@ -124,6 +131,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
             mHelper.onCreate(database);              // creates the tables
             asyncSession.deleteAll(DBAsset.class);    // clear all elements from a table
             asyncSession.deleteAll(DBCampaign.class);
+            asyncSession.deleteAll(DBCampaignsAssets.class);
             asyncSession.deleteAll(DBmsgBoardCampaign.class);
             asyncSession.deleteAll(DBMessage.class);
             asyncSession.waitForCompletion();
@@ -193,14 +201,15 @@ public class DBManager implements AsyncOperationListener, DbWorker {
     public boolean contains(Campaign _campaign) {
         try {
             openReadableDb();
-            DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
+            final DBCampaignDao dbCampaignDao = daoSession.getDBCampaignDao();
 //            List<DBCampaign> resCampaigns = dbCampaignDao.queryBuilder()
 //                    .where(DBCampaignDao.Properties.CampaignId.eq(_campaign.campaignId))
 //                    .build().list();
-            DBCampaign campaign = dbCampaignDao.load((long) _campaign.campaignId);
+            final DBCampaign campaign = dbCampaignDao.load((long) _campaign.campaignId);
             daoSession.clear();
 
             return campaign != null;
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -208,39 +217,57 @@ public class DBManager implements AsyncOperationListener, DbWorker {
     }
 
     @Override
-    public boolean contains(Asset _asset) {
+    public final boolean contains(final Asset _asset) {
         try {
             openReadableDb();
-            DBAssetDao dao = daoSession.getDBAssetDao();
-            List<DBAsset> resAssets = dao.queryBuilder()
-                    .where(_asset.url != null ? DBAssetDao.Properties.Url.eq(_asset.url) :
-                                    DBAssetDao.Properties.Url.isNull(),
-                            _asset.name != null ? DBAssetDao.Properties.Name.eq(_asset.name) :
-                                    DBAssetDao.Properties.Name.isNull(),
-                            DBAssetDao.Properties.Sequence.eq(_asset.sequence),
-                            DBAssetDao.Properties.Duration.eq(_asset.duration))
-                    .build().list();
+            DBAssetDao assetDao = daoSession.getDBAssetDao();
+//            List<DBAsset> resAssets = assetDao.queryBuilder()
+//                    .where(_asset.url != null ? DBAssetDao.Properties.Url.eq(_asset.url) :
+//                                    DBAssetDao.Properties.Url.isNull(),
+//                            _asset.name != null ? DBAssetDao.Properties.Name.eq(_asset.name) :
+//                                    DBAssetDao.Properties.Name.isNull(),
+//                            DBAssetDao.Properties.Sequence.eq(_asset.sequence),
+//                            DBAssetDao.Properties.Duration.eq(_asset.duration))
+//                    .build().list();
+            final DBAsset dbAsset = assetDao.load((long) _asset.getAssetId());
             daoSession.clear();
-            return resAssets.size() > 0;
+//            return resAssets.size() > 0;
+            return dbAsset != null;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
 
+    /**
+     * Write campaign into db, and relation between campaign and assets. Do not write assets.
+     * @param _campaign
+     */
     @Override
-    public void write(Campaign _campaign) {
+    public final void write(final Campaign _campaign) {
         if(_campaign == null) throw new NullPointerException("Campaign object or campaign id is zero");
         try {
             openWritableDb();
 
-            DBCampaign dbCampaign = Transformer.createDBCampaign(_campaign);
-            DBCampaignDao dao = daoSession.getDBCampaignDao();
+            final DBCampaign dbCampaign = Transformer.createDBCampaign(_campaign);
+            final DBCampaignDao dao = daoSession.getDBCampaignDao();
             dao.insertOrReplace(dbCampaign);
 
-            List<DBAsset> dbAssets = Transformer.createDBAssetsList(_campaign.assets, _campaign.campaignId);
-            DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
-            dbAssetDao.insertOrReplaceInTx(dbAssets);
+            final List<DBCampaignsAssets> dbCampaignsAssetsList = new ArrayList<>();
+            for (final Asset asset : _campaign.assets) {
+                final DBCampaignsAssets dbCampaignsAssets = new DBCampaignsAssets();
+                dbCampaignsAssets.setCampaignId(_campaign.campaignId);
+                dbCampaignsAssets.setAssetId(asset.getAssetId());
+                dbCampaignsAssetsList.add(dbCampaignsAssets);
+            }
+
+            final DBCampaignsAssetsDao dbCampaignsAssetsDao = daoSession.getDBCampaignsAssetsDao();
+            dbCampaignsAssetsDao.insertOrReplaceInTx(dbCampaignsAssetsList);
+
+//            List<DBAsset> dbAssets = Transformer.createDBAssetsList(_campaign.assets, _campaign.campaignId);
+//            DBAssetDao dbAssetDao = daoSession.getDBAssetDao();
+//            dbAssetDao.insertOrReplaceInTx(dbAssets);
+
             daoSession.clear();
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,7 +275,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
     }
 
     @Override
-    public void write(Asset _asset) {
+    public final void write(final Asset _asset) {
         if(_asset == null) return;
         try {
             openWritableDb();
@@ -293,17 +320,26 @@ public class DBManager implements AsyncOperationListener, DbWorker {
     }
 
     @Override
-    public List<Asset> getAssets(Campaign _campaign) {
+    public final List<Asset> getAssets(final Campaign _campaign) {
         if(_campaign == null) return null;
-        List<Asset> resAssets = new LinkedList<>();
+        final List<Asset> resAssets = new LinkedList<>();
         try {
             openReadableDb();
-            DBAssetDao dao = daoSession.getDBAssetDao();
-            List<DBAsset> resDBAssets = dao.queryBuilder()
-                    .where(DBAssetDao.Properties.CampaignId.eq(_campaign.campaignId))
-                    .build().list();
-            daoSession.clear();
-            return Transformer.createAssetsList(resDBAssets);
+//            final DBAssetDao dao = daoSession.getDBAssetDao();
+//            List<DBAsset> resDBAssets = dao.queryBuilder()
+//                    .where(DBAssetDao.Properties.CampaignsAssetsId.eq(_campaign.campaignId))
+//                    .build().list();
+//            daoSession.clear();
+//            return Transformer.createAssetsList(resDBAssets);
+
+//            final DBAssetDao assetDao = daoSession.getDBAssetDao();
+//            final List<Asset> assets = null;
+//            final QueryBuilder<DBAsset> qb = assetDao.queryBuilder()
+//                    .join(DBCampaignsAssets.class, DBCampaignsAssetsDao.Properties.CampaignId)
+//                    .where(DBCampaignsAssetsDao.Properties.CampaignId.eq(_campaign.campaignId))
+//                    .li
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
