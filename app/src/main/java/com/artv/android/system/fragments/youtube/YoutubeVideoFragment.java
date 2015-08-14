@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * Created by
  * mRogach on 14.08.2015.
  */
-public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.PlaybackEventListener, YouTubePlayer.PlayerStateChangeListener {
+public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.PlayerStateChangeListener {
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
     private YouTubePlayerFragment youTubePlayerFragment;
@@ -85,7 +85,6 @@ public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.Play
                 if (!wasRestored) {
                     mYouTubePlayer = youTubePlayer;
                     mYouTubePlayer.setPlayerStateChangeListener(YoutubeVideoFragment.this);
-                    mYouTubePlayer.setPlaybackEventListener(YoutubeVideoFragment.this);
                     mYouTubePlayer.loadVideo(mYoutubeVideoID);
                     mYouTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
                 }
@@ -111,7 +110,7 @@ public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.Play
     YoutubeVideoController youtubeVideoController = new YoutubeVideoController() {
         @Override
         public void play() {
-            if (mYouTubePlayer != null) {
+            if (mYouTubePlayer != null && !mYouTubePlayer.isPlaying()) {
                 mYouTubePlayer.play();
             }
         }
@@ -126,31 +125,6 @@ public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.Play
 
     public YoutubeVideoController getYoutubeVideoController() {
         return youtubeVideoController;
-    }
-
-    @Override
-    public void onPlaying() {
-
-    }
-
-    @Override
-    public void onPaused() {
-
-    }
-
-    @Override
-    public void onStopped() {
-
-    }
-
-    @Override
-    public void onBuffering(boolean b) {
-
-    }
-
-    @Override
-    public void onSeekTo(int i) {
-
     }
 
     @Override
