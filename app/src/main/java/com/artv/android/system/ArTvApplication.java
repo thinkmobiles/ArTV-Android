@@ -9,7 +9,7 @@ import com.artv.android.ApplicationLogic;
 /**
  * Created by ZOG on 6/30/2015.
  */
-public final class MyApplication extends Application {
+public final class ArTvApplication extends Application {
 
     private ApplicationLogic mApplicationLogic;
 
