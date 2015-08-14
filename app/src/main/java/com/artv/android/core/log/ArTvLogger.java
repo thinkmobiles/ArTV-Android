@@ -2,6 +2,9 @@ package com.artv.android.core.log;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+
+import com.artv.android.system.ArTvApplication;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,6 +55,8 @@ public abstract class ArTvLogger {
 
         @Override
         public final void run() {
+            Log.d(ArTvApplication.class.getSimpleName(), mMessage);
+
             for (final ILogger logger : mLoggers) {
                 logger.printMessage(mFromNewLine, mMessage);
             }

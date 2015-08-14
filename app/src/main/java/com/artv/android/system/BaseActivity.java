@@ -9,8 +9,8 @@ import com.artv.android.ApplicationLogic;
  */
 public abstract class BaseActivity extends Activity {
 
-    public final MyApplication getMyApplication() {
-        return (MyApplication) getApplication();
+    public final ArTvApplication getMyApplication() {
+        return (ArTvApplication) getApplication();
     }
 
     public final ApplicationLogic getApplicationLogic() {
