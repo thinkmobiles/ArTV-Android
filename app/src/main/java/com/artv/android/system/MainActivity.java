@@ -15,6 +15,7 @@ import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.MediaPlayerFragment;
+import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
 public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IConfigInfoListener {
@@ -88,6 +89,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
             case STATE_PLAY_MODE:
                 getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
+//                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=_oEA18Y8gM0")).commit();
                 break;
         }
     }

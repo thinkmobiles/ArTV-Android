@@ -29,23 +29,22 @@ android {
 }
 
 dependencies {
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
-
+    //    compile fileTree(dir: 'libs', include: ['*.jar'])
     //testing
     androidTestCompile 'com.android.support.test:runner:0.3'
     androidTestCompile 'com.android.support.test:rules:0.3'
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'org.mockito:mockito-core:1.+'
-    androidTestCompile "com.google.dexmaker:dexmaker:1.2"
-    androidTestCompile "com.google.dexmaker:dexmaker-mockito:1.2"
-
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.squareup.picasso:picasso:2.3.3'
-    compile('de.greenrobot:greendao:1.3.7')
-    compile('com.squareup.retrofit:converter-simplexml:1.6.1'){
+    compile 'de.greenrobot:greendao:1.3.7'
+    compile('com.squareup.retrofit:converter-simplexml:1.6.1') {
         exclude module: 'stax'
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
+    compile files('A:/Android/StudioProjects/ArTV-Android/YouTubeAndroidPlayerApi.jar')
 }
