@@ -90,7 +90,7 @@ public class StartWorker {
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printMessage("Has campaigns to play");
                 mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-//                doBeaconRequest();
+                doBeaconRequest();
                 break;
         }
     }

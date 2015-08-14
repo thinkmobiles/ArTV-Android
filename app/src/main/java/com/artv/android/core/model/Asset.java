@@ -24,13 +24,17 @@ public final class Asset {
     @Element(name = "Sequence", required = false)
     public int sequence;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        if (getClass() != o.getClass()) return false;
+    public final int getAssetId() {
+        return hashCode();
+    }
 
-        Asset asset = (Asset) o;
+    @Override
+    public final boolean equals(final Object _o) {
+        if (this == _o) return true;
+        if (_o == null) return false;
+        if (getClass() != _o.getClass()) return false;
+
+        final Asset asset = (Asset) _o;
 
         if(!TextUtils.equals(name,asset.name)) return false;
         if(!TextUtils.equals(url,asset.url)) return false;
@@ -38,5 +42,14 @@ public final class Asset {
         if(sequence != asset.sequence) return false;
 
         return true;
+    }
+
+    @Override
+    public final int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + duration;
+        result = 31 * result + sequence;
+        return result;
     }
 }

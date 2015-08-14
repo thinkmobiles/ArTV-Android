@@ -31,4 +31,27 @@ public class AssetTest {
 
         return asset1;
     }
+
+    @Test
+    public final void IdIsUnique() {
+        final Asset asset1 = createTestAsset();
+        final Asset asset2 = createTestAsset();
+
+        Assert.assertEquals(asset1.getAssetId(), asset2.getAssetId());
+
+        final Asset asset3 = new Asset();
+        asset3.name = "fsdf";
+        asset3.url = "fsdf";
+        asset3.duration = 10;
+        asset3.sequence = 12;
+
+        final Asset asset4 = new Asset();
+        asset4.name = "fsdf";
+        asset4.url = "fsdf";
+        asset4.duration = 11;
+        asset4.sequence = 12;
+
+        Assert.assertTrue(asset3.hashCode() != asset4.hashCode());
+    }
+
 }
