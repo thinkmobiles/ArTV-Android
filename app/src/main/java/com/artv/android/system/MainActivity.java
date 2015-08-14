@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
             case STATE_PLAY_MODE:
                 getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
-//                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=_oEA18Y8gM0")).commit();
+//                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
                 break;
         }
     }

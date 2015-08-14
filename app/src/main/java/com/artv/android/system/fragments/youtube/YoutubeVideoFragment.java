@@ -107,7 +107,7 @@ public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.Play
         this.youtubeVideoListener = youtubeVideoListener;
     }
 
-    YoutubeVideoController youtubeVideoController = new YoutubeVideoController() {
+    private YoutubeVideoController youtubeVideoController = new YoutubeVideoController() {
         @Override
         public void play() {
             if (mYouTubePlayer != null && !mYouTubePlayer.isPlaying()) {
