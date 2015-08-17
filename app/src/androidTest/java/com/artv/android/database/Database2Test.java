@@ -150,7 +150,7 @@ public final class Database2Test {
         for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
         dbManager.write(campaign1);
 
-        final Campaign campaign2 = buildCampaign1();
+        final Campaign campaign2 = buildCampaign2();
         campaign2.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
         for(int i = 0; i < campaign2.assets.size(); i++) dbManager.write(campaign2.assets.get(i));
         dbManager.write(campaign2);
@@ -176,7 +176,7 @@ public final class Database2Test {
         for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
         dbManager.write(campaign1);
 
-        final Campaign campaign2 = buildCampaign1();
+        final Campaign campaign2 = buildCampaign2();
         campaign2.assets = Arrays.asList(buildAsset2(), buildAsset3());
         for(int i = 0; i < campaign2.assets.size(); i++) dbManager.write(campaign2.assets.get(i));
         dbManager.write(campaign2);
@@ -242,6 +242,8 @@ public final class Database2Test {
         Assert.assertFalse(dbManager.generateId(1, 1) == dbManager.generateId(1, 0));
         Assert.assertFalse(dbManager.generateId(34, 5345) == dbManager.generateId(5345, 53245));
         Assert.assertTrue(dbManager.generateId(434, 434) == dbManager.generateId(434, 434));
+        Assert.assertFalse(dbManager.generateId(1, 1527506766) == dbManager.generateId(2, 1331024045));
+        Assert.assertFalse(dbManager.generateId(1, 1331024045) == dbManager.generateId(2, 1331024045));
     }
 
     private final Asset buildAsset1() {

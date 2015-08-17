@@ -3,6 +3,7 @@ package com.artv.android.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -130,10 +131,21 @@ public class DbManager2 implements DbWorker {
             openWritableDb();
             final DBCampaign dbCampaign = mTransformer.createDBCampaign(_campaign);
             final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
+            deleteRelatedCampaignsAssets(daoSession, _campaign);
             writeCampaignsAssetsRelation(daoSession, _campaign);
             return campaignDao.insertOrReplace(dbCampaign);
         } finally {
             daoSession.clear();
+        }
+    }
+
+    private final void deleteRelatedCampaignsAssets(final DaoSession _daoSession,
+                                                    final Campaign _campaign) {
+        final DBCampaignsAssetsDao campaignsAssetsDao = _daoSession.getDBCampaignsAssetsDao();
+        final List<DBCampaignsAssets> dbCampaignsAssetses = getDBRelationsForCampaign(daoSession, _campaign);
+
+        for (final DBCampaignsAssets dbCampaignsAssets : dbCampaignsAssetses) {
+            campaignsAssetsDao.delete(dbCampaignsAssets);
         }
     }
 
@@ -143,6 +155,8 @@ public class DbManager2 implements DbWorker {
         for (final Asset asset : _campaign.assets) {
             final DBCampaignsAssets dbCampaignsAssets = new DBCampaignsAssets();
             dbCampaignsAssets.setId(generateId(_campaign.campaignId, asset.getAssetId()));
+            Log.d("DB_Relation", String.format("C_id: %d, A_id: %d, Gen_id: %d",
+                    _campaign.campaignId, asset.getAssetId(), dbCampaignsAssets.getId()));
             dbCampaignsAssets.setCampaignId(_campaign.campaignId);
             dbCampaignsAssets.setAssetId(asset.getAssetId());
             dbCampaignsAssetsList.add(dbCampaignsAssets);
@@ -152,11 +166,11 @@ public class DbManager2 implements DbWorker {
         dbCampaignsAssetsDao.insertOrReplaceInTx(dbCampaignsAssetsList);
     }
 
-    protected final long generateId(final int... ints) {
+    protected final long generateId(final Integer... ints) {
         if (ints.length < 2) throw new RuntimeException("Must pass minimum two numbers");
-        int id = 0;
-        for (int i = 0; i < ints.length - 1; i++) {
-            id = id + (ints[i] << 2 + ints[i + 1] << 2);
+        int id = ints[0].hashCode();
+        for (int i = 1; i < ints.length; i++) {
+            id = 31 * id + ints[i].hashCode();
         }
 
         return id;
@@ -188,15 +202,11 @@ public class DbManager2 implements DbWorker {
     @Override
     public final List<Asset> getAssets(final Campaign _campaign) {
         try {
-            final DBCampaignsAssetsDao campaignsAssetsDao = daoSession.getDBCampaignsAssetsDao();
-            final List<DBCampaignsAssets> dbCampaignsAssetses = campaignsAssetsDao
-                    .queryBuilder()
-                    .where(DBCampaignsAssetsDao.Properties.CampaignId.eq(_campaign.campaignId))
-                    .list();
+            final List<DBCampaignsAssets> dbCampaignsAssetses = getDBRelationsForCampaign(daoSession, _campaign);
 
             final DBAssetDao assetDao = daoSession.getDBAssetDao();
-            final List<DBAsset> dbAssets = new ArrayList<>();
 
+            final List<DBAsset> dbAssets = new ArrayList<>();
             for (final DBCampaignsAssets dbCampaignsAssets : dbCampaignsAssetses) {
                 final DBAsset dbAsset = assetDao.load(Long.valueOf(dbCampaignsAssets.getAssetId()));
                 dbAssets.add(dbAsset);
@@ -206,6 +216,16 @@ public class DbManager2 implements DbWorker {
         } finally {
             daoSession.clear();
         }
+    }
+
+    private final List<DBCampaignsAssets> getDBRelationsForCampaign(
+            final DaoSession _daoSession, final Campaign _campaign) {
+        final DBCampaignsAssetsDao campaignsAssetsDao = _daoSession.getDBCampaignsAssetsDao();
+        final List<DBCampaignsAssets> dbCampaignsAssetses = campaignsAssetsDao
+                .queryBuilder()
+                .where(DBCampaignsAssetsDao.Properties.CampaignId.eq(_campaign.campaignId))
+                .list();
+        return dbCampaignsAssetses;
     }
 
     @Override
