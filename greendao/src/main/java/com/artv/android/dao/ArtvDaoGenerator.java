@@ -81,7 +81,7 @@ public class ArtvDaoGenerator {
 
     private static Entity addCampaignsAssets(final Schema _schema) {
         Entity campaignsAssets = _schema.addEntity("DBCampaignsAssets");
-        campaignsAssets.addIdProperty().primaryKey().autoincrement();
+        campaignsAssets.addIdProperty().primaryKey();
         campaignsAssets.addIntProperty("campaignId");
         campaignsAssets.addIntProperty("assetId");
 

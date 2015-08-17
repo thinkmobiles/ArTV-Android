@@ -44,7 +44,7 @@ public class DBCampaignsAssetsDao extends AbstractDao<DBCampaignsAssets, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DBCAMPAIGNS_ASSETS\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
                 "\"CAMPAIGN_ID\" INTEGER," + // 1: campaignId
                 "\"ASSET_ID\" INTEGER);"); // 2: assetId
     }
