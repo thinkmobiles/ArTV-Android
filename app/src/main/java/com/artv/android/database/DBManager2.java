@@ -15,7 +15,9 @@ import com.artv.android.database.gen.DBCampaignDao;
 import com.artv.android.database.gen.DBCampaignsAssets;
 import com.artv.android.database.gen.DBCampaignsAssetsDao;
 import com.artv.android.database.gen.DBMessage;
+import com.artv.android.database.gen.DBMessageDao;
 import com.artv.android.database.gen.DBmsgBoardCampaign;
+import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
@@ -218,8 +220,8 @@ public class DbManager2 implements DbWorker {
         }
     }
 
-    private final List<DBCampaignsAssets> getDBRelationsForCampaign(
-            final DaoSession _daoSession, final Campaign _campaign) {
+    private final List<DBCampaignsAssets> getDBRelationsForCampaign(final DaoSession _daoSession,
+                                                                    final Campaign _campaign) {
         final DBCampaignsAssetsDao campaignsAssetsDao = _daoSession.getDBCampaignsAssetsDao();
         final List<DBCampaignsAssets> dbCampaignsAssetses = campaignsAssetsDao
                 .queryBuilder()
@@ -230,17 +232,51 @@ public class DbManager2 implements DbWorker {
 
     @Override
     public final Campaign getCampaignById(final int _campaignId) {
-        return null;
+        try {
+            final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
+            final DBCampaign dbCampaign = campaignDao.load((long) _campaignId);
+            if (dbCampaign == null) throw new RuntimeException("Bad campaignId");
+            return mTransformer.createCampaign(dbCampaign);
+        } finally {
+            daoSession.clear();
+        }
     }
 
     @Override
     public final long write(final MsgBoardCampaign _msgBoardCampaign) {
-        return -1;
+        try {
+            openWritableDb();
+            final DBmsgBoardCampaign dBmsgBoardCampaign = mTransformer.createDBmsgBoardCampaign(_msgBoardCampaign);
+
+            final DBmsgBoardCampaignDao msgBoardCampaignDao = daoSession.getDBmsgBoardCampaignDao();
+            final DBMessageDao messageDao = daoSession.getDBMessageDao();
+
+            msgBoardCampaignDao.deleteAll();
+            messageDao.deleteAll();
+
+            messageDao.insertInTx(mTransformer.createDBMessageList(_msgBoardCampaign.messages));
+            return msgBoardCampaignDao.insertOrReplace(dBmsgBoardCampaign);
+        } finally {
+            daoSession.clear();
+        }
     }
 
     @Override
     public final MsgBoardCampaign getMsgBoardCampaign() {
-        return null;
+        try {
+            openReadableDb();
+            final DBmsgBoardCampaignDao dBmsgBoardCampaignDao = daoSession.getDBmsgBoardCampaignDao();
+            final DBMessageDao messageDao = daoSession.getDBMessageDao();
+
+            final List msgs = dBmsgBoardCampaignDao.loadAll();
+            if (msgs.isEmpty()) return null;
+
+            final MsgBoardCampaign msg = mTransformer.createMsgBoardCampaign(dBmsgBoardCampaignDao.loadAll().get(0));
+            msg.messages = mTransformer.createMessagesList(messageDao.loadAll());
+            return msg;
+        } finally {
+            daoSession.clear();
+        }
     }
 
 }

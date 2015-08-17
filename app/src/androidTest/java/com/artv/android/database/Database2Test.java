@@ -5,7 +5,8 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
-import com.artv.android.database.gen.DaoSession;
+import com.artv.android.core.model.Message;
+import com.artv.android.core.model.MsgBoardCampaign;
 
 import junit.framework.Assert;
 
@@ -236,6 +237,33 @@ public final class Database2Test {
     }
 
     @Test
+    public final void WriteCampaignWithAssets_WriteCampaignWithoutAssets_NoAssetsInCampaign() {
+        final Campaign campaign = buildCampaign1();
+        campaign.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
+        for(int i = 0; i < campaign.assets.size(); i++) dbManager.write(campaign.assets.get(i));
+        dbManager.write(campaign);
+
+        campaign.assets = new ArrayList<>();
+        dbManager.write(campaign);
+
+        final List<Asset> loadedAssets = dbManager.getAssets(campaign);
+        Assert.assertTrue(loadedAssets.isEmpty());
+    }
+
+    @Test
+    public final void WriteCampaignWithAssets_WriteCampaignWithoutAssets_UnrelatedAssetsSaved() {
+        final Campaign campaign = buildCampaign1();
+        campaign.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
+        for(int i = 0; i < campaign.assets.size(); i++) dbManager.write(campaign.assets.get(i));
+        dbManager.write(campaign);
+
+        campaign.assets = new ArrayList<>();
+        dbManager.write(campaign);
+
+        Assert.assertTrue(dbManager.getAllAssets().size() == 3);
+    }
+
+    @Test
     public final void GenerateId_IdUnique() {
         Assert.assertFalse(dbManager.generateId(5, 6) == dbManager.generateId(6, 5));
         Assert.assertFalse(dbManager.generateId(0, 1) == dbManager.generateId(1, 0));
@@ -244,6 +272,57 @@ public final class Database2Test {
         Assert.assertTrue(dbManager.generateId(434, 434) == dbManager.generateId(434, 434));
         Assert.assertFalse(dbManager.generateId(1, 1527506766) == dbManager.generateId(2, 1331024045));
         Assert.assertFalse(dbManager.generateId(1, 1331024045) == dbManager.generateId(2, 1331024045));
+    }
+
+    @Test
+    public final void WriteCampaign_GetCampaignById() {
+        final Campaign campaign1 = buildCampaign1();
+        final Campaign campaign2 = buildCampaign2();
+
+        dbManager.write(campaign1);
+        dbManager.write(campaign2);
+
+        Assert.assertEquals(campaign1, dbManager.getCampaignById(1));
+        Assert.assertEquals(campaign2, dbManager.getCampaignById(2));
+    }
+    
+    @Test
+    public final void WriteMsgBoardCampaign_MsgBoardCampaignWrote_DatabaseContainsMsgBoardCampaign() {
+        final MsgBoardCampaign msg1 = buildMsgBoardCampaign1();
+        final MsgBoardCampaign msg2 = buildMsgBoardCampaign2();
+
+        Assert.assertFalse(-1 == dbManager.write(msg1));
+        Assert.assertFalse(-1 == dbManager.write(msg2));
+    }
+
+    @Test
+    public final void WriteMsgBoardCampaign_WriteSameMsgBoardCampaignAgain_MsgBoardCampaignReplaced() {
+        final MsgBoardCampaign msg1 = buildMsgBoardCampaign1();
+        final MsgBoardCampaign msg2 = buildMsgBoardCampaign2();
+
+        Assert.assertTrue(dbManager.write(msg1) == dbManager.write(msg1));
+        Assert.assertTrue(dbManager.write(msg2) == dbManager.write(msg2));
+    }
+
+    @Test
+    public final void WriteMsgBoardCampaign_OnlyLastMsgBoardCampaignStored() {
+        final MsgBoardCampaign msg1 = buildMsgBoardCampaign1();
+        final MsgBoardCampaign msg2 = buildMsgBoardCampaign2();
+
+        dbManager.write(msg1);
+        Assert.assertEquals(dbManager.getMsgBoardCampaign(), msg1);
+        dbManager.write(msg2);
+        Assert.assertEquals(dbManager.getMsgBoardCampaign(), msg2);
+    }
+
+    @Test
+    public final void NoMsgBoardCampaign_GetMsgBoardCampaign_ReturnsNull() {
+        Assert.assertNull(dbManager.getMsgBoardCampaign());
+    }
+
+    @Test
+    public final void WriteMsgBoardCampaignWithMessages_GetMsgBoardCampaign_MessagesMatch() {
+
     }
 
     private final Asset buildAsset1() {
@@ -310,6 +389,42 @@ public final class Database2Test {
         campaign3.playDay = "0010000";
         campaign3.assets = new ArrayList<>();
         return campaign3;
+    }
+
+    private final MsgBoardCampaign buildMsgBoardCampaign1() {
+        final MsgBoardCampaign msg = new MsgBoardCampaign();
+        msg.msgBoardId = 1;
+        msg.crcVersion = "1";
+        msg.startDate = "2015-01-01";
+        msg.endDate = "2015-01-10";
+        msg.playDay = "1000000";
+        msg.textColor = "red";
+        msg.rightBkgURL = "rightBkgURL";
+        msg.bottomBkgURL = "bottomBkgURL";
+        msg.messages = new ArrayList<>();
+        return msg;
+    }
+
+    private final MsgBoardCampaign buildMsgBoardCampaign2() {
+        final MsgBoardCampaign msg = new MsgBoardCampaign();
+        msg.msgBoardId = 2;
+        msg.crcVersion = "2";
+        msg.startDate = "2015-02-02";
+        msg.endDate = "2015-02-20";
+        msg.playDay = "0100000";
+        msg.textColor = "green";
+        msg.rightBkgURL = "rightBkgURL";
+        msg.bottomBkgURL = "bottomBkgURL";
+        msg.messages = new ArrayList<>();
+        return msg;
+    }
+
+    protected final Message buildMessage(final int _seed) {
+        final Message message = new Message();
+        message.position = _seed + "";
+        message.sequence = _seed;
+        message.text = _seed + "";
+        return message;
     }
 
 }
