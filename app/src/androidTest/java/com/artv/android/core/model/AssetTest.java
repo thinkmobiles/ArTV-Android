@@ -11,31 +11,41 @@ import org.junit.runner.RunWith;
  * Created by Misha on 8/6/2015.
  */
 @RunWith(AndroidJUnit4.class)
-public class AssetTest {
+public final class AssetTest {
 
     @Test
-    public void Asset_Equal() {
-        Asset asset1 = createTestAsset();
-        Asset asset2 = createTestAsset();
+    public final void Asset_Equal() {
+        final Asset asset1 = createAsset1();
+        final Asset asset1copy = createAsset1();
+        final Asset asset2 = createAsset2();
 
-        Assert.assertEquals("Assets are not equal",asset1,asset1);
-        Assert.assertEquals("Assets are not equal",asset1,asset2);
+        Assert.assertEquals("Assets are not equal", asset1, asset1);
+        Assert.assertEquals("Assets are not equal", asset1, asset1copy);
+        Assert.assertFalse(asset1.equals(asset2));
     }
 
-    public Asset createTestAsset() {
-        Asset asset1 = new Asset();
-        asset1.url = "url1";
-        asset1.name = null;
-        asset1.sequence = 12345;
-        asset1.duration = 1232;
+    private final Asset createAsset1() {
+        final Asset asset = new Asset();
+        asset.url = "url1";
+        asset.name = null;
+        asset.sequence = 12345;
+        asset.duration = 1232;
+        return asset;
+    }
 
-        return asset1;
+    private final Asset createAsset2() {
+        final Asset asset = new Asset();
+        asset.url = "url1";
+        asset.name = "asset2";
+        asset.sequence = 878943245;
+        asset.duration = 12389672;
+        return asset;
     }
 
     @Test
     public final void IdIsUnique() {
-        final Asset asset1 = createTestAsset();
-        final Asset asset2 = createTestAsset();
+        final Asset asset1 = createAsset1();
+        final Asset asset2 = createAsset1();
 
         Assert.assertEquals(asset1.getAssetId(), asset2.getAssetId());
 

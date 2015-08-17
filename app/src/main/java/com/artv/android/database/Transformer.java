@@ -18,7 +18,9 @@ import java.util.List;
  * Created by Misha on 7/16/2015.
  */
 public final class Transformer {
+
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-dd-MM");
+
     private Transformer() {}
 
     protected static List<DBCampaign> createDBCampaignList(List<Campaign> campaigns) {

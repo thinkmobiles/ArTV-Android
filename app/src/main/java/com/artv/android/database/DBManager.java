@@ -3,7 +3,6 @@ package com.artv.android.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.graphics.Paint;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -21,7 +20,6 @@ import com.artv.android.database.gen.DBmsgBoardCampaignDao;
 import com.artv.android.database.gen.DaoMaster;
 import com.artv.android.database.gen.DaoSession;
 
-import junit.framework.Assert;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -244,7 +242,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
      * @param _campaign
      */
     @Override
-    public final void write(final Campaign _campaign) {
+    public final long write(final Campaign _campaign) {
         if(_campaign == null) throw new NullPointerException("Campaign object or campaign id is zero");
         try {
             openWritableDb();
@@ -272,11 +270,12 @@ public class DBManager implements AsyncOperationListener, DbWorker {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return  -1;
     }
 
     @Override
-    public final void write(final Asset _asset) {
-        if(_asset == null) return;
+    public final long write(final Asset _asset) {
+        if(_asset == null) return -1;
         try {
             openWritableDb();
 
@@ -288,6 +287,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return  - 1;
     }
 
     @Override
@@ -319,10 +319,20 @@ public class DBManager implements AsyncOperationListener, DbWorker {
         return assets;
     }
 
+    public List<DBCampaignsAssets> getAllDBCampaignsAssets() {
+        try {
+            openReadableDb();
+            return daoSession.getDBCampaignsAssetsDao().loadAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
+    }
+
     @Override
     public final List<Asset> getAssets(final Campaign _campaign) {
         if(_campaign == null) return null;
-        final List<Asset> resAssets = new LinkedList<>();
+        final List<Asset> resAssets = new ArrayList<>();
         try {
             openReadableDb();
 //            final DBAssetDao dao = daoSession.getDBAssetDao();
@@ -339,6 +349,12 @@ public class DBManager implements AsyncOperationListener, DbWorker {
 //                    .where(DBCampaignsAssetsDao.Properties.CampaignId.eq(_campaign.campaignId))
 //                    .li
 
+            final DBAssetDao assetDao = daoSession.getDBAssetDao();
+            final QueryBuilder<DBAsset> queryBuilder = assetDao.queryBuilder();
+            queryBuilder.join(DBCampaignsAssets.class, DBCampaignsAssetsDao.Properties.CampaignId)
+                    .where(DBCampaignsAssetsDao.Properties.CampaignId.eq(_campaign.campaignId));
+            final List<DBAsset> dbAssets = queryBuilder.list();
+            return Transformer.createAssetsList(dbAssets);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -362,7 +378,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
     }
 
     @Override
-    public void write(MsgBoardCampaign _msgBoardCampaign) {
+    public long write(MsgBoardCampaign _msgBoardCampaign) {
         try {
             openWritableDb();
 
@@ -389,6 +405,7 @@ public class DBManager implements AsyncOperationListener, DbWorker {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return -1;
     }
 
     @Override

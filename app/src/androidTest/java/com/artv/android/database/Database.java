@@ -16,7 +16,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -83,7 +87,7 @@ public class Database {
         Campaign campaign = createFirstTestCampaign();
         dbManager.write(campaign);
 
-        Assert.assertEquals("Campaign not equals",campaign,dbManager.getCampaignById(campaign.campaignId));
+        Assert.assertEquals("Campaign not equals", campaign, dbManager.getCampaignById(campaign.campaignId));
     }
 
     @Test
@@ -108,11 +112,11 @@ public class Database {
         Assert.assertNotNull("Result is null", msgBoardCampaignResult);
         Assert.assertEquals("Messages1 not equals", msgBoardCampaign.messages.get(0), msgBoardCampaignResult.messages.get(0));
         Assert.assertEquals("Messages2 not equals", msgBoardCampaign.messages.get(1),msgBoardCampaignResult.messages.get(1));
-        Assert.assertEquals("Messages sizes not equals", msgBoardCampaign.messages.size(),msgBoardCampaignResult.messages.size());
+        Assert.assertEquals("Messages sizes not equals", msgBoardCampaign.messages.size(), msgBoardCampaignResult.messages.size());
         Assert.assertEquals("MsgBoardCampaigns not equals", msgBoardCampaign, msgBoardCampaignResult);
 
         dbManager.write((MsgBoardCampaign) null);
-        Assert.assertNull("Result is not null",dbManager.getMsgBoardCampaign());
+        Assert.assertNull("Result is not null", dbManager.getMsgBoardCampaign());
     }
 
     private Campaign createFirstTestCampaign() {
@@ -240,6 +244,40 @@ public class Database {
         msgBoardCampaign1.messages = messages1;
 
         return msgBoardCampaign1;
+    }
+
+
+    @Test
+    public final void GetAssetsForCampaign_ReturnOnlyAssetsBelongToCampaign() {
+
+        final Asset asset1 = new Asset();
+        asset1.name = "asset1";
+        asset1.url = "asset1/asset1";
+        asset1.duration = 1;
+        asset1.sequence = 1;
+
+        final Asset asset2 = new Asset();
+        asset2.name = "asset2";
+        asset2.url = "asset2/asset2";
+        asset2.duration = 2;
+        asset2.sequence = 2;
+
+        final Asset asset3 = new Asset();
+        asset3.name = "asset3";
+        asset3.url = "asset3/asset3";
+        asset3.duration = 3;
+        asset3.sequence = 3;
+
+        dbManager.write(asset1);
+        dbManager.write(asset2);
+        dbManager.write(asset3);
+
+        final Campaign campaign = new Campaign();
+        campaign.campaignId = 12;
+        campaign.crcVersion = "123asset";
+        campaign.assets = Arrays.asList(asset1, asset2);
+
+        dbManager.write(campaign);
     }
 
 }

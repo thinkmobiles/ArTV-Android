@@ -11,16 +11,16 @@ import java.util.List;
  */
 public interface DbWorker {
 
-    void write(final Asset _asset);
+    long write(final Asset _asset);
     boolean contains(final Asset _asset);
     List<Asset> getAllAssets();
 
-    void write(final Campaign _campaign);
+    long write(final Campaign _campaign);
     boolean contains(final Campaign _campaign);
     List<Campaign> getAllCampaigns();
     List<Asset> getAssets(final Campaign _campaign);
     Campaign getCampaignById(final int _campaignId);
 
-    void write(final MsgBoardCampaign _msgBoardCampaign);
+    long write(final MsgBoardCampaign _msgBoardCampaign);
     MsgBoardCampaign getMsgBoardCampaign();
 }
