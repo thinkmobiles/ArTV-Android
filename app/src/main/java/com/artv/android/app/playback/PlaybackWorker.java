@@ -3,6 +3,7 @@ package com.artv.android.app.playback;
 import android.os.Handler;
 
 import com.artv.android.core.Constants;
+import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.database.DbWorker;
 
 /**
@@ -11,6 +12,7 @@ import com.artv.android.database.DbWorker;
 public final class PlaybackWorker implements IVideoCompletionListener {
 
     private DbWorker mDbWorker;
+    private GlobalConfig mGlobalConfig;
     private IPlaybackController mPlaybackController;
 
     public final void setPlaybackController(final IPlaybackController _controller) {
@@ -19,6 +21,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     public final void setDbWorker(final DbWorker _dbWorker) {
         mDbWorker = _dbWorker;
+    }
+
+    public final void setGlobalConfig(final GlobalConfig _globalConfig) {
+        mGlobalConfig = _globalConfig;
     }
 
     public final IVideoCompletionListener getVideoCompletionListener() {

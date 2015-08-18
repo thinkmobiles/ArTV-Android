@@ -52,10 +52,15 @@ public final class ApplicationLogic {
 
         mApiWorker = new ApiWorker(mContext);
 
-        mInitWorker = new InitWorker();
-        mDisplaySwitcher = new DisplaySwitcher();
-
         mDbWorker = DbManager.getInstance(mContext);
+
+        mPlaybackWorker = new PlaybackWorker();
+        mPlaybackWorker.setDbWorker(mDbWorker);
+
+        mInitWorker = new InitWorker();
+        mInitWorker.setPlaybackWorker(mPlaybackWorker);
+
+        mDisplaySwitcher = new DisplaySwitcher();
 
         mDateWorker = new DateWorker();
 
@@ -78,9 +83,6 @@ public final class ApplicationLogic {
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
-
-        mPlaybackWorker = new PlaybackWorker();
-        mPlaybackWorker.setDbWorker(mDbWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {

@@ -1,6 +1,7 @@
 package com.artv.android.core.init;
 
 import com.artv.android.ArTvResult;
+import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -26,6 +27,7 @@ public class InitWorker {
     private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
+    private PlaybackWorker mPlaybackWorker;
 
     private InitData mInitData;
     private IInitCallback mCallback;
@@ -44,6 +46,10 @@ public class InitWorker {
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
         mApiWorker = _apiWorker;
+    }
+
+    public final void setPlaybackWorker(final PlaybackWorker _worker) {
+        mPlaybackWorker = _worker;
     }
 
     public final void startInitializing(final IInitCallback _callback) {
@@ -107,6 +113,7 @@ public class InitWorker {
             public final void onSuccess(final GetGlobalConfigResponseObject _respObj) {
                 _respObj.globalConfig.prepareEntries();
                 mInitData.setGlobalConfig(_respObj.globalConfig);
+                mPlaybackWorker.setGlobalConfig(_respObj.globalConfig);
                 ArTvLogger.printMessage(_respObj.apiType + " : success");
                 getDeviceConfig();
             }
