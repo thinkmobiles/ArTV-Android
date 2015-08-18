@@ -17,11 +17,17 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mPlaybackController = _controller;
     }
 
+    public final void setDbWorker(final DbWorker _dbWorker) {
+        mDbWorker = _dbWorker;
+    }
+
     public final IVideoCompletionListener getVideoCompletionListener() {
         return this;
     }
 
     public final void startPlayback() {
+        mPlaybackController.showMsgBoardCampaign(mDbWorker.getMsgBoardCampaign());
+
         mPlaybackController.playLocalPicture(Constants.PATH + "/2.jpg");
         new Handler().postDelayed(new Runnable() {
             @Override

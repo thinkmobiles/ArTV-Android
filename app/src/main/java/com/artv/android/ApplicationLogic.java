@@ -80,6 +80,7 @@ public final class ApplicationLogic {
         mStartWorker.setDbWorker(mDbWorker);
 
         mPlaybackWorker = new PlaybackWorker();
+        mPlaybackWorker.setDbWorker(mDbWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
