@@ -182,6 +182,7 @@ public final class DbManager implements DbWorker {
     @Override
     public final boolean contains(final Campaign _campaign) {
         try {
+            openReadableDb();
             final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
             final DBCampaign dbCampaign = campaignDao.load((long) _campaign.campaignId);
             return dbCampaign != null;
@@ -205,6 +206,7 @@ public final class DbManager implements DbWorker {
     @Override
     public final List<Asset> getAssets(final Campaign _campaign) {
         try {
+            openReadableDb();
             final List<DBCampaignsAssets> dbCampaignsAssetses = getDBRelationsForCampaign(daoSession, _campaign);
 
             final DBAssetDao assetDao = daoSession.getDBAssetDao();
@@ -234,6 +236,7 @@ public final class DbManager implements DbWorker {
     @Override
     public final Campaign getCampaignById(final int _campaignId) {
         try {
+            openReadableDb();
             final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
             final DBCampaign dbCampaign = campaignDao.load((long) _campaignId);
             if (dbCampaign == null) throw new RuntimeException("Bad campaignId");
@@ -245,6 +248,7 @@ public final class DbManager implements DbWorker {
 
     @Override
     public final long write(final MsgBoardCampaign _msgBoardCampaign) {
+        if (_msgBoardCampaign == null) return -1;
         try {
             openWritableDb();
             final DBmsgBoardCampaign dBmsgBoardCampaign = mTransformer.createDBmsgBoardCampaign(_msgBoardCampaign);

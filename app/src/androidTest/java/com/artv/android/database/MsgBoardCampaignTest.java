@@ -57,6 +57,11 @@ public final class MsgBoardCampaignTest {
     }
 
     @Test
+    public final void WriteNull_NotWrote() {
+        Assert.assertEquals(dbManager.write((MsgBoardCampaign) null), -1);
+    }
+
+    @Test
     public final void WriteMsgBoardCampaign_OnlyLastMsgBoardCampaignStored() {
         final MsgBoardCampaign msg1 = buildMsgBoardCampaign1();
         final MsgBoardCampaign msg2 = buildMsgBoardCampaign2();
