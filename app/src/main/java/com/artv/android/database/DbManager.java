@@ -30,26 +30,26 @@ import de.greenrobot.dao.async.AsyncSession;
 /**
  * Created by ZOG on 8/17/2015.
  */
-public class DbManager2 implements DbWorker {
+public final class DbManager implements DbWorker {
 
-    private static DbManager2 instance;
+    private static DbManager instance;
 
     private DaoMaster.DevOpenHelper mHelper;
     private SQLiteDatabase database;
     private DaoMaster daoMaster;
     private DaoSession daoSession;
     private AsyncSession asyncSession;
-    private Transformer2 mTransformer;
+    private Transformer mTransformer;
 
-    private DbManager2(final Context _context) {
+    private DbManager(final Context _context) {
         mHelper = new DaoMaster.DevOpenHelper(_context, "artv-database", null);
-        mTransformer = new Transformer2();
+        mTransformer = new Transformer();
     }
 
 
-    public static DbManager2 getInstance(final Context _context) {
+    public static DbManager getInstance(final Context _context) {
         if (instance == null) {
-            instance = new DbManager2(_context);
+            instance = new DbManager(_context);
         }
 
         return instance;

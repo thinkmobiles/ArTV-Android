@@ -3,7 +3,6 @@ package com.artv.android.core.init;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.artv.android.ArTvResult;
-import com.artv.android.ArTvResultTest;
 
 import junit.framework.Assert;
 

@@ -1,10 +1,7 @@
 package com.artv.android.core.init;
 
 import com.artv.android.core.model.DeviceConfig;
-import com.artv.android.core.model.Entry;
 import com.artv.android.core.model.GlobalConfig;
-
-import java.util.ArrayList;
 
 /**
  * Created by ZOG on 7/8/2015.

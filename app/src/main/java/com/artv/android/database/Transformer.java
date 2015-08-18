@@ -9,197 +9,123 @@ import com.artv.android.database.gen.DBCampaign;
 import com.artv.android.database.gen.DBMessage;
 import com.artv.android.database.gen.DBmsgBoardCampaign;
 
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Misha on 7/16/2015.
+ * Created by ZOG on 8/17/2015.
  */
 public final class Transformer {
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-dd-MM");
-
-    private Transformer() {}
-
-    protected static List<DBCampaign> createDBCampaignList(List<Campaign> campaigns) {
-        ArrayList<DBCampaign> dbCampaigns = new ArrayList<>(campaigns.size());
-
-        for (Campaign campaign : campaigns)
-            dbCampaigns.add(createDBCampaign(campaign));
-
-        return dbCampaigns;
+    protected final DBAsset createDBAsset(final Asset _asset) {
+        final DBAsset dbAsset = new DBAsset();
+        dbAsset.setId((long) _asset.getAssetId());
+        dbAsset.setSequence(_asset.sequence);
+        dbAsset.setDuration(_asset.duration);
+        dbAsset.setName(_asset.name);
+        dbAsset.setUrl(_asset.url);
+        return dbAsset;
     }
 
-    protected static List<DBmsgBoardCampaign> createDBmsgCampaignList(List<MsgBoardCampaign> msgBoardCampaigns) {
-        ArrayList<DBmsgBoardCampaign> dBmsgBoardCampaigns = new ArrayList<>(msgBoardCampaigns.size());
-
-        for (MsgBoardCampaign msgBoardCampaign : msgBoardCampaigns)
-            dBmsgBoardCampaigns.add(createDBmsgBoardCampaign(msgBoardCampaign));
-
-        return dBmsgBoardCampaigns;
+    private final Asset createAsset(final DBAsset _dbAsset) {
+        final Asset asset = new Asset();
+        asset.sequence = _dbAsset.getSequence();
+        asset.duration = _dbAsset.getDuration();
+        asset.name = _dbAsset.getName();
+        asset.url = _dbAsset.getUrl();
+        return asset;
     }
 
-    protected static List<Campaign> createCampaignList(List<DBCampaign> dbCampaigns) {
-        ArrayList<Campaign> campaigns = new ArrayList<>(dbCampaigns.size());
-
-        for (DBCampaign dbCampaign : dbCampaigns)
-            campaigns.add(createCampaign(dbCampaign));
-
-        return campaigns;
+    protected final List<Asset> createAssetsList(final List<DBAsset> _dbAssets) {
+        final List<Asset> assets = new ArrayList<>(_dbAssets.size());
+        for (final DBAsset dbAsset : _dbAssets) assets.add(createAsset(dbAsset));
+        return assets;
     }
 
-    protected static List<MsgBoardCampaign> createMsgBoardCampaignList(List<DBmsgBoardCampaign> dBmsgBoardCampaigns) {
-        ArrayList<MsgBoardCampaign> msgBoardCampaigns = new ArrayList<>(dBmsgBoardCampaigns.size());
-
-        for (DBmsgBoardCampaign dBmsgBoardCampaign : dBmsgBoardCampaigns)
-            msgBoardCampaigns.add(createMsgBoardCampaign(dBmsgBoardCampaign));
-
-        return msgBoardCampaigns;
-    }
-
-    protected static DBCampaign createDBCampaign(Campaign campaign) {
-        DBCampaign dbCampaign = new DBCampaign();
-        dbCampaign.setId((long) campaign.campaignId);
-        dbCampaign.setCrcVersion(campaign.crcVersion);
-        dbCampaign.setStartDate(campaign.startDate);
-        dbCampaign.setEndDate(campaign.endDate);
-        dbCampaign.setPlayDay(campaign.playDay);
-        dbCampaign.setOverrideTime(campaign.overrideTime);
-        dbCampaign.setSequence(campaign.sequence);
-
+    protected final DBCampaign createDBCampaign(final Campaign _campaign) {
+        final DBCampaign dbCampaign = new DBCampaign();
+        dbCampaign.setId((long) _campaign.campaignId);
+        dbCampaign.setCrcVersion(_campaign.crcVersion);
+        dbCampaign.setStartDate(_campaign.startDate);
+        dbCampaign.setEndDate(_campaign.endDate);
+        dbCampaign.setPlayDay(_campaign.playDay);
+        dbCampaign.setOverrideTime(_campaign.overrideTime);
+        dbCampaign.setSequence(_campaign.sequence);
         return dbCampaign;
     }
 
-    protected static DBmsgBoardCampaign createDBmsgBoardCampaign(MsgBoardCampaign msgBoardCampaign) {
-        DBmsgBoardCampaign dBmsgBoardCampaign = new DBmsgBoardCampaign();
-        dBmsgBoardCampaign.setId((long) msgBoardCampaign.msgBoardId);
-        dBmsgBoardCampaign.setBottomBkgURL(msgBoardCampaign.bottomBkgURL);
-        dBmsgBoardCampaign.setRightBkgURL(msgBoardCampaign.rightBkgURL);
-        dBmsgBoardCampaign.setCrcVersion(msgBoardCampaign.crcVersion);
-        dBmsgBoardCampaign.setPlayDay(msgBoardCampaign.playDay);
-        dBmsgBoardCampaign.setTextColor(msgBoardCampaign.textColor);
-        dBmsgBoardCampaign.setStartDate(msgBoardCampaign.startDate);
-        dBmsgBoardCampaign.setEndDate(msgBoardCampaign.endDate);
-
-        return dBmsgBoardCampaign;
-    }
-
-    protected static Campaign createCampaign(DBCampaign dbCampaign) {
-        Campaign campaign = new Campaign();
-        campaign.campaignId = dbCampaign.getId().intValue();
-        campaign.crcVersion = dbCampaign.getCrcVersion();
-        campaign.startDate = dbCampaign.getStartDate();
-        campaign.endDate = dbCampaign.getEndDate();
-        campaign.overrideTime = dbCampaign.getOverrideTime();
-        campaign.sequence = dbCampaign.getSequence();
-        campaign.playDay = dbCampaign.getPlayDay();
-//        campaign.assets = createAssetsList(dbCampaign.getAssets());
+    protected final Campaign createCampaign(final DBCampaign _dbCampaign) {
+        final Campaign campaign = new Campaign();
+        campaign.campaignId = _dbCampaign.getId().intValue();
+        campaign.crcVersion = _dbCampaign.getCrcVersion();
+        campaign.startDate = _dbCampaign.getStartDate();
+        campaign.endDate = _dbCampaign.getEndDate();
+        campaign.overrideTime = _dbCampaign.getOverrideTime();
+        campaign.sequence = _dbCampaign.getSequence();
+        campaign.playDay = _dbCampaign.getPlayDay();
 
         return campaign;
     }
 
-    protected static MsgBoardCampaign createMsgBoardCampaign(DBmsgBoardCampaign dBmsgBoardCampaign) {
-        MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
-        msgBoardCampaign.bottomBkgURL = dBmsgBoardCampaign.getBottomBkgURL();
-        msgBoardCampaign.crcVersion = dBmsgBoardCampaign.getCrcVersion();
-        msgBoardCampaign.msgBoardId = dBmsgBoardCampaign.getId().intValue();
-        msgBoardCampaign.textColor = dBmsgBoardCampaign.getTextColor();
-        msgBoardCampaign.playDay = dBmsgBoardCampaign.getPlayDay();
-        msgBoardCampaign.rightBkgURL = dBmsgBoardCampaign.getRightBkgURL();
-        msgBoardCampaign.startDate = dBmsgBoardCampaign.getStartDate();
-        msgBoardCampaign.endDate = dBmsgBoardCampaign.getEndDate();
-        msgBoardCampaign.messages = createMessagesList(dBmsgBoardCampaign.getMessages());
+    protected final List<Campaign> createCampaignList(final List<DBCampaign> _dbCampaigns) {
+        final List<Campaign> campaigns = new ArrayList<>(_dbCampaigns.size());
+        for (final DBCampaign dbCampaign : _dbCampaigns) campaigns.add(createCampaign(dbCampaign));
+        return campaigns;
+    }
 
+    protected final DBmsgBoardCampaign createDBmsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
+        final DBmsgBoardCampaign dBmsgBoardCampaign = new DBmsgBoardCampaign();
+        dBmsgBoardCampaign.setId((long) _msgBoardCampaign.msgBoardId);
+        dBmsgBoardCampaign.setBottomBkgURL(_msgBoardCampaign.bottomBkgURL);
+        dBmsgBoardCampaign.setRightBkgURL(_msgBoardCampaign.rightBkgURL);
+        dBmsgBoardCampaign.setCrcVersion(_msgBoardCampaign.crcVersion);
+        dBmsgBoardCampaign.setPlayDay(_msgBoardCampaign.playDay);
+        dBmsgBoardCampaign.setTextColor(_msgBoardCampaign.textColor);
+        dBmsgBoardCampaign.setStartDate(_msgBoardCampaign.startDate);
+        dBmsgBoardCampaign.setEndDate(_msgBoardCampaign.endDate);
+        return dBmsgBoardCampaign;
+    }
+
+    protected final MsgBoardCampaign createMsgBoardCampaign(final DBmsgBoardCampaign _dBmsgBoardCampaign) {
+        if (_dBmsgBoardCampaign == null) return null;
+        final MsgBoardCampaign msgBoardCampaign = new MsgBoardCampaign();
+        msgBoardCampaign.bottomBkgURL = _dBmsgBoardCampaign.getBottomBkgURL();
+        msgBoardCampaign.crcVersion = _dBmsgBoardCampaign.getCrcVersion();
+        msgBoardCampaign.msgBoardId = _dBmsgBoardCampaign.getId().intValue();
+        msgBoardCampaign.textColor = _dBmsgBoardCampaign.getTextColor();
+        msgBoardCampaign.playDay = _dBmsgBoardCampaign.getPlayDay();
+        msgBoardCampaign.rightBkgURL = _dBmsgBoardCampaign.getRightBkgURL();
+        msgBoardCampaign.startDate = _dBmsgBoardCampaign.getStartDate();
+        msgBoardCampaign.endDate = _dBmsgBoardCampaign.getEndDate();
         return msgBoardCampaign;
     }
 
-    protected static List<DBAsset> createDBAssetsList(List<Asset> assetList, Integer campaignId) {
-        ArrayList<DBAsset> dbAssets = new ArrayList<>(assetList.size());
-
-        DBAsset a;
-        for (Asset asset : assetList) {
-            a = createDBAsset(asset);
-//            a.setCampaignId(campaignId);
-            dbAssets.add(a);
-        }
-
-        return dbAssets;
-    }
-
-    protected static List<DBMessage> createDBMessageList(List<Message> messageList, Integer msgBoardID) {
-        ArrayList<DBMessage> dbMessages = new ArrayList<>(messageList.size());
-
-        DBMessage dbMessage;
-        for (Message message : messageList) {
-            dbMessage = createDBMessage(message);
-            dbMessage.setMsgBoardID(msgBoardID);
-            dbMessages.add(dbMessage);
-        }
-
+    protected final List<DBMessage> createDBMessageList(final List<Message> _messages) {
+        final List<DBMessage> dbMessages = new ArrayList<>(_messages.size());
+        for (final Message message : _messages) dbMessages.add(createDBMessage(message));
         return dbMessages;
     }
 
-    protected static List<Asset> createAssetsList(List<DBAsset> dbAssetsList) {
-        ArrayList<Asset> assets = new ArrayList<>(dbAssetsList.size());
-
-        for (DBAsset dbAsset : dbAssetsList)
-            assets.add(createAsset(dbAsset));
-
-        return assets;
-    }
-
-    protected static List<Message> createMessagesList(List<DBMessage> dbMessages) {
-        ArrayList<Message> messages = new ArrayList<>(dbMessages.size());
-
-        for (DBMessage dbMessage : dbMessages)
-            messages.add(createMessage(dbMessage));
-
+    protected final List<Message> createMessagesList(final List<DBMessage> _dbMessages) {
+        final List<Message> messages = new ArrayList<>(_dbMessages.size());
+        for (final DBMessage dbMessage : _dbMessages) messages.add(createMessage(dbMessage));
         return messages;
     }
 
-    protected static DBAsset createDBAsset(Asset asset) {
-        DBAsset dbAsset = new DBAsset();
-        dbAsset.setSequence(asset.sequence);
-        dbAsset.setDuration(asset.duration);
-        dbAsset.setName(asset.name);
-        dbAsset.setUrl(asset.url);
-
-        return dbAsset;
-    }
-
-    protected static Asset createAsset(DBAsset dbAsset) {
-        Asset asset = new Asset();
-        asset.sequence = dbAsset.getSequence();
-        asset.duration = dbAsset.getDuration();
-        asset.name = dbAsset.getName();
-        asset.url = dbAsset.getUrl();
-
-        return asset;
-    }
-
-
-
-    protected static Message createMessage(DBMessage dbMessage) {
-        Message message = new Message();
-        message.position = dbMessage.getPosition();
-        message.sequence = dbMessage.getSequence();
-        message.text = dbMessage.getText();
-
+    private final Message createMessage(final DBMessage _dbMessage) {
+       final Message message = new Message();
+        message.position = _dbMessage.getPosition();
+        message.sequence = _dbMessage.getSequence();
+        message.text = _dbMessage.getText();
         return message;
     }
 
-    protected static DBMessage createDBMessage(Message message) {
-        DBMessage dbMessage = new DBMessage();
-        dbMessage.setPosition(message.position);
-        dbMessage.setSequence(message.sequence);
-        dbMessage.setText(message.text);
-
+    private final DBMessage createDBMessage(final Message _message) {
+        final DBMessage dbMessage = new DBMessage();
+        dbMessage.setPosition(_message.position);
+        dbMessage.setSequence(_message.sequence);
+        dbMessage.setText(_message.text);
         return dbMessage;
     }
 
-    public static long getMillisecFromStringDate(String date) {
-        return simpleDateFormat.parse(date, new ParsePosition(0)).getTime();
-    }
 }

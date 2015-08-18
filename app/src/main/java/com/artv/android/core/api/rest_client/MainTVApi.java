@@ -3,7 +3,6 @@ package com.artv.android.core.api.rest_client;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.api.api_model.response.BeaconResponseObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
-import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.model.Beacon;
 import com.artv.android.core.model.DeviceConfig;

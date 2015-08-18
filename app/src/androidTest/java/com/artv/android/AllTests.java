@@ -1,7 +1,7 @@
 package com.artv.android;
 
 import com.artv.android.core.AllCoreTests;
-import com.artv.android.database.Database;
+import com.artv.android.database.AllDatabaseTests;
 import com.artv.android.system.AllSystemTests;
 
 import org.junit.runner.RunWith;
@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         AllCoreTests.class,
-        Database.class,
+        AllDatabaseTests.class,
         AllSystemTests.class,
         ApplicationLogicTest.class,
         ArTvResultTest.class

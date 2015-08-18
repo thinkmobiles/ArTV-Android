@@ -15,8 +15,6 @@ import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
 import com.artv.android.core.log.ArTvLogger;
 
-import java.util.ArrayList;
-
 /**
  * Created by ZOG on 7/8/2015.
  *

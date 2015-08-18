@@ -12,7 +12,7 @@ import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
-import com.artv.android.database.DBManager;
+import com.artv.android.database.DbManager;
 import com.artv.android.database.DbWorker;
 import com.artv.android.system.SpHelper;
 
@@ -53,7 +53,7 @@ public final class ApplicationLogic {
         mInitWorker = new InitWorker();
         mDisplaySwitcher = new DisplaySwitcher();
 
-        mDbWorker = DBManager.getInstance(mContext);
+        mDbWorker = DbManager.getInstance(mContext);
 
         mDateWorker = new DateWorker();
 

@@ -1,21 +1,17 @@
 package com.artv.android.system;
 
-import android.app.Fragment;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.artv.android.R;
-import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.system.fragments.ConfigInfoFragment;
-import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

@@ -2,14 +2,7 @@ package com.artv.android.core.api.api_model.response;
 
 import com.artv.android.core.api.ApiType;
 import com.artv.android.core.api.api_model.BaseResponseObject;
-import com.artv.android.core.model.Entry;
 import com.artv.android.core.model.GlobalConfig;
-
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
-
-import java.util.ArrayList;
 
 /**
  * Created by

@@ -2,7 +2,6 @@ package com.artv.android.core.api;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.BeaconRequestObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.request.GetDeviceConfigRequestObject;
@@ -13,7 +12,6 @@ import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
-import com.artv.android.core.model.Beacon;
 
 import junit.framework.Assert;
 
