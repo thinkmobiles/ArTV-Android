@@ -197,14 +197,15 @@ public final class DbManager implements DbWorker {
             openReadableDb();
             final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
             final List<DBCampaign> dbCampaigns = campaignDao.loadAll();
-            return mTransformer.createCampaignList(dbCampaigns);
+            final List<Campaign> campaigns = mTransformer.createCampaignList(dbCampaigns);
+            for (final Campaign campaign : campaigns) campaign.assets = getAssets(campaign);
+            return campaigns;
         } finally {
             daoSession.clear();
         }
     }
 
-    @Override
-    public final List<Asset> getAssets(final Campaign _campaign) {
+    protected final List<Asset> getAssets(final Campaign _campaign) {
         try {
             openReadableDb();
             final List<DBCampaignsAssets> dbCampaignsAssetses = getDBRelationsForCampaign(daoSession, _campaign);
@@ -240,7 +241,9 @@ public final class DbManager implements DbWorker {
             final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
             final DBCampaign dbCampaign = campaignDao.load((long) _campaignId);
             if (dbCampaign == null) throw new RuntimeException("Bad campaignId");
-            return mTransformer.createCampaign(dbCampaign);
+            final Campaign campaign = mTransformer.createCampaign(dbCampaign);
+            campaign.assets = getAssets(campaign);
+            return campaign;
         } finally {
             daoSession.clear();
         }

@@ -80,13 +80,31 @@ public final class CampaignTest {
     }
 
     @Test
-    public final void WriteCampaign_GetAssets_AssetsMatch() {
+    public final void WriteCampaign_GetCampaign_AssetsMatch() {
         final Campaign campaign1 = buildCampaign1();
         campaign1.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
         for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
         dbManager.write(campaign1);
 
-        final List<Asset> loadedAssets = dbManager.getAssets(campaign1);
+        final Campaign campaignLoaded = dbManager.getCampaignById(campaign1.campaignId);
+
+        Assert.assertTrue(campaign1.assets.size() == campaignLoaded.assets.size());
+        for (final Asset asset : campaign1.assets) {
+            Assert.assertTrue(campaignLoaded.assets.contains(asset));
+        }
+    }
+
+    @Test
+    public final void WriteCampaignMultipleTimes_GetCampaign_AssetsMatchAndNotDuplicate() {
+        final Campaign campaign1 = buildCampaign1();
+        campaign1.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
+        for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
+        dbManager.write(campaign1);
+        dbManager.write(campaign1);
+        dbManager.write(campaign1);
+        dbManager.write(campaign1);
+
+        final List<Asset> loadedAssets = dbManager.getCampaignById(campaign1.campaignId).assets;
 
         Assert.assertTrue(campaign1.assets.size() == loadedAssets.size());
         for (final Asset asset : campaign1.assets) {
@@ -95,25 +113,7 @@ public final class CampaignTest {
     }
 
     @Test
-    public final void WriteCampaignMultipleTimes_GetAssets_AssetsMatchAndNotDuplicate() {
-        final Campaign campaign1 = buildCampaign1();
-        campaign1.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
-        for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
-        dbManager.write(campaign1);
-        dbManager.write(campaign1);
-        dbManager.write(campaign1);
-        dbManager.write(campaign1);
-
-        final List<Asset> loadedAssets = dbManager.getAssets(campaign1);
-
-        Assert.assertTrue(campaign1.assets.size() == loadedAssets.size());
-        for (final Asset asset : campaign1.assets) {
-            Assert.assertTrue(loadedAssets.contains(asset));
-        }
-    }
-
-    @Test
-    public final void WriteFewCampaignWithSameAssets_GetAssets_AssetsMatch() {
+    public final void WriteFewCampaignWithSameAssets_GetCampaigns_AssetsMatch() {
         final Campaign campaign1 = buildCampaign1();
         campaign1.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
         for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
@@ -124,8 +124,8 @@ public final class CampaignTest {
         for(int i = 0; i < campaign2.assets.size(); i++) dbManager.write(campaign2.assets.get(i));
         dbManager.write(campaign2);
 
-        final List<Asset> loadedAssets1 = dbManager.getAssets(campaign1);
-        final List<Asset> loadedAssets2 = dbManager.getAssets(campaign2);
+        final List<Asset> loadedAssets1 = dbManager.getCampaignById(campaign1.campaignId).assets;
+        final List<Asset> loadedAssets2 = dbManager.getCampaignById(campaign2.campaignId).assets;
 
         Assert.assertTrue(campaign1.assets.size() == loadedAssets1.size());
         for (final Asset asset : campaign1.assets) {
@@ -139,7 +139,7 @@ public final class CampaignTest {
     }
 
     @Test
-    public final void WriteFewCampaignWithOverlappingAssets_GetAssets_AssetsMatch() {
+    public final void WriteFewCampaignWithOverlappingAssets_GetCampaigns_AssetsMatch() {
         final Campaign campaign1 = buildCampaign1();
         campaign1.assets = Arrays.asList(buildAsset1(), buildAsset3());
         for(int i = 0; i < campaign1.assets.size(); i++) dbManager.write(campaign1.assets.get(i));
@@ -150,8 +150,8 @@ public final class CampaignTest {
         for(int i = 0; i < campaign2.assets.size(); i++) dbManager.write(campaign2.assets.get(i));
         dbManager.write(campaign2);
 
-        final List<Asset> loadedAssets1 = dbManager.getAssets(campaign1);
-        final List<Asset> loadedAssets2 = dbManager.getAssets(campaign2);
+        final List<Asset> loadedAssets1 = dbManager.getCampaignById(campaign1.campaignId).assets;
+        final List<Asset> loadedAssets2 = dbManager.getCampaignById(campaign2.campaignId).assets;
 
         Assert.assertTrue(campaign1.assets.size() == loadedAssets1.size());
         for (final Asset asset : campaign1.assets) {
@@ -165,7 +165,7 @@ public final class CampaignTest {
     }
 
     @Test
-    public final void WriteCampaignWithMoreAssets_GetAssets_AssetsMatch() {
+    public final void WriteCampaignWithMoreAssets_GetCampaign_AssetsMatch() {
         final Campaign campaign = buildCampaign1();
 
         campaign.assets = Arrays.asList(buildAsset1(), buildAsset2());
@@ -176,7 +176,7 @@ public final class CampaignTest {
         for(int i = 0; i < campaign.assets.size(); i++) dbManager.write(campaign.assets.get(i));
         dbManager.write(campaign);
 
-        final List<Asset> loadedAssets = dbManager.getAssets(campaign);
+        final List<Asset> loadedAssets = dbManager.getCampaignById(campaign.campaignId).assets;
 
         Assert.assertTrue(campaign.assets.size() == loadedAssets.size());
         for (final Asset asset : campaign.assets) {
@@ -185,7 +185,7 @@ public final class CampaignTest {
     }
 
     @Test
-    public final void WriteCampaignWithLessAssets_GetAssets_AssetsMatch() {
+    public final void WriteCampaignWithLessAssets_GetCampaign_AssetsMatch() {
         final Campaign campaign = buildCampaign1();
 
         campaign.assets = Arrays.asList(buildAsset1(), buildAsset2(), buildAsset3());
@@ -196,7 +196,7 @@ public final class CampaignTest {
         for(int i = 0; i < campaign.assets.size(); i++) dbManager.write(campaign.assets.get(i));
         dbManager.write(campaign);
 
-        final List<Asset> loadedAssets = dbManager.getAssets(campaign);
+        final List<Asset> loadedAssets = dbManager.getCampaignById(campaign.campaignId).assets;
 
         Assert.assertTrue(campaign.assets.size() == loadedAssets.size());
         for (final Asset asset : campaign.assets) {
@@ -214,7 +214,7 @@ public final class CampaignTest {
         campaign.assets = new ArrayList<>();
         dbManager.write(campaign);
 
-        final List<Asset> loadedAssets = dbManager.getAssets(campaign);
+        final List<Asset> loadedAssets = dbManager.getCampaignById(campaign.campaignId).assets;
         Assert.assertTrue(loadedAssets.isEmpty());
     }
 
