@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.artv.android.R;
+import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
@@ -80,23 +81,23 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private final void handleAppState() {
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
                 break;
 
             case STATE_APP_START_WITH_CONFIG_INFO:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
                 break;
 
             case STATE_PLAY_MODE:
-                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
-//                getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
                 break;
         }
     }
 
     @Override
     public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
-        getFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
     }
 
     @Override

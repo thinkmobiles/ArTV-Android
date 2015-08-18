@@ -74,6 +74,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support.test/exposed-instrumentation-api-publish/0.3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support.test/rules/0.3/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support.test/runner/0.3/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
@@ -95,7 +96,9 @@
     <orderEntry type="library" exported="" scope="TEST" name="dexmaker-1.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="runner-0.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="exposed-instrumentation-api-publish-0.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="support-annotations-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="YouTubeAndroidPlayerApi" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.3.3" level="project" />
     <orderEntry type="library" exported="" name="converter-simplexml-1.6.1" level="project" />
     <orderEntry type="library" exported="" name="retrofit-1.9.0" level="project" />

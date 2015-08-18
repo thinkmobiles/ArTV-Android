@@ -19,6 +19,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
+import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.core.Constants;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.GlobalConfig;
@@ -37,7 +38,7 @@ import java.util.List;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class MediaPlayerFragment extends BaseFragment {
+public final class MediaPlayerFragment extends BaseFragment implements IPlaybackController {
 
     private FrameLayout mVideoContainer;
     private LinearLayout mRightContainer, mBottomContainer;
@@ -47,23 +48,9 @@ public final class MediaPlayerFragment extends BaseFragment {
 
     private SurfaceHolder mSurfaceHolder;
 
-    private DbWorker mDbWorker;
-    private List<File> mFiles;
-
-    private GlobalConfig globalConfig;
-
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
-
-        globalConfig = getApplicationLogic().getInitWorker().getInitData().getGlobalConfig();
-
-        mDbWorker = getApplicationLogic().getDbWorker();
-        mFiles = new ArrayList<>();
-        for (final Asset asset : mDbWorker.getAllAssets()) {
-            final File file = new File(Constants.PATH + asset.url);
-            if (file.exists()) mFiles.add(file);
-        }
     }
 
     @Override
@@ -109,8 +96,7 @@ public final class MediaPlayerFragment extends BaseFragment {
         mVideoWindow.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public final void onCompletion(final MediaPlayer _mp) {
-                mCurrentAsset++;
-                doShowLogic();
+
             }
         });
 
@@ -120,8 +106,7 @@ public final class MediaPlayerFragment extends BaseFragment {
                 Toast.makeText(getActivity().getApplicationContext(),
                         "Error playing: what = " + _what + ", extra = " + _extra,
                         Toast.LENGTH_SHORT).show();
-                mCurrentAsset++;
-                doShowLogic();
+
                 return true;
             }
         });
@@ -130,7 +115,7 @@ public final class MediaPlayerFragment extends BaseFragment {
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        if (_savedInstanceState == null) doShowLogic();
+        if (_savedInstanceState == null) ;
     }
 
     @Override
@@ -148,7 +133,7 @@ public final class MediaPlayerFragment extends BaseFragment {
         mBottomContainer.setVisibility(View.VISIBLE);
     }
 
-    public void setMsgBoardCampaign(MsgBoardCampaign _msgBoardCampaign) {
+    public void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
         Picasso.with(getActivity()).load(_msgBoardCampaign.bottomBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -188,42 +173,29 @@ public final class MediaPlayerFragment extends BaseFragment {
 
     }
 
-    private int mCurrentAsset = 0;
-    private final void doShowLogic() {
-        final int assetsCount = mFiles.size();
-        if (assetsCount == 0) {
-            Toast.makeText(getActivity().getApplicationContext(), "No assets to show", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    @Override
+    public final void playLocalVideo(final String _path) {
+        ivImage.setVisibility(View.INVISIBLE);
+        mVideoWindow.setVideoPath(_path);
+    }
 
-        if (mCurrentAsset >= assetsCount) {
-            mCurrentAsset = 0;
+    @Override
+    public final void playLocalPicture(final String _path) {
+        mVideoWindow.stopPlayback();
+        ivImage.setVisibility(View.VISIBLE);
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 8;
+        try {
+            ivImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(_path), null, options));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
-        final File file = mFiles.get(mCurrentAsset);
-        if (file.getName().endsWith("jpg")) {
-            mVideoWindow.stopPlayback();
-            ivImage.setVisibility(View.VISIBLE);
-            final BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 8;
-            try {
-                ivImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(file), null, options));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-            }
+    }
 
-            ivImage.postDelayed(new Runnable() {
-                @Override
-                public final void run() {
-                    mCurrentAsset++;
-                    doShowLogic();
-                }
-            }, globalConfig.getServerDefaultPlayTime() * 1000);
-
-        } else {
-            ivImage.setVisibility(View.INVISIBLE);
-            mVideoWindow.setVideoPath(file.getPath());
-        }
+    @Override
+    public final void playYoutubeLink(final String _url) {
+        //todo: implement
     }
 
 }

@@ -9,7 +9,7 @@ import com.artv.android.system.BaseActivity;
 /**
  * Created by ZOG on 7/7/2015.
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends android.support.v4.app.Fragment {
 
     private BaseActivity mBaseActivity;
 
