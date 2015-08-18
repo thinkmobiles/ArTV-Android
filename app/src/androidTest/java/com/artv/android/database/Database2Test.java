@@ -321,8 +321,86 @@ public final class Database2Test {
     }
 
     @Test
-    public final void WriteMsgBoardCampaignWithMessages_GetMsgBoardCampaign_MessagesMatch() {
+    public final void WriteMsgBoardCampaign_GetMsgBoardCampaign_MsgBoardCampaignsMatch() {
+        final MsgBoardCampaign msgBoardCampaign = buildMsgBoardCampaign1();
+        dbManager.write(msgBoardCampaign);
+        final MsgBoardCampaign msgBoardCampaignLoaded = dbManager.getMsgBoardCampaign();
+        Assert.assertEquals(msgBoardCampaign, msgBoardCampaignLoaded);
+    }
 
+    @Test
+    public final void WriteMsgBoardCampaignWithMessages_GetMsgBoardCampaign_MessagesMatch() {
+        final List<Message> messages = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            messages.add(buildMessage(i));
+        }
+        final MsgBoardCampaign msgBoardCampaign = buildMsgBoardCampaign1();
+        msgBoardCampaign.messages = messages;
+        dbManager.write(msgBoardCampaign);
+
+        final MsgBoardCampaign msgBoardCampaignLoaded = dbManager.getMsgBoardCampaign();
+        Assert.assertEquals(messages.size(), msgBoardCampaignLoaded.messages.size());
+
+        for (final Message message : messages) msgBoardCampaignLoaded.messages.contains(message);
+    }
+
+    @Test
+    public final void WriteMsgBoardCampaignWithMessages_WriteWithMoreOrLessMessages_MessagesMatch() {
+        final List<Message> messages = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            messages.add(buildMessage(i));
+        }
+        final MsgBoardCampaign msgBoardCampaign = buildMsgBoardCampaign1();
+        msgBoardCampaign.messages = messages;
+        dbManager.write(msgBoardCampaign);
+
+        messages.add(buildMessage(6));
+        dbManager.write(msgBoardCampaign);
+
+        MsgBoardCampaign msgBoardCampaignLoaded = dbManager.getMsgBoardCampaign();
+        Assert.assertEquals(messages.size(), msgBoardCampaignLoaded.messages.size());
+        for (final Message message : messages) msgBoardCampaignLoaded.messages.contains(message);
+
+        for (int i = 7; i < 11; i++) {
+            messages.add(buildMessage(i));
+        }
+        dbManager.write(msgBoardCampaign);
+
+        msgBoardCampaignLoaded = dbManager.getMsgBoardCampaign();
+        Assert.assertEquals(messages.size(), msgBoardCampaignLoaded.messages.size());
+        for (final Message message : messages) msgBoardCampaignLoaded.messages.contains(message);
+
+        for (int i = 0; i < 5; i++) {
+            messages.remove(messages.get(i));
+        }
+        dbManager.write(msgBoardCampaign);
+
+        msgBoardCampaignLoaded = dbManager.getMsgBoardCampaign();
+        Assert.assertEquals(messages.size(), msgBoardCampaignLoaded.messages.size());
+        for (final Message message : messages) msgBoardCampaignLoaded.messages.contains(message);
+    }
+
+    @Test
+    public final void WriteMsgBoardCampaignWithMessages_OnlyWroteMessagesSaved() {
+        final List<Message> messages = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            messages.add(buildMessage(i));
+        }
+        final MsgBoardCampaign msgBoardCampaign = buildMsgBoardCampaign1();
+        msgBoardCampaign.messages = messages;
+        dbManager.write(msgBoardCampaign);
+
+        Assert.assertEquals(dbManager.getAllMessages().size(), 5);
+
+        messages.add(buildMessage(6));
+        dbManager.write(msgBoardCampaign);
+
+        Assert.assertEquals(dbManager.getAllMessages().size(), 6);
+
+        messages.remove(messages.get(0));
+        dbManager.write(msgBoardCampaign);
+
+        Assert.assertEquals(dbManager.getAllMessages().size(), 5);
     }
 
     private final Asset buildAsset1() {

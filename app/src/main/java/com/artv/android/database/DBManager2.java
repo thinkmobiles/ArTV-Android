@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
+import com.artv.android.core.model.Message;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.gen.DBAsset;
 import com.artv.android.database.gen.DBAssetDao;
@@ -274,6 +275,16 @@ public class DbManager2 implements DbWorker {
             final MsgBoardCampaign msg = mTransformer.createMsgBoardCampaign(dBmsgBoardCampaignDao.loadAll().get(0));
             msg.messages = mTransformer.createMessagesList(messageDao.loadAll());
             return msg;
+        } finally {
+            daoSession.clear();
+        }
+    }
+
+    protected final List<Message> getAllMessages() {
+        try {
+            openReadableDb();
+            final DBMessageDao messageDao = daoSession.getDBMessageDao();
+            return mTransformer.createMessagesList(messageDao.loadAll());
         } finally {
             daoSession.clear();
         }
