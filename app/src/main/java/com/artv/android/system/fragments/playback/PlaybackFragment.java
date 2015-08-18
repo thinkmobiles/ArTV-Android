@@ -21,7 +21,9 @@ import android.widget.VideoView;
 import com.artv.android.R;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
+import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.model.MsgBoardCampaign;
+import com.artv.android.database.DbWorker;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -44,12 +46,15 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private TextView tvRightText;
     private TextView tvBottomText;
 
+    private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
-        mVideoCompletionListener = getApplicationLogic().getPlaybackWorker().getVideoCompletionListener();
+        mPlaybackWorker = getApplicationLogic().getPlaybackWorker();
+        mPlaybackWorker.setPlaybackController(this);
+        mVideoCompletionListener = mPlaybackWorker.getVideoCompletionListener();
     }
 
     @Override
@@ -102,7 +107,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        if (_savedInstanceState == null) ;
+        if (_savedInstanceState == null) mPlaybackWorker.startPlayback();
     }
 
     @Override
@@ -110,17 +115,12 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         super.onDestroy();
     }
 
-    private void switchToFullScreenMode() {
-        rlRightContainer.setVisibility(View.GONE);
-        rlBottomContainer.setVisibility(View.GONE);
+    private void toggleMsgUi(final boolean _hasMsg) {
+        rlRightContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
+        rlBottomContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
     }
 
-    private void switchToBoxedMode() {
-        rlRightContainer.setVisibility(View.VISIBLE);
-        rlBottomContainer.setVisibility(View.VISIBLE);
-    }
-
-    public void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
+    private final void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
         Picasso.with(getActivity()).load(_msgBoardCampaign.bottomBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -163,16 +163,18 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     @Override
     public final void playLocalVideo(final String _path) {
         removeFragmentIfExist();
-
         ivImage.setVisibility(View.INVISIBLE);
+
+        vvVideoPlayer.setVisibility(View.VISIBLE);
         vvVideoPlayer.setVideoPath(_path);
     }
 
     @Override
     public final void playLocalPicture(final String _path) {
         removeFragmentIfExist();
-
         vvVideoPlayer.stopPlayback();
+        vvVideoPlayer.setVisibility(View.INVISIBLE);
+
         ivImage.setVisibility(View.VISIBLE);
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
@@ -188,6 +190,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public final void playYoutubeLink(final String _url) {
         ivImage.setVisibility(View.INVISIBLE);
         vvVideoPlayer.stopPlayback();
+        vvVideoPlayer.setVisibility(View.INVISIBLE);
 
         final YoutubeVideoFragment fragment = YoutubeVideoFragment.newInstance(_url);
         fragment.setYoutubeVideoListener(new YoutubeVideoListener() {
@@ -207,6 +210,12 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private final void removeFragmentIfExist() {
         final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.flPlayContainer_FP);
         if (fragment != null) getChildFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
+    @Override
+    public final void showMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
+        toggleMsgUi(_msgBoardCampaign != null);
+        if (_msgBoardCampaign != null) setMsgBoardCampaign(_msgBoardCampaign);
     }
 
 }

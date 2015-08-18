@@ -1,5 +1,7 @@
 package com.artv.android.app.playback;
 
+import com.artv.android.core.model.MsgBoardCampaign;
+
 /**
  * Used to control playback.
  *
@@ -10,5 +12,6 @@ public interface IPlaybackController {
     void playLocalVideo(final String _path);
     void playLocalPicture(final String _path);
     void playYoutubeLink(final String _url);
+    void showMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign);
 
 }
