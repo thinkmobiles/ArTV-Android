@@ -1,6 +1,8 @@
 package com.artv.android.app.playback;
 
 /**
+ * Used to control playback.
+ *
  * Created by ZOG on 8/18/2015.
  */
 public interface IPlaybackController {

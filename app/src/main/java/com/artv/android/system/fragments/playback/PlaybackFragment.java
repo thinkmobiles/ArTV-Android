@@ -1,4 +1,4 @@
-package com.artv.android.system.fragments;
+package com.artv.android.system.fragments.playback;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,55 +7,54 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
 import com.artv.android.app.playback.IPlaybackController;
-import com.artv.android.core.Constants;
-import com.artv.android.core.model.Asset;
-import com.artv.android.core.model.GlobalConfig;
+import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.core.model.MsgBoardCampaign;
-import com.artv.android.database.DbWorker;
-import com.artv.android.system.custom_views.CustomMediaController;
+import com.artv.android.system.fragments.BaseFragment;
+import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
+import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class MediaPlayerFragment extends BaseFragment implements IPlaybackController {
+public final class PlaybackFragment extends BaseFragment implements IPlaybackController {
 
-    private FrameLayout mVideoContainer;
-    private LinearLayout mRightContainer, mBottomContainer;
-    private TextView mRightText, mBottomText;
-    private VideoView mVideoWindow;
+    private FrameLayout flPlayContainer;
     private ImageView ivImage;
+    private VideoView vvVideoPlayer;
+    private RelativeLayout rlRightContainer;
+    private RelativeLayout rlBottomContainer;
+    private TextView tvRightText;
+    private TextView tvBottomText;
 
-    private SurfaceHolder mSurfaceHolder;
+    private IVideoCompletionListener mVideoCompletionListener;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
+        mVideoCompletionListener = getApplicationLogic().getPlaybackWorker().getVideoCompletionListener();
     }
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
-        final View view = _inflater.inflate(R.layout.fragment_media_player, _container, false);
+        final View view = _inflater.inflate(R.layout.fragment_playback, _container, false);
 
         findViews(view);
         prepareVideoViews();
@@ -64,49 +63,37 @@ public final class MediaPlayerFragment extends BaseFragment implements IPlayback
     }
 
     private final void findViews(final View _view) {
-        mVideoContainer = (FrameLayout) _view.findViewById(R.id.flVideoContainer_FMP);
-        mBottomContainer = (LinearLayout) _view.findViewById(R.id.llBottomContainer_FMP);
-        mRightContainer = (LinearLayout) _view.findViewById(R.id.llRightContainer_FMP);
-        mRightText = (TextView) _view.findViewById(R.id.tvRightText_FMP);
-        mBottomText = (TextView) _view.findViewById(R.id.tvBottomText_FMP);
-        mVideoWindow = (VideoView) _view.findViewById(R.id.vvPlayerWindow_FMP);
-        ivImage = (ImageView) _view.findViewById(R.id.ivImage_FMP);
+        flPlayContainer = (FrameLayout) _view.findViewById(R.id.flPlayContainer_FP);
+        ivImage = (ImageView) _view.findViewById(R.id.ivImage_FP);
+        vvVideoPlayer = (VideoView) _view.findViewById(R.id.vvVideoPlayer_FP);
+        rlRightContainer = (RelativeLayout) _view.findViewById(R.id.rlRightContainer_FP);
+        rlBottomContainer = (RelativeLayout) _view.findViewById(R.id.rlBottomContainer_FP);
+        tvRightText = (TextView) _view.findViewById(R.id.tvRightText_FP);
+        tvBottomText = (TextView) _view.findViewById(R.id.tvBottomText_FP);
     }
 
     private final void prepareVideoViews() {
-        mSurfaceHolder = mVideoWindow.getHolder();
-        final CustomMediaController mediaController = new CustomMediaController(getActivity());
-        mediaController.setAnchorView(mVideoWindow);
-        mVideoWindow.setMediaController(mediaController);
-        mVideoWindow.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        vvVideoPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public final void onPrepared(final MediaPlayer _mp) {
                 _mp.start();
             }
         });
 
-        mediaController.setFullScreenBtnListener(new CustomMediaController.OnFullScreenBtnClickListener() {
-            @Override
-            public void onFullScreenBtnClicked(boolean isFullScreenMode) {
-                if (isFullScreenMode) switchToFullScreenMode();
-                else switchToBoxedMode();
-            }
-        });
-
-        mVideoWindow.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        vvVideoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public final void onCompletion(final MediaPlayer _mp) {
-
+                mVideoCompletionListener.onVideoCompleted();
             }
         });
 
-        mVideoWindow.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+        vvVideoPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public final boolean onError(final MediaPlayer _mp, final int _what, final int _extra) {
                 Toast.makeText(getActivity().getApplicationContext(),
                         "Error playing: what = " + _what + ", extra = " + _extra,
                         Toast.LENGTH_SHORT).show();
-
+                mVideoCompletionListener.onVideoCompleted();
                 return true;
             }
         });
@@ -124,64 +111,68 @@ public final class MediaPlayerFragment extends BaseFragment implements IPlayback
     }
 
     private void switchToFullScreenMode() {
-        mRightContainer.setVisibility(View.GONE);
-        mBottomContainer.setVisibility(View.GONE);
+        rlRightContainer.setVisibility(View.GONE);
+        rlBottomContainer.setVisibility(View.GONE);
     }
 
     private void switchToBoxedMode() {
-        mRightContainer.setVisibility(View.VISIBLE);
-        mBottomContainer.setVisibility(View.VISIBLE);
+        rlRightContainer.setVisibility(View.VISIBLE);
+        rlBottomContainer.setVisibility(View.VISIBLE);
     }
 
     public void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
         Picasso.with(getActivity()).load(_msgBoardCampaign.bottomBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                mBottomContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                rlBottomContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
             }
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                mBottomContainer.setBackgroundDrawable(null);
+                rlBottomContainer.setBackgroundDrawable(null);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                mBottomContainer.setBackgroundDrawable(null);
+                rlBottomContainer.setBackgroundDrawable(null);
             }
         });
         Picasso.with(getActivity()).load(_msgBoardCampaign.rightBkgURL).into(new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                mRightContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                rlRightContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
             }
 
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
-                mRightContainer.setBackgroundDrawable(null);
+                rlRightContainer.setBackgroundDrawable(null);
             }
 
             @Override
             public void onPrepareLoad(Drawable placeHolderDrawable) {
-                mRightContainer.setBackgroundDrawable(null);
+                rlRightContainer.setBackgroundDrawable(null);
             }
         });
 
         int textColor = Color.parseColor(_msgBoardCampaign.textColor);
-        mBottomText.setTextColor(textColor);
-        mRightText.setTextColor(textColor);
+        tvBottomText.setTextColor(textColor);
+        tvRightText.setTextColor(textColor);
 
     }
 
     @Override
     public final void playLocalVideo(final String _path) {
+        removeFragmentIfExist();
+
         ivImage.setVisibility(View.INVISIBLE);
-        mVideoWindow.setVideoPath(_path);
+        vvVideoPlayer.setVideoPath(_path);
     }
 
     @Override
     public final void playLocalPicture(final String _path) {
-        mVideoWindow.stopPlayback();
+        removeFragmentIfExist();
+
+        vvVideoPlayer.stopPlayback();
         ivImage.setVisibility(View.VISIBLE);
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
@@ -195,7 +186,27 @@ public final class MediaPlayerFragment extends BaseFragment implements IPlayback
 
     @Override
     public final void playYoutubeLink(final String _url) {
-        //todo: implement
+        ivImage.setVisibility(View.INVISIBLE);
+        vvVideoPlayer.stopPlayback();
+
+        final YoutubeVideoFragment fragment = YoutubeVideoFragment.newInstance(_url);
+        fragment.setYoutubeVideoListener(new YoutubeVideoListener() {
+            @Override
+            public final void onVideoStarted() {
+
+            }
+
+            @Override
+            public final void onVideoEnded() {
+                mVideoCompletionListener.onVideoCompleted();
+            }
+        });
+        getChildFragmentManager().beginTransaction().replace(R.id.flPlayContainer_FP, fragment).commit();
+    }
+
+    private final void removeFragmentIfExist() {
+        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.flPlayContainer_FP);
+        if (fragment != null) getChildFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
 }

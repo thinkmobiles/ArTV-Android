@@ -2,6 +2,7 @@ package com.artv.android;
 
 import android.content.Context;
 
+import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.app.start.StartWorker;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
@@ -36,6 +37,7 @@ public final class ApplicationLogic {
     private DateWorker mDateWorker;
 
     private StartWorker mStartWorker;
+    private PlaybackWorker mPlaybackWorker;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -76,6 +78,8 @@ public final class ApplicationLogic {
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
+
+        mPlaybackWorker = new PlaybackWorker();
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -100,6 +104,10 @@ public final class ApplicationLogic {
 
     public final InitWorker getInitWorker() {
         return mInitWorker;
+    }
+
+    public final PlaybackWorker getPlaybackWorker() {
+        return mPlaybackWorker;
     }
 
     /**

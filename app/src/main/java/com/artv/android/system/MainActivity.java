@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.artv.android.R;
-import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
@@ -15,8 +14,7 @@ import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
-import com.artv.android.system.fragments.MediaPlayerFragment;
-import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
+import com.artv.android.system.fragments.playback.PlaybackFragment;
 import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
 public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IConfigInfoListener {
@@ -89,7 +87,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
-                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new MediaPlayerFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
 //                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
                 break;
         }

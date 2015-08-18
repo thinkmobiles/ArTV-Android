@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/flPlayContainer_FP"
+        android:layout_weight="1"
+        android:background="#000"
+        android:layout_toLeftOf="@+id/rlRightContainer_FP"
+        android:layout_above="@+id/rlBottomContainer_FP">
+
+        <com.artv.android.system.custom_views.VideoViewCustom
+            android:id="@+id/vvVideoPlayer_FP"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivImage_FP"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            android:background="@color/text" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/rlBottomContainer_FP"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/tvBottomText_FP"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:id="@+id/rlRightContainer_FP"
+        android:layout_alignParentRight="true"
+        android:layout_above="@+id/rlBottomContainer_FP">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/tvRightText_FP"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+</RelativeLayout>

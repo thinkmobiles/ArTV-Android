@@ -1,9 +1,7 @@
 package com.artv.android.system.fragments.youtube;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +9,10 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.artv.android.R;
+import com.artv.android.system.fragments.BaseFragment;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,10 +21,10 @@ import java.util.regex.Pattern;
  * Created by
  * mRogach on 14.08.2015.
  */
-public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.PlayerStateChangeListener {
+public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.PlayerStateChangeListener {
 
     private static final int RECOVERY_DIALOG_REQUEST = 1;
-    private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayerSupportFragment youTubePlayerFragment;
     private static final String YoutubeDeveloperKey = "AIzaSyCZe0fNjL91GSTJZh5Bq0x7g3KHKF6lSoE";
     private String mYoutubeUrl;
     private String mYoutubeVideoID;
@@ -59,8 +58,8 @@ public class YoutubeVideoFragment extends Fragment implements YouTubePlayer.Play
     }
 
     private void showFragment() {
-        youTubePlayerFragment = YouTubePlayerFragment.newInstance();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.youtube_fragment, youTubePlayerFragment).commit();
     }
 
