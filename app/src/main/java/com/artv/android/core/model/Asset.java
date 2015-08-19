@@ -19,37 +19,36 @@ public final class Asset {
     public String url;
 
     @Element(name = "Duration", required = false)
-    public int duration;
+    public Integer duration;
 
     @Element(name = "Sequence", required = false)
-    public int sequence;
+    public Integer sequence;
 
     public final int getAssetId() {
-        return hashCode();
+        return Math.abs(hashCode());
     }
 
     @Override
-    public final boolean equals(final Object _o) {
-        if (this == _o) return true;
-        if (_o == null) return false;
-        if (getClass() != _o.getClass()) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        final Asset asset = (Asset) _o;
+        Asset asset = (Asset) o;
 
-        if(!TextUtils.equals(name,asset.name)) return false;
-        if(!TextUtils.equals(url,asset.url)) return false;
-        if(duration != asset.duration) return false;
-        if(sequence != asset.sequence) return false;
+        if (name != null ? !name.equals(asset.name) : asset.name != null) return false;
+        if (url != null ? !url.equals(asset.url) : asset.url != null) return false;
+        if (duration != null ? !duration.equals(asset.duration) : asset.duration != null)
+            return false;
+        return !(sequence != null ? !sequence.equals(asset.sequence) : asset.sequence != null);
 
-        return true;
     }
 
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (url != null ? url.hashCode() : 0);
-        result = 31 * result + duration;
-        result = 31 * result + sequence;
+        result = 31 * result + (duration != null ? duration.hashCode() : 0);
+        result = 31 * result + (sequence != null ? sequence.hashCode() : 0);
         return result;
     }
 }

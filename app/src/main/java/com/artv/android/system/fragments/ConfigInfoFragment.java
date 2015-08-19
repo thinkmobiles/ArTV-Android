@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.artv.android.R;
 import com.artv.android.core.api.ApiConst;
-import com.artv.android.core.api.UrlHelper;
+import com.artv.android.core.UrlHelper;
 import com.artv.android.core.config_info.ConfigInfo;
 
 /**

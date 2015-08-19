@@ -50,7 +50,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
         Assert.assertEquals(ArTvState.STATE_APP_START, mMainActivity.getApplicationLogic().getStateWorker().getArTvState());
 
         final ConfigInfoFragment fragment = (ConfigInfoFragment) mMainActivity
-                .getFragmentManager()
+                .getSupportFragmentManager()
                 .findFragmentById(R.id.flFragmentContainer_AM);
     }
 
