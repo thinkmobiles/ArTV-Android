@@ -16,7 +16,8 @@ public final class GetCampaignRequestObject extends BaseRequestObject implements
 
     private String mToken;
     private String mTagID;
-    private int mCampaignID;
+    private int mCampaignId;
+    private int mMsgBoardCampaignId;
 
     private GetCampaignRequestObject() {
         apiType = ApiType.GET_CAMPAIGN;
@@ -27,7 +28,8 @@ public final class GetCampaignRequestObject extends BaseRequestObject implements
         final Map<String, String> query = new HashMap<>(3);
         query.put(ApiConst.KEY_TOKEN, mToken);
         query.put(ApiConst.KEY_TAG_ID, mTagID);
-        query.put(ApiConst.KEY_CAMPAIGN_ID, String.valueOf(mCampaignID));
+        query.put(ApiConst.KEY_CAMPAIGN_ID, String.valueOf(mCampaignId));
+        query.put(ApiConst.KEY_MSG_BOARD_CAMPAIGN_ID, String.valueOf(mMsgBoardCampaignId));
         return query;
     }
 
@@ -50,7 +52,12 @@ public final class GetCampaignRequestObject extends BaseRequestObject implements
         }
 
         public final Builder setCampaignID(final int _campaignID) {
-            mGetCampaignRequestObject.mCampaignID = _campaignID;
+            mGetCampaignRequestObject.mCampaignId = _campaignID;
+            return this;
+        }
+
+        public final Builder setMsgBoardCampaignId(final int _msgBoardCampaignId) {
+            mGetCampaignRequestObject.mMsgBoardCampaignId = _msgBoardCampaignId;
             return this;
         }
 
