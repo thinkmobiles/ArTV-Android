@@ -4,14 +4,25 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/flPlayContainer_FP"
-        android:layout_weight="1"
-        android:background="#000"
+        android:id="@+id/rlPlayContainer_FP"
         android:layout_toLeftOf="@+id/rlRightContainer_FP"
         android:layout_above="@+id/rlBottomContainer_FP">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rlForImage_FP">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/ivImage_FP"
+                android:scaleType="fitCenter"
+                android:background="@color/text" />
+        </RelativeLayout>
 
         <com.artv.android.system.custom_views.VideoViewCustom
             android:id="@+id/vvVideoPlayer_FP"
@@ -19,21 +30,14 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/ivImage_FP"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            android:background="@color/text" />
-
-    </FrameLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/rlBottomContainer_FP"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -49,7 +53,8 @@
         android:layout_height="match_parent"
         android:id="@+id/rlRightContainer_FP"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/rlBottomContainer_FP">
+        android:layout_above="@+id/rlBottomContainer_FP"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,4 +65,5 @@
             android:layout_gravity="center_horizontal"
             android:layout_centerInParent="true" />
     </RelativeLayout>
+
 </RelativeLayout>

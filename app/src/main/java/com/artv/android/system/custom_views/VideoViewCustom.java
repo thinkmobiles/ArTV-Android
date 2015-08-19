@@ -21,9 +21,9 @@ public class VideoViewCustom extends VideoView {
         super(context, attrs, defStyle);
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        getHolder().setFixedSize(getMeasuredWidth(), getMeasuredHeight());
-    }
+//    @Override
+//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//        getHolder().setFixedSize(getMeasuredWidth(), getMeasuredHeight());
+//    }
 }

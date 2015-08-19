@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.model.MsgBoardCampaign;
-import com.artv.android.database.DbWorker;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -38,7 +36,7 @@ import java.io.FileNotFoundException;
  */
 public final class PlaybackFragment extends BaseFragment implements IPlaybackController {
 
-    private FrameLayout flPlayContainer;
+    private RelativeLayout rlPlayContainer;
     private ImageView ivImage;
     private VideoView vvVideoPlayer;
     private RelativeLayout rlRightContainer;
@@ -68,7 +66,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     }
 
     private final void findViews(final View _view) {
-        flPlayContainer = (FrameLayout) _view.findViewById(R.id.flPlayContainer_FP);
+        rlPlayContainer = (RelativeLayout) _view.findViewById(R.id.rlPlayContainer_FP);
         ivImage = (ImageView) _view.findViewById(R.id.ivImage_FP);
         vvVideoPlayer = (VideoView) _view.findViewById(R.id.vvVideoPlayer_FP);
         rlRightContainer = (RelativeLayout) _view.findViewById(R.id.rlRightContainer_FP);
@@ -111,8 +109,9 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     }
 
     @Override
-    public final void onDestroy() {
-        super.onDestroy();
+    public final void onStop() {
+        super.onStop();
+        mPlaybackWorker.stopPlayback();
     }
 
     private void toggleMsgUi(final boolean _hasMsg) {
@@ -163,9 +162,10 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     @Override
     public final void playLocalVideo(final String _path) {
         removeFragmentIfExist();
-        ivImage.setVisibility(View.INVISIBLE);
+        ivImage.setVisibility(View.GONE);
 
         vvVideoPlayer.setVisibility(View.VISIBLE);
+        vvVideoPlayer.setZOrderOnTop(false);
         vvVideoPlayer.setVideoPath(_path);
     }
 
@@ -173,7 +173,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public final void playLocalPicture(final String _path) {
         removeFragmentIfExist();
         vvVideoPlayer.stopPlayback();
-        vvVideoPlayer.setVisibility(View.INVISIBLE);
+        vvVideoPlayer.setVisibility(View.GONE);
+        vvVideoPlayer.setZOrderOnTop(true);
 
         ivImage.setVisibility(View.VISIBLE);
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -188,9 +189,10 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     @Override
     public final void playYoutubeLink(final String _url) {
-        ivImage.setVisibility(View.INVISIBLE);
+        ivImage.setVisibility(View.GONE);
         vvVideoPlayer.stopPlayback();
-        vvVideoPlayer.setVisibility(View.INVISIBLE);
+        vvVideoPlayer.setVisibility(View.GONE);
+        vvVideoPlayer.setZOrderOnTop(true);
 
         final YoutubeVideoFragment fragment = YoutubeVideoFragment.newInstance(_url);
         fragment.setYoutubeVideoListener(new YoutubeVideoListener() {
@@ -204,11 +206,11 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
                 mVideoCompletionListener.onVideoCompleted();
             }
         });
-        getChildFragmentManager().beginTransaction().replace(R.id.flPlayContainer_FP, fragment).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.rlPlayContainer_FP, fragment).commit();
     }
 
     private final void removeFragmentIfExist() {
-        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.flPlayContainer_FP);
+        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.rlPlayContainer_FP);
         if (fragment != null) getChildFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
