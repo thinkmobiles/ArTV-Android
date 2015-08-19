@@ -89,7 +89,8 @@ public class BeaconWorker {
         beacon.currentCampaign = 0; //set current playing campaign id
         beacon.currentAsset = 0; //set current playing asset id
         beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
-        beacon.msgBoardCampaign = mDbWorker.getMsgBoardCampaign();
+        beacon.mMessageBoardCampaigns = new ArrayList<>();
+        beacon.mMessageBoardCampaigns.add(mDbWorker.getMsgBoardCampaign());
         beacon.errorLog = "All ok";
         return beacon;
     }
