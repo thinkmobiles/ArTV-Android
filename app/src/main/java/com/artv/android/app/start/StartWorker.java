@@ -141,6 +141,7 @@ public class StartWorker {
                 }
             } else {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
             }
         }
     };
