@@ -144,13 +144,17 @@ public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.
     @Override
     public void onVideoStarted() {
         Log.v("video", "onVideoStarted");
-        youtubeVideoListener.onVideoStarted();
+        if (youtubeVideoListener != null) {
+            youtubeVideoListener.onVideoStarted();
+        }
     }
 
     @Override
     public void onVideoEnded() {
         Log.v("video", "onVideoEnded");
-        youtubeVideoListener.onVideoEnded();
+        if (youtubeVideoListener != null) {
+            youtubeVideoListener.onVideoEnded();
+        }
     }
 
     @Override

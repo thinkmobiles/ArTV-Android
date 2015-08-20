@@ -50,25 +50,23 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mPlayModeManager = new PlayModeManager();
         mCampaigns = mDbWorker.getAllCampaigns();
         prepareStackToPlay(mPlayModeManager, mCampaigns);
-        play(mAssetStack);
     }
 
     private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
-        Campaign campaignToPlay = null;
+        Campaign campaignToPlay;
         switch (_playModeManager.campainToPlay(_campaigns)) {
             case 0:
-                campaignToPlay = _playModeManager.getDefaultCampaign(_campaigns);
+                mAssetStack = getStackAssetsAllCampaigns(_campaigns);
                 break;
             case 1:
                 campaignToPlay = hasPlayCampaignInCurentTime(_campaigns, _playModeManager);
+                if (campaignToPlay != null) {
+                    mAssetStack = getStackAssets(campaignToPlay.assets);
+                } else
+                    mAssetStack = getStackAssetsAllCampaigns(_campaigns);
                 break;
         }
-
-        if (campaignToPlay != null) {
-            mAssetStack = getStackAssets(campaignToPlay.assets);
-        } else {
-            mAssetStack = getStackAssets(_playModeManager.getDefaultCampaign(_campaigns).assets);
-        }
+        play();
     }
 
     public final void stopPlayback() {
@@ -77,16 +75,21 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     @Override
     public final void onVideoCompleted() {
-
+        play();
     }
 
     private void play() {
-        if (isVideoFormat(_assets.pop().url)) {
-            playVideo(_assets);
-        } else if (isPictureFormat(_assets.pop().url)) {
-            playPicture(_assets);
-        } else if (UrlHelper.isYoutubeUrl(_assets.pop().url)) {
-            playYouTubeVideo(_assets);
+        if (!mAssetStack.isEmpty()) {
+            Asset asset = mAssetStack.pop();
+            if (isVideoFormat(asset.url)) {
+                mPlaybackController.playLocalVideo(Constants.PATH + asset.url);
+            } else if (isPictureFormat(asset.url)) {
+                playPicture(asset);
+            } else if (UrlHelper.isYoutubeUrl(asset.url)) {
+                mPlaybackController.playYoutubeLink(asset.url);
+            }
+        } else {
+            prepareStackToPlay(mPlayModeManager, mCampaigns);
         }
     }
 
@@ -101,11 +104,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         return _fileName.endsWith(".jpg") || _fileName.endsWith(".png");
     }
 
-    private void playNextAsset(final Stack<Asset> _assets) {
+    private void playNextAsset(final Asset _asset) {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                playAsset(_assets);
+                play();
             }
         }, playDuration(_asset));
     }
@@ -117,27 +120,13 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         return mGlobalConfig.getServerDefaultPlayTime() * 1000;
     }
 
-    private void playVideo(final Stack<Asset> _assets) {
-        mPlaybackController.playLocalVideo(Constants.PATH + _assets.pop().url);
-        if (_assets.pop().duration > 0) {
-            playNextAsset(_assets);
-        }
-    }
-
-    private void playYouTubeVideo(final Stack<Asset> _assets) {
-        mPlaybackController.playYoutubeLink(_assets.pop().url);
-        if (_assets.pop().duration > 0) {
-            playNextAsset(_assets);
-        }
-    }
-
-    private void playPicture(final Stack<Asset> _assets) {
-        mPlaybackController.playLocalPicture(Constants.PATH + _assets.pop().url);
-        playNextAsset(_assets);
+    private void playPicture(final Asset _asset) {
+        mPlaybackController.playLocalPicture(Constants.PATH + _asset.url);
+        playNextAsset(_asset);
     }
 
     private Campaign hasPlayCampaignInCurentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
-        Date owerrideTime = null;
+        Date owerrideTime;
         Date currentTime = _playModeManager.getCurrentDate();
         long currentTimeInMills = _playModeManager.getTimeInMills(currentTime);
         long owerrideTimeInMills = 0;
@@ -151,7 +140,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 return campaign;
             } else if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
                 startCheckTimeDelay(campaign, owerrideTimeInMills - currentTimeInMills);
-                return _playModeManager.getDefaultCampaign(_campaigns);
             }
         }
         return null;
@@ -162,7 +150,8 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                playAsset(_campaign);
+                mAssetStack = getStackAssets(_campaign.assets);
+                play();
             }
         }, _timeDelay);
     }
@@ -176,6 +165,15 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         });
     }
 
+    private void sortCampaigns(List<Campaign> _campaigns) {
+        Collections.sort(_campaigns, new Comparator<Campaign>() {
+            @Override
+            public int compare(Campaign lhs, Campaign rhs) {
+                return rhs.sequence.compareTo(lhs.sequence);
+            }
+        });
+    }
+
     private Stack<Asset> getStackAssets(final List<Asset> _assets) {
         sortAssets(_assets);
         Stack<Asset> stack = new Stack<>();
@@ -183,6 +181,16 @@ public final class PlaybackWorker implements IVideoCompletionListener {
             stack.push(asset);
         }
         return stack;
+    }
+
+    private Stack<Asset> getStackAssetsAllCampaigns(List<Campaign> _campaigns) {
+        List<Asset> assets = new ArrayList<>();
+        sortCampaigns(_campaigns);
+        for (Campaign campaign : _campaigns) {
+            sortAssets(campaign.assets);
+            assets.addAll(campaign.assets);
+        }
+        return getStackAssets(assets);
     }
 
 }

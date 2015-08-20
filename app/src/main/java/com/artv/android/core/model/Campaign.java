@@ -26,7 +26,7 @@ public final class Campaign {
     public String endDate;
 
     @Element(name = "Sequence", required = false)
-    public int sequence;
+    public Integer sequence;
 
     @Element(name = "PlayDay", required = false)
     public String playDay;
