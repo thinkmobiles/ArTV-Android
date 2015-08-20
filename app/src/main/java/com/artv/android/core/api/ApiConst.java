@@ -31,6 +31,7 @@ public abstract class ApiConst {
     public static final String KEY_TAG_ID                   = "TagID";
     public static final String KEY_TOKEN                    = "Token";
     public static final String KEY_CAMPAIGN_ID              = "CampaignID";
+    public static final String KEY_MSG_BOARD_CAMPAIGN_ID    = "MessageBoardCampaignID";
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END API PATHS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public static final void setProtocol(final String _protocol) {

@@ -25,6 +25,7 @@ import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
 public class CampaignWorker {
 
     private static final int ID_ALL_CAMPAIGN = 0;
+    private static final int ID_ALL_MSG_BOARD_CAMPAIGN = 0;
 
     private ApiWorker mApiWorker;
     private InitData mInitData;
@@ -57,7 +58,7 @@ public class CampaignWorker {
      * @param _listener listen for finishing operation.
      */
     public final void doInitialCampaignDownload(final ICampaignDownloadListener _listener) {
-        getCampaign(ID_ALL_CAMPAIGN, new ICampaignCallback() {
+        getCampaign(ID_ALL_CAMPAIGN, ID_ALL_MSG_BOARD_CAMPAIGN, new ICampaignCallback() {
             @Override
             public final void onFinished(final CampaignResult _result) {
                 if (_result.getSuccess()) {
@@ -77,11 +78,13 @@ public class CampaignWorker {
      * @param _campaignId campaign id to get.
      * @param _callback callback for operation result.
      */
-    public final void getCampaign(final int _campaignId, final ICampaignCallback _callback) {
+    public final void getCampaign(final int _campaignId, final int _msgBoardCampaignId,
+                                  final ICampaignCallback _callback) {
         final GetCampaignRequestObject requestObject = new GetCampaignRequestObject.Builder()
                 .setToken(mInitData.getToken())
                 .setTagID(mConfigInfo.getDeviceId())
                 .setCampaignID(_campaignId)
+                .setMsgBoardCampaignId(_msgBoardCampaignId)
                 .build();
 
         mApiWorker.doGetCampaign(requestObject, new WebRequestCallback<GetCampaignResponseObject>() {
@@ -92,8 +95,8 @@ public class CampaignWorker {
                 _callback.onFinished(
                         new CampaignResult.Builder()
                                 .setSuccess(true)
-                                .setCampaigns(_respObj.campaigns)
-                                .setMsgBoardCampaign(_respObj.msgBoardCampaign)
+                                .setCampaigns(_respObj.getCampaigns())
+                                .setMsgBoardCampaign(_respObj.getMsgBoardCampaign())
                                 .build()
                 );
             }

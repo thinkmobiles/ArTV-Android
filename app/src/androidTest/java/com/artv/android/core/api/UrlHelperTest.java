@@ -2,6 +2,8 @@ package com.artv.android.core.api;
 
 import android.support.test.runner.AndroidJUnit4;
 
+import com.artv.android.core.UrlHelper;
+
 import junit.framework.Assert;
 
 import org.junit.Test;

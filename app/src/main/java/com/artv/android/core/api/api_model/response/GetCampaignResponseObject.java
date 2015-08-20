@@ -10,6 +10,7 @@ import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by
@@ -26,10 +27,19 @@ public class GetCampaignResponseObject extends BaseResponseObject {
     public String errorDescription;
 
     @ElementList(name = "Campaigns", required = false)
-    public ArrayList<Campaign> campaigns;
+    private ArrayList<Campaign> mCampaigns;
 
-    @Element(name = "MsgBoardCampaign", required = false)
-    public MsgBoardCampaign msgBoardCampaign;
+    @ElementList(name = "MessageBoardCampaigns", required = false)
+    private List<MsgBoardCampaign> mMessageBoardCampaigns;
+
+    public final ArrayList<Campaign> getCampaigns() {
+        return mCampaigns;
+    }
+
+    public final MsgBoardCampaign getMsgBoardCampaign() {
+        if (mMessageBoardCampaigns == null || mMessageBoardCampaigns.isEmpty()) return null;
+        return mMessageBoardCampaigns.get(0);
+    }
 
     public GetCampaignResponseObject() {
         apiType = ApiType.GET_CAMPAIGN;

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.core.Constants;
+import com.artv.android.core.UrlHelper;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
@@ -64,6 +65,21 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
             }
 
             for (final Asset asset : campaign.assets) {
+                if (asset.url == null) {
+                    return new ArTvResult.Builder()
+                            .setSuccess(false)
+                            .setMessage("Url is null in asset: name = " + asset.name)
+                            .build();
+                }
+
+                if (UrlHelper.isYoutubeUrl(asset.url)) {
+                    ArTvLogger.printMessage("Skip loading " + asset.name + ", url is youtube video");
+                    mTotalProgress += progressPerAsset;
+                    publishProgress();
+                    mDbWorker.write(asset);
+                    continue;
+                }
+
                 ArTvLogger.printMessage("Loading asset " + asset.name + "...");
 
                 if (mDbWorker.contains(asset)) {
@@ -114,7 +130,7 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
         final ArTvResult.Builder result = new ArTvResult.Builder();
 
         try {
-            final URL url = buildUrlFrom(_asset.url);
+            final URL url = UrlHelper.buildUrlFrom(_asset.url);
 
             final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(10000);
@@ -163,25 +179,6 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
             result.setMessage(_e.toString());
         }
         return result.build();
-    }
-
-    private final URL buildUrlFrom(final String _path) throws UnsupportedEncodingException, MalformedURLException {
-        final URL url;
-        try {
-            url = new URL(_path);
-            return url;
-        } catch (final MalformedURLException _e) {
-            _e.printStackTrace();
-        }
-
-        final Uri uri = new Uri.Builder()
-                .scheme(ApiConst.getProtocol())
-                .authority(ApiConst.getAuthority())
-                .path(_path)
-                .build();
-
-        final String address = URLDecoder.decode(uri.toString(), "utf-8");
-        return new URL(address);
     }
 
 }

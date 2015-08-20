@@ -61,7 +61,7 @@ public class BeaconWorker {
 
                 if (_respObj.errorNumber == 0) {
                     ArTvLogger.printMessage(_respObj.apiType + " : success");
-                    builder.setSuccess(true).setCampaigns(_respObj.campaigns).setMsgBoardCampaign(_respObj.msgBoardCampaign);
+                    builder.setSuccess(true).setCampaigns(_respObj.getCampaigns()).setMsgBoardCampaign(_respObj.getMsgBoardCampaign());
                 } else {
                     ArTvLogger.printMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);
                     builder.setSuccess(false).setMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);
@@ -76,7 +76,7 @@ public class BeaconWorker {
 
                 _callback.onFinished(new CampaignResult.Builder()
                         .setSuccess(false)
-                        .setMessage(_errorResp.apiType.name() + _errorResp.error)
+                        .setMessage(_errorResp.apiType.name() + " " + _errorResp.error)
                         .build());
             }
         });
@@ -89,7 +89,8 @@ public class BeaconWorker {
         beacon.currentCampaign = 0; //set current playing campaign id
         beacon.currentAsset = 0; //set current playing asset id
         beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
-        beacon.msgBoardCampaign = mDbWorker.getMsgBoardCampaign();
+        beacon.mMessageBoardCampaigns = new ArrayList<>();
+        beacon.mMessageBoardCampaigns.add(mDbWorker.getMsgBoardCampaign());
         beacon.errorLog = "All ok";
         return beacon;
     }

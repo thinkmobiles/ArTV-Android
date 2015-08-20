@@ -61,7 +61,7 @@ public final class AssetTest {
         asset4.duration = 11;
         asset4.sequence = 12;
 
-        Assert.assertTrue(asset3.hashCode() != asset4.hashCode());
+        Assert.assertTrue(asset3.getAssetId() != asset4.getAssetId());
     }
 
 }

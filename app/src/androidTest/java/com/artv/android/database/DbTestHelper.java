@@ -14,9 +14,9 @@ abstract class DbTestHelper {
 
     protected static final Asset buildAsset1() {
         final Asset asset1 = new Asset();
-        asset1.name = "asset1";
-        asset1.url = "asset1/asset1";
-        asset1.duration = 1;
+        asset1.name = null;
+        asset1.url = null;
+        asset1.duration = null;
         asset1.sequence = 1;
         return asset1;
     }

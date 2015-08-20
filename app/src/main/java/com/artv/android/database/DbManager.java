@@ -171,9 +171,9 @@ public final class DbManager implements DbWorker {
 
     protected final long generateId(final Integer... ints) {
         if (ints.length < 2) throw new RuntimeException("Must pass minimum two numbers");
-        int id = ints[0].hashCode();
+        int id = Math.abs(ints[0].hashCode());
         for (int i = 1; i < ints.length; i++) {
-            id = 31 * id + ints[i].hashCode();
+            id = 31 * id + Math.abs(ints[i].hashCode());
         }
 
         return id;
