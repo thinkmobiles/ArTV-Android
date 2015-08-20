@@ -3,6 +3,7 @@ package com.artv.android.system.fragments.playback;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -30,6 +31,7 @@ import com.squareup.picasso.Target;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Collections;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -37,6 +39,8 @@ import java.io.FileNotFoundException;
 public final class PlaybackFragment extends BaseFragment implements IPlaybackController {
 
     private RelativeLayout rlPlayContainer;
+    private RelativeLayout rlVideo;
+    private RelativeLayout rlImage;
     private ImageView ivImage;
     private VideoView vvVideoPlayer;
     private RelativeLayout rlRightContainer;
@@ -67,6 +71,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     private final void findViews(final View _view) {
         rlPlayContainer = (RelativeLayout) _view.findViewById(R.id.rlPlayContainer_FP);
+        rlVideo = (RelativeLayout) _view.findViewById(R.id.rlVideo_FP);
+        rlImage = (RelativeLayout) _view.findViewById(R.id.rlImage_FP);
         ivImage = (ImageView) _view.findViewById(R.id.ivImage_FP);
         vvVideoPlayer = (VideoView) _view.findViewById(R.id.vvVideoPlayer_FP);
         rlRightContainer = (RelativeLayout) _view.findViewById(R.id.rlRightContainer_FP);
@@ -87,6 +93,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
             @Override
             public final void onCompletion(final MediaPlayer _mp) {
                 mVideoCompletionListener.onVideoCompleted();
+                vvVideoPlayer.stopPlayback();
             }
         });
 
@@ -161,22 +168,17 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     @Override
     public final void playLocalVideo(final String _path) {
-        removeFragmentIfExist();
-        ivImage.setVisibility(View.GONE);
+        setImageVisibility(false);
+        setVideoVisibility(true);
 
-        vvVideoPlayer.setVisibility(View.VISIBLE);
-        vvVideoPlayer.setZOrderOnTop(false);
         vvVideoPlayer.setVideoPath(_path);
     }
 
     @Override
     public final void playLocalPicture(final String _path) {
-        removeFragmentIfExist();
-        vvVideoPlayer.stopPlayback();
-        vvVideoPlayer.setVisibility(View.GONE);
-        vvVideoPlayer.setZOrderOnTop(true);
+        setImageVisibility(true);
+        setVideoVisibility(false);
 
-        ivImage.setVisibility(View.VISIBLE);
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 8;
         try {
@@ -189,11 +191,6 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     @Override
     public final void playYoutubeLink(final String _url) {
-        ivImage.setVisibility(View.GONE);
-        vvVideoPlayer.stopPlayback();
-        vvVideoPlayer.setVisibility(View.GONE);
-        vvVideoPlayer.setZOrderOnTop(true);
-
         final YoutubeVideoFragment fragment = YoutubeVideoFragment.newInstance(_url);
         fragment.setYoutubeVideoListener(new YoutubeVideoListener() {
             @Override
@@ -203,21 +200,25 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
             @Override
             public final void onVideoEnded() {
+                getChildFragmentManager().beginTransaction().remove(fragment).commit();
                 mVideoCompletionListener.onVideoCompleted();
             }
         });
         getChildFragmentManager().beginTransaction().replace(R.id.rlPlayContainer_FP, fragment).commit();
     }
 
-    private final void removeFragmentIfExist() {
-        final Fragment fragment = getChildFragmentManager().findFragmentById(R.id.rlPlayContainer_FP);
-        if (fragment != null) getChildFragmentManager().beginTransaction().remove(fragment).commit();
-    }
-
     @Override
     public final void showMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
         toggleMsgUi(_msgBoardCampaign != null);
         if (_msgBoardCampaign != null) setMsgBoardCampaign(_msgBoardCampaign);
+    }
+
+    private final void setImageVisibility(final boolean _visible) {
+        rlImage.setVisibility(_visible ? View.VISIBLE : View.GONE);
+    }
+
+    private final void setVideoVisibility(final boolean _visible) {
+        rlVideo.setVisibility(_visible ? View.VISIBLE : View.GONE);
     }
 
 }
