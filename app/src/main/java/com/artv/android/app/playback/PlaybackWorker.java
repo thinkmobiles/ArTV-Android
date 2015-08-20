@@ -3,6 +3,7 @@ package com.artv.android.app.playback;
 import android.os.Handler;
 
 import com.artv.android.core.Constants;
+import com.artv.android.core.UrlHelper;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.GlobalConfig;
@@ -83,7 +84,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 playVideo(_campaign, asset);
             } else if (isPictureFormat(asset.url)) {
                 playPicture(_campaign, asset);
-            } else if (isYouTubeVideo(asset.url)) {
+            } else if (UrlHelper.isYoutubeUrl(asset.url)) {
                 playYouTubeVideo(_campaign, asset);
             }
         }
@@ -98,7 +99,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 playVideo(_campaign, asset);
             } else if (isPictureFormat(asset.url)) {
                 playPicture(_campaign, asset);
-            } else if (isYouTubeVideo(asset.url)) {
+            } else if (UrlHelper.isYoutubeUrl(asset.url)) {
                 playYouTubeVideo(_campaign, asset);
             }
         } else {
@@ -136,10 +137,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     private boolean isPictureFormat(final String _fileName) {
         return _fileName.endsWith(".jpg") || _fileName.endsWith(".png");
-    }
-
-    private boolean isYouTubeVideo(final String _fileName) {
-        return _fileName.toLowerCase().contains("www.youtube.com");
     }
 
     private void playNextAsset(final Campaign _campaign, final Asset _asset) {
