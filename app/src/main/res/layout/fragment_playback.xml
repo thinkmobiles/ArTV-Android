@@ -43,6 +43,12 @@
         android:layout_alignParentBottom="true"
         android:visibility="gone">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivBottomBg_FP"
+            android:scaleType="centerCrop" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,6 +56,7 @@
             android:text="Medium Text"
             android:id="@+id/tvBottomText_FP"
             android:layout_centerInParent="true" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -60,6 +67,12 @@
         android:layout_above="@+id/rlBottomContainer_FP"
         android:visibility="gone">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivRightBg_FP"
+            android:scaleType="centerCrop" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,6 +81,7 @@
             android:id="@+id/tvRightText_FP"
             android:layout_gravity="center_horizontal"
             android:layout_centerInParent="true" />
+
     </RelativeLayout>
 
 </RelativeLayout>

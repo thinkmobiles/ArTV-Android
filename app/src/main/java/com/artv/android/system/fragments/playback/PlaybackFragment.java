@@ -3,12 +3,11 @@ package com.artv.android.system.fragments.playback;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,9 @@ import com.artv.android.R;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.core.UrlHelper;
 import com.artv.android.core.model.MsgBoardCampaign;
+import com.artv.android.system.ArTvApplication;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -31,7 +32,8 @@ import com.squareup.picasso.Target;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Collections;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -42,6 +44,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private RelativeLayout rlVideo;
     private RelativeLayout rlImage;
     private ImageView ivImage;
+    private ImageView ivBottomBg;
+    private ImageView ivRightBg;
     private VideoView vvVideoPlayer;
     private RelativeLayout rlRightContainer;
     private RelativeLayout rlBottomContainer;
@@ -74,6 +78,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         rlVideo = (RelativeLayout) _view.findViewById(R.id.rlVideo_FP);
         rlImage = (RelativeLayout) _view.findViewById(R.id.rlImage_FP);
         ivImage = (ImageView) _view.findViewById(R.id.ivImage_FP);
+        ivBottomBg = (ImageView) _view.findViewById(R.id.ivBottomBg_FP);
+        ivRightBg = (ImageView) _view.findViewById(R.id.ivRightBg_FP);
         vvVideoPlayer = (VideoView) _view.findViewById(R.id.vvVideoPlayer_FP);
         rlRightContainer = (RelativeLayout) _view.findViewById(R.id.rlRightContainer_FP);
         rlBottomContainer = (RelativeLayout) _view.findViewById(R.id.rlBottomContainer_FP);
@@ -121,51 +127,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         mPlaybackWorker.stopPlayback();
     }
 
-    private void toggleMsgUi(final boolean _hasMsg) {
-        rlRightContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
-        rlBottomContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
-    }
-
-    private final void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
-        Picasso.with(getActivity()).load(_msgBoardCampaign.bottomBkgURL).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                rlBottomContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                rlBottomContainer.setBackgroundDrawable(null);
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                rlBottomContainer.setBackgroundDrawable(null);
-            }
-        });
-        Picasso.with(getActivity()).load(_msgBoardCampaign.rightBkgURL).into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                rlRightContainer.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                rlRightContainer.setBackgroundDrawable(null);
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                rlRightContainer.setBackgroundDrawable(null);
-            }
-        });
-
-        int textColor = Color.parseColor(_msgBoardCampaign.textColor);
-        tvBottomText.setTextColor(textColor);
-        tvRightText.setTextColor(textColor);
-
-    }
-
+    //region playing assets
     @Override
     public final void playLocalVideo(final String _path) {
         setImageVisibility(false);
@@ -187,6 +149,14 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
             e.printStackTrace();
             Toast.makeText(getActivity().getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private final void setImageVisibility(final boolean _visible) {
+        rlImage.setVisibility(_visible ? View.VISIBLE : View.GONE);
+    }
+
+    private final void setVideoVisibility(final boolean _visible) {
+        rlVideo.setVisibility(_visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -212,13 +182,36 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         toggleMsgUi(_msgBoardCampaign != null);
         if (_msgBoardCampaign != null) setMsgBoardCampaign(_msgBoardCampaign);
     }
+    //endregion
 
-    private final void setImageVisibility(final boolean _visible) {
-        rlImage.setVisibility(_visible ? View.VISIBLE : View.GONE);
+    private void toggleMsgUi(final boolean _hasMsg) {
+        rlRightContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
+        rlBottomContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
     }
 
-    private final void setVideoVisibility(final boolean _visible) {
-        rlVideo.setVisibility(_visible ? View.VISIBLE : View.GONE);
+    private final void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
+        loadBottomBg(_msgBoardCampaign.bottomBkgURL);
+        loadRightBg(_msgBoardCampaign.rightBkgURL);
+
+        int textColor = Color.parseColor(_msgBoardCampaign.textColor);
+        tvBottomText.setTextColor(textColor);
+        tvRightText.setTextColor(textColor);
+    }
+
+    private final void loadBottomBg(final String _path) {
+        try {
+            Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path).toString()).into(ivBottomBg);
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private final void loadRightBg(final String _path) {
+        try {
+            Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path).toString()).into(ivRightBg);
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

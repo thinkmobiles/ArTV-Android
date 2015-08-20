@@ -45,7 +45,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     public final void startPlayback() {
         mPlaybackController.showMsgBoardCampaign(mDbWorker.getMsgBoardCampaign());
-//        mCampaigns = getTestCampaigns();
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager = new PlayModeManager();
         play(mPlayModeManager, mCampaigns);
