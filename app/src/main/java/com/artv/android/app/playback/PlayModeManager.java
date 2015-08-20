@@ -20,7 +20,7 @@ import java.util.Locale;
 public class PlayModeManager {
 
     private Date getDateFromString(final String _date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM");
         try {
             return dateFormat.parse(_date);
         } catch (ParseException e) {

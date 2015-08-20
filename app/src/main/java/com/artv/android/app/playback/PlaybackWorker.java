@@ -44,7 +44,8 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     public final void startPlayback() {
         mPlaybackController.showMsgBoardCampaign(mDbWorker.getMsgBoardCampaign());
-        mCampaigns = getTestCampaigns();
+//        mCampaigns = getTestCampaigns();
+        mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager = new PlayModeManager();
         play(mPlayModeManager, mCampaigns);
     }
@@ -78,11 +79,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private void playAsset(final Campaign _campaign) {
         if (_campaign != null && !_campaign.assets.isEmpty()) {
             final Asset asset = getFirstAssetToPlay(_campaign.assets);
-            if (isVideoFormat(asset.name)) {
+            if (isVideoFormat(asset.url)) {
                 playVideo(_campaign, asset);
-            } else if (isPictureFormat(asset.name)) {
+            } else if (isPictureFormat(asset.url)) {
                 playPicture(_campaign, asset);
-            } else if (isYouTubeVideo(asset.name)) {
+            } else if (isYouTubeVideo(asset.url)) {
                 playYouTubeVideo(_campaign, asset);
             }
         }
@@ -93,11 +94,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         assets.remove(_asset);
         final Asset asset = getFirstAssetToPlay(assets);
         if (asset != null) {
-            if (isVideoFormat(asset.name)) {
+            if (isVideoFormat(asset.url)) {
                 playVideo(_campaign, asset);
-            } else if (isPictureFormat(asset.name)) {
+            } else if (isPictureFormat(asset.url)) {
                 playPicture(_campaign, asset);
-            } else if (isYouTubeVideo(asset.name)) {
+            } else if (isYouTubeVideo(asset.url)) {
                 playYouTubeVideo(_campaign, asset);
             }
         } else {
@@ -107,7 +108,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     private void playNextCampaign(final List<Campaign> _campaigns, final Campaign _currentCampaign) {
         _campaigns.remove(_currentCampaign);
-        play(mPlayModeManager, _campaigns);
+        if(!_campaigns.isEmpty()) {
+            play(mPlayModeManager, _campaigns);
+        } else {
+            play(mPlayModeManager, mCampaigns);
+        }
     }
 
     private Asset getFirstAssetToPlay(final List<Asset> _assets) {
@@ -147,14 +152,14 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private int playDuration(final Asset _asset) {
-        if (_asset.duration > 0) {
+        if (_asset.duration != null && _asset.duration > 0) {
             return _asset.duration * 1000;
         }
         return mGlobalConfig.getServerDefaultPlayTime() * 1000;
     }
 
     private void playVideo(final Campaign _campaign, final Asset _asset) {
-        mPlaybackController.playLocalVideo(Constants.PATH + "/" + _asset.url);
+        mPlaybackController.playLocalVideo(Constants.PATH + _asset.url);
         if (_asset.duration > 0) {
             playNextAsset(_campaign, _asset);
         }
@@ -168,7 +173,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private void playPicture(final Campaign _campaign, final Asset _asset) {
-        mPlaybackController.playLocalPicture(Constants.PATH + "/" + _asset.url);
+        mPlaybackController.playLocalPicture(Constants.PATH + _asset.url);
         playNextAsset(_campaign, _asset);
     }
 
@@ -199,83 +204,5 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 playAsset(_campaign);
             }
         }, _timeDelay);
-    }
-
-    private List<Campaign> getTestCampaigns() {
-        List<Campaign> campaigns = new ArrayList<>();
-        Campaign campaign1 = new Campaign();
-        campaign1.campaignId = 1;
-        campaign1.crcVersion = "gfgjfjhg";
-        campaign1.startDate = "2015-08-19";
-        campaign1.endDate = "2015-09-19";
-        campaign1.sequence = 5;
-        campaign1.playDay = "1001011";
-        campaign1.overrideTime = "17:04 AM";
-        campaign1.assets = getFirstAssets();
-
-        Campaign campaign2 = new Campaign();
-        campaign2.campaignId = 2;
-        campaign2.crcVersion = "gfgvv";
-        campaign2.startDate = "2015-08-19";
-        campaign2.endDate = "2015-09-19";
-        campaign2.sequence = 1;
-        campaign2.playDay = "1001011";
-        campaign2.overrideTime = "17:05 AM";
-        campaign2.assets = getSecondAssets();
-
-        campaigns.add(campaign1);
-        campaigns.add(campaign2);
-        return campaigns;
-    }
-
-    private List<Asset> getFirstAssets() {
-        List<Asset> assets = new ArrayList<>();
-        Asset asset1 = new Asset();
-        asset1.name = "1.mp4";
-        asset1.url = "1.mp4";
-        asset1.duration = 15;
-        asset1.sequence = 3;
-
-        Asset asset2 = new Asset();
-        asset2.name = "3.3gp";
-        asset2.url = "3.3gp";
-        asset2.duration = 10;
-        asset2.sequence = 1;
-
-        Asset asset3 = new Asset();
-        asset3.name = "5.jpg";
-        asset3.url = "5.jpg";
-        asset3.sequence = 2;
-
-        assets.add(asset1);
-        assets.add(asset2);
-        assets.add(asset3);
-        return assets;
-    }
-
-    private List<Asset> getSecondAssets() {
-        List<Asset> assets = new ArrayList<>();
-        Asset asset1 = new Asset();
-        asset1.name = "2.mp4";
-        asset1.url = "2.mp4";
-        asset1.duration = 10;
-        asset1.sequence = 1;
-
-        Asset asset2 = new Asset();
-        asset2.name = "4.3gp";
-        asset2.url = "4.3gp";
-        asset2.duration = 10;
-        asset2.sequence = 2;
-
-        Asset asset3 = new Asset();
-        asset3.name = "6.jpg";
-        asset3.url = "6.jpg";
-        asset3.sequence = 3;
-        asset3.duration = 5;
-
-        assets.add(asset1);
-        assets.add(asset2);
-        assets.add(asset3);
-        return assets;
     }
 }
