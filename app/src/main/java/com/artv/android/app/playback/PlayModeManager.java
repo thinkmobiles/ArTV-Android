@@ -45,13 +45,21 @@ public class PlayModeManager {
 
 
     private boolean hasPlayCampaignInCurentDate(final List<Campaign> _campaigns) {
-        long startDate, endDate, currentDate;
+        long startDate = 0, endDate = 0, currentDate;
         currentDate = getCurrentDate().getTime();
-        for (Campaign campaign : _campaigns) {
-            startDate = getDateFromString(campaign.startDate).getTime();
-            endDate = getDateFromString(campaign.endDate).getTime();
-            if (startDate <= currentDate && currentDate <= endDate) {
-                return true;
+        if (!_campaigns.isEmpty()) {
+            for (Campaign campaign : _campaigns) {
+                if (campaign.startDate != null) {
+                    startDate = getDateFromString(campaign.startDate).getTime();
+                }
+                if (campaign.startDate != null) {
+                    endDate = getDateFromString(campaign.endDate).getTime();
+                }
+                if (startDate != 0 && endDate != 0 && startDate <= currentDate && currentDate <= endDate) {
+                    return true;
+                } else if (startDate != 0 && startDate <= currentDate) {
+                    return true;
+                }
             }
         }
         return false;

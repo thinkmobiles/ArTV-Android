@@ -175,17 +175,19 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private Campaign hasPlayCampaignInCurentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
-        Date owerrideTime;
+        Date owerrideTime = null;
         Date currentTime = _playModeManager.getCurrentDate();
         long currentTimeInMills = _playModeManager.getTimeInMills(currentTime);
-        long owerrideTimeInMills;
+        long owerrideTimeInMills = 0;
 
         for (Campaign campaign : _campaigns) {
-            owerrideTime = _playModeManager.getTimeFromString(campaign.overrideTime);
-            owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
-            if (owerrideTimeInMills == currentTimeInMills) {
+            if (campaign.overrideTime != null) {
+                owerrideTime = _playModeManager.getTimeFromString(campaign.overrideTime);
+                owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
+            }
+            if (owerrideTimeInMills != 0 && owerrideTimeInMills == currentTimeInMills) {
                 return campaign;
-            } else if (owerrideTimeInMills > currentTimeInMills) {
+            } else if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
                 startCheckTimeDelay(campaign, owerrideTimeInMills - currentTimeInMills);
                 return _playModeManager.getDefaultCampaign(_campaigns);
             }
