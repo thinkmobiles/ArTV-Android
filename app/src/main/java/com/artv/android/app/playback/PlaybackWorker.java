@@ -51,6 +51,32 @@ public final class PlaybackWorker implements IVideoCompletionListener {
             return;
         }
 
+        final Asset video1 = new Asset();
+        video1.name = "video";
+        video1.url = "/1.mp4";
+        video1.sequence = 0;
+
+        final Asset img2 = new Asset();
+        img2.name = "img";
+        img2.url = "/2.jpg";
+        img2.sequence = 1;
+
+        final Asset video3 = new Asset();
+        video3.name = "drama";
+        video3.url = "https://www.youtube.com/watch?v=3Jid11eWcEI";
+        video3.sequence = 2;
+
+        final Asset img4 = new Asset();
+        img4.name = "img";
+        img4.url = "/2.jpg";
+        img4.sequence = 3;
+
+        mCampaigns.get(0).assets = new ArrayList<>();
+        mCampaigns.get(0).assets.add(video1);
+        mCampaigns.get(0).assets.add(img2);
+        mCampaigns.get(0).assets.add(video3);
+        mCampaigns.get(0).assets.add(img4);
+
         play();
     }
 

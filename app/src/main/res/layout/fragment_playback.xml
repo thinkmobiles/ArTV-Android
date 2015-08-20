@@ -8,28 +8,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rlPlayContainer_FP"
-        android:layout_toLeftOf="@+id/rlRightContainer_FP"
-        android:layout_above="@+id/rlBottomContainer_FP">
+        android:layout_above="@+id/rlBottomContainer_FP"
+        android:layout_toLeftOf="@+id/rlRightContainer_FP">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rlForImage_FP">
+            android:id="@+id/rlVideo_FP">
+
+            <VideoView
+                android:id="@+id/vvVideoPlayer_FP"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rlImage_FP">
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/ivImage_FP"
-                android:scaleType="fitCenter"
-                android:background="@color/text" />
+                android:scaleType="fitCenter" />
         </RelativeLayout>
-
-        <com.artv.android.system.custom_views.VideoViewCustom
-            android:id="@+id/vvVideoPlayer_FP"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"/>
-
     </RelativeLayout>
 
     <RelativeLayout
