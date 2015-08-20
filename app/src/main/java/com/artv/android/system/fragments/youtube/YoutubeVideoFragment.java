@@ -155,6 +155,7 @@ public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.
 
     @Override
     public void onError(YouTubePlayer.ErrorReason errorReason) {
+        onVideoEnded();
         Log.v("video", "onError");
     }
 }
