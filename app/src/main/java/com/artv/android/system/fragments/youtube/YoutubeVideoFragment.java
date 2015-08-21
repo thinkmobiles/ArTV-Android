@@ -48,7 +48,6 @@ public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.
         mYoutubeVideoID = getVideoNameFromUrl(mYoutubeUrl);
         showFragment();
         initFragment();
-        Log.v("youtube", getVideoNameFromUrl(mYoutubeUrl));
         return view;
     }
 
