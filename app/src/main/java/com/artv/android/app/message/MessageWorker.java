@@ -1,15 +1,19 @@
 package com.artv.android.app.message;
 
 import android.graphics.Color;
+import android.os.Handler;
 
 import com.artv.android.core.UrlHelper;
 import com.artv.android.core.log.ArTvLogger;
+import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.core.model.Message;
 import com.artv.android.core.model.MsgBoardCampaign;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,10 +23,13 @@ public final class MessageWorker {
 
     private MsgBoardCampaign mMsgBoardCampaign;
     private IMessageController mMessageController;
+    private GlobalConfig mGlobalConfig;
 
     private boolean mPlay = false;
-    private List<Message> mBottomMessages;
-    private List<Message> mRightMessages;
+    private Iterator<Message> mBottomMsgCycle;
+    private Iterator<Message> mRightMsgCycle;
+
+    private Handler mHandler;
 
     public final void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
         mMsgBoardCampaign = _msgBoardCampaign;
@@ -30,6 +37,10 @@ public final class MessageWorker {
 
     public final void setMessageController(final IMessageController _controller) {
         mMessageController = _controller;
+    }
+
+    public final void setGlobalConfig(final GlobalConfig _globalConfig) {
+        mGlobalConfig = _globalConfig;
     }
 
     public final void playMessages() {
@@ -40,11 +51,16 @@ public final class MessageWorker {
         setBackground();
         setTextColor();
 
-        mBottomMessages = getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.BOTTOM);
-        mRightMessages = getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.RIGHT);
+        final List<Message> bottomMessages = getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.BOTTOM);
+        final List<Message> rightMessages = getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.RIGHT);
 
-        sortMessagesBySequence(mBottomMessages);
-        sortMessagesBySequence(mRightMessages);
+        sortMessagesBySequence(bottomMessages);
+        sortMessagesBySequence(rightMessages);
+
+        mBottomMsgCycle = Iterables.cycle(bottomMessages).iterator();
+        mRightMsgCycle = Iterables.cycle(rightMessages).iterator();
+
+        mHandler = new Handler();
 
         play();
     }
@@ -86,6 +102,17 @@ public final class MessageWorker {
     }
 
     private final void play() {
+        mMessageController.showBottomMessage(mBottomMsgCycle.next().text);
+        mMessageController.showRightMessage(mRightMsgCycle.next().text);
+
+        if (mPlay) mHandler.postDelayed(nextMsg, mGlobalConfig.getServerDefaultPlayTime() * 1000);
     }
+
+    private final Runnable nextMsg = new Runnable() {
+        @Override
+        public final void run() {
+            play();
+        }
+    };
 
 }
