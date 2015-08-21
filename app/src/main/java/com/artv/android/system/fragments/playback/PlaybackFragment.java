@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -132,7 +133,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public final void playLocalVideo(final String _path) {
         setImageVisibility(false);
         setVideoVisibility(true);
-
+        vvVideoPlayer.setVisibility(View.VISIBLE);
         vvVideoPlayer.setVideoPath(_path);
     }
 
@@ -161,6 +162,9 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     @Override
     public final void playYoutubeLink(final String _url) {
+        setVideoVisibility(false);
+        setImageVisibility(false);
+        vvVideoPlayer.setVisibility(View.GONE);
         final YoutubeVideoFragment fragment = YoutubeVideoFragment.newInstance(_url);
         fragment.setYoutubeVideoListener(new YoutubeVideoListener() {
             @Override
