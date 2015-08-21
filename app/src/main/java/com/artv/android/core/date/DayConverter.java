@@ -32,7 +32,7 @@ public final class DayConverter {
         return null;
     }
 
-    public List<Day> getDaysToPlay(final String _playDays) {
+    public List<Day> getDays(final String _playDays) {
         List<Day> days = new ArrayList<>();
         for (int i = 0; i < _playDays.length(); i++) {
             if (_playDays.charAt(i) == '1') {

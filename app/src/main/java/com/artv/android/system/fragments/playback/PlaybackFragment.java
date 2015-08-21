@@ -1,16 +1,11 @@
 package com.artv.android.system.fragments.playback;
 
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,21 +18,13 @@ import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
-import com.artv.android.core.UrlHelper;
-import com.artv.android.core.model.MsgBoardCampaign;
-import com.artv.android.system.ArTvApplication;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -77,12 +64,6 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         final View view = _inflater.inflate(R.layout.fragment_playback, _container, false);
 
         findViews(view);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        Log.v("hours", String.valueOf(calendar.get(Calendar.HOUR)));
-        Log.v("hours", String.valueOf(new Date().getHours()));
-        Log.v("hours", String.valueOf(calendar.get(Calendar.MINUTE)));
-        Log.v("hours", String.valueOf(new Date().getMinutes()));
         prepareVideoViews();
 
         return view;

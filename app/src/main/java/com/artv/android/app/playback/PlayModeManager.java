@@ -75,7 +75,7 @@ public class PlayModeManager {
             if (!_campaigns.isEmpty()) {
                 for (Campaign campaign : _campaigns) {
                     if (!campaign.playDay.isEmpty()) {
-                        daysToDplay = mDayConverter.getDaysToPlay(campaign.playDay);
+                        daysToDplay = mDayConverter.getDays(campaign.playDay);
                         if (!daysToDplay.isEmpty() && daysToDplay.contains(day)) {
                             return true;
                         }
