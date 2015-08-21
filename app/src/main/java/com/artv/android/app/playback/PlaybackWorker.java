@@ -60,7 +60,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 mAssetStack = getStackAssetsAllCampaigns(_campaigns);
                 break;
             case 1:
-                campaignToPlay = hasPlayCampaignInCurentTime(_campaigns, _playModeManager);
+                campaignToPlay = hasPlayCampaignInCurrentTime(_campaigns, _playModeManager);
                 if (campaignToPlay != null) {
                     mAssetStack = getStackAssets(campaignToPlay.assets);
                 } else
@@ -126,7 +126,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         playNextAsset(_asset);
     }
 
-    private Campaign hasPlayCampaignInCurentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
+    private Campaign hasPlayCampaignInCurrentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
         Date owerrideTime;
         Date currentTime = _playModeManager.getCurrentDate();
         long currentTimeInMills = _playModeManager.getTimeInMills(currentTime);
@@ -158,40 +158,50 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     public void sortAssets(List<Asset> _assets) {
-        Collections.sort(_assets, new Comparator<Asset>() {
-            @Override
-            public int compare(Asset lhs, Asset rhs) {
-                return rhs.sequence.compareTo(lhs.sequence);
-            }
-        });
+        if (!_assets.isEmpty()) {
+            Collections.sort(_assets, new Comparator<Asset>() {
+                @Override
+                public int compare(Asset lhs, Asset rhs) {
+                    return rhs.sequence.compareTo(lhs.sequence);
+                }
+            });
+        }
     }
 
     public void sortCampaigns(List<Campaign> _campaigns) {
-        Collections.sort(_campaigns, new Comparator<Campaign>() {
-            @Override
-            public int compare(Campaign lhs, Campaign rhs) {
-                return rhs.sequence.compareTo(lhs.sequence);
-            }
-        });
+        if (!_campaigns.isEmpty()) {
+            Collections.sort(_campaigns, new Comparator<Campaign>() {
+                @Override
+                public int compare(Campaign lhs, Campaign rhs) {
+                    return rhs.sequence.compareTo(lhs.sequence);
+                }
+            });
+        }
     }
 
     private Stack<Asset> getStackAssets(final List<Asset> _assets) {
-        sortAssets(_assets);
-        Stack<Asset> stack = new Stack<>();
-        for (Asset asset : _assets) {
-            stack.push(asset);
+        if (!_assets.isEmpty()) {
+            sortAssets(_assets);
+            Stack<Asset> stack = new Stack<>();
+            for (Asset asset : _assets) {
+                stack.push(asset);
+            }
+            return stack;
         }
-        return stack;
+        return null;
     }
 
     public Stack<Asset> getStackAssetsAllCampaigns(List<Campaign> _campaigns) {
-        List<Asset> assets = new ArrayList<>();
-        sortCampaigns(_campaigns);
-        for (Campaign campaign : _campaigns) {
-            sortAssets(campaign.assets);
-            assets.addAll(campaign.assets);
+        if (!_campaigns.isEmpty()) {
+            List<Asset> assets = new ArrayList<>();
+            sortCampaigns(_campaigns);
+            for (Campaign campaign : _campaigns) {
+                sortAssets(campaign.assets);
+                assets.addAll(campaign.assets);
+            }
+            return getStackAssets(assets);
         }
-        return getStackAssets(assets);
+        return null;
     }
 
 }
