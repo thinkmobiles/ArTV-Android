@@ -1,6 +1,5 @@
 package com.artv.android.system.fragments.playback;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +17,8 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
+import com.artv.android.app.message.IMessageController;
+import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
@@ -38,7 +39,7 @@ import java.net.MalformedURLException;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class PlaybackFragment extends BaseFragment implements IPlaybackController {
+public final class PlaybackFragment extends BaseFragment implements IPlaybackController, IMessageController {
 
     private RelativeLayout rlPlayContainer;
     private RelativeLayout rlVideo;
@@ -54,13 +55,18 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
+    private MessageWorker mMessageWorker;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
+
         mPlaybackWorker = getApplicationLogic().getPlaybackWorker();
         mPlaybackWorker.setPlaybackController(this);
         mVideoCompletionListener = mPlaybackWorker.getVideoCompletionListener();
+
+        mMessageWorker = getApplicationLogic().getMessageWorker();
+        mMessageWorker.setMessageController(this);
     }
 
     @Override
@@ -118,13 +124,17 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        if (_savedInstanceState == null) mPlaybackWorker.startPlayback();
+        if (_savedInstanceState == null) {
+            mPlaybackWorker.startPlayback();
+            mMessageWorker.playMessages();
+        }
     }
 
     @Override
     public final void onStop() {
         super.onStop();
         mPlaybackWorker.stopPlayback();
+        mMessageWorker.stopMessages();
     }
 
     //region playing assets
@@ -176,34 +186,43 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         });
         getChildFragmentManager().beginTransaction().replace(R.id.rlPlayContainer_FP, fragment).commit();
     }
-
-    @Override
-    public final void showMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
-        toggleMsgUi(_msgBoardCampaign != null);
-        if (_msgBoardCampaign != null) setMsgBoardCampaign(_msgBoardCampaign);
-    }
     //endregion
 
-    private void toggleMsgUi(final boolean _hasMsg) {
-        rlRightContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
-        rlBottomContainer.setVisibility(_hasMsg ? View.VISIBLE : View.GONE);
+    @Override
+    public final void showMessageUi() {
+        rlRightContainer.setVisibility(View.VISIBLE);
+        rlBottomContainer.setVisibility(View.VISIBLE);
     }
 
-    private final void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
-        loadBottomBg(_msgBoardCampaign.bottomBkgURL);
-        loadRightBg(_msgBoardCampaign.rightBkgURL);
-
-        int textColor = Color.parseColor(_msgBoardCampaign.textColor);
-        tvBottomText.setTextColor(textColor);
-        tvRightText.setTextColor(textColor);
+    @Override
+    public final void hideMessageUi() {
+        rlRightContainer.setVisibility(View.GONE);
+        rlBottomContainer.setVisibility(View.GONE);
     }
 
-    private final void loadBottomBg(final String _path) {
-        Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path)).into(ivBottomBg);
+    @Override
+    public final void setBottomBg(final String _url) {
+        Picasso.with(getActivity()).load(_url).into(ivBottomBg);
     }
 
-    private final void loadRightBg(final String _path) {
-        Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path)).into(ivRightBg);
+    @Override
+    public final void setRightBg(final String _url) {
+        Picasso.with(getActivity()).load(_url).into(ivRightBg);
     }
 
+    @Override
+    public final void setTextColor(final int _color) {
+        tvBottomText.setTextColor(_color);
+        tvRightText.setTextColor(_color);
+    }
+
+    @Override
+    public final void showRightMessage(final String _message) {
+        tvRightText.setText(_message);
+    }
+
+    @Override
+    public final void showBottomMessage(final String _message) {
+        tvBottomText.setText(_message);
+    }
 }

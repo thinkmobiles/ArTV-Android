@@ -8,6 +8,7 @@ import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.core.model.Message;
 import com.artv.android.core.model.MsgBoardCampaign;
+import com.artv.android.database.DbWorker;
 import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public final class MessageWorker {
     private MsgBoardCampaign mMsgBoardCampaign;
     private IMessageController mMessageController;
     private GlobalConfig mGlobalConfig;
+    private DbWorker mDbWorker;
 
     private boolean mPlay = false;
     private Iterator<Message> mBottomMsgCycle;
@@ -31,8 +33,7 @@ public final class MessageWorker {
 
     private Handler mHandler;
 
-    public final void setMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
-        mMsgBoardCampaign = _msgBoardCampaign;
+    public MessageWorker() {
     }
 
     public final void setMessageController(final IMessageController _controller) {
@@ -43,8 +44,15 @@ public final class MessageWorker {
         mGlobalConfig = _globalConfig;
     }
 
+    public final void setDbWorker(final DbWorker _dbWorker) {
+        mDbWorker = _dbWorker;
+    }
+
     public final void playMessages() {
+        mMsgBoardCampaign = mDbWorker.getMsgBoardCampaign();
         if (mMsgBoardCampaign == null) return;
+
+        mMessageController.showMessageUi();
 
         mPlay = true;
 
@@ -67,6 +75,7 @@ public final class MessageWorker {
 
     public final void stopMessages() {
         mPlay = false;
+        if (mHandler != null) mHandler.removeCallbacks(nextMsg);
     }
 
     private final void setBackground() {
