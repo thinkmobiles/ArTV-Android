@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Handler;
 
 import com.artv.android.core.UrlHelper;
+import com.artv.android.core.date.DayConverter;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.core.model.Message;
@@ -26,6 +27,7 @@ public final class MessageWorker {
     private IMessageController mMessageController;
     private GlobalConfig mGlobalConfig;
     private DbWorker mDbWorker;
+    private DayConverter mDayConverter;
 
     private boolean mPlay = false;
     private Iterator<Message> mBottomMsgCycle;
@@ -34,6 +36,7 @@ public final class MessageWorker {
     private Handler mHandler;
 
     public MessageWorker() {
+        mDayConverter = new DayConverter();
     }
 
     public final void setMessageController(final IMessageController _controller) {
@@ -50,9 +53,18 @@ public final class MessageWorker {
 
     public final void playMessages() {
         mMsgBoardCampaign = mDbWorker.getMsgBoardCampaign();
-        if (mMsgBoardCampaign == null) return;
+        if (mMsgBoardCampaign == null) {
+            mMessageController.hideMessageUi();
+            return;
+        }
 
-        mMessageController.showMessageUi();
+        if (shouldPlayMessagesToday()) {
+            mMessageController.showMessageUi();
+        } else {
+            mMessageController.hideMessageUi();
+            mHandler.postDelayed(playMessagesLater, getRemainTimeToPlay());
+            return;
+        }
 
         mPlay = true;
 
@@ -75,7 +87,21 @@ public final class MessageWorker {
 
     public final void stopMessages() {
         mPlay = false;
-        if (mHandler != null) mHandler.removeCallbacks(nextMsg);
+        if (mHandler != null) {
+            mHandler.removeCallbacks(nextMsg);
+            mHandler.removeCallbacks(playMessagesLater);
+        }
+    }
+
+    private final boolean shouldPlayMessagesToday() {
+//        final Day currentDay = mDayConverter.getCurrentDay();
+//        final List<Day> playedDays = mDayConverter.getDays(mMsgBoardCampaign.playDay);
+//        return playedDays.contains(currentDay);
+        return true;
+    }
+
+    private final long getRemainTimeToPlay() {
+        return 1000;
     }
 
     private final void setBackground() {
@@ -121,6 +147,13 @@ public final class MessageWorker {
         @Override
         public final void run() {
             play();
+        }
+    };
+
+    private final Runnable playMessagesLater = new Runnable() {
+        @Override
+        public final void run() {
+            playMessages();
         }
     };
 
