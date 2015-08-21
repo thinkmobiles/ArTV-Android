@@ -1,5 +1,7 @@
 package com.artv.android.core.model;
 
+import com.artv.android.app.message.MessagePosition;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -10,6 +12,9 @@ import org.simpleframework.xml.Root;
 @Root(name = "Message")
 public final class Message {
 
+    private static final String KEY_RIGHT = "R";
+    private static final String KEY_BOTTOM = "B";
+
     @Element(name = "Text")
     public String text;
 
@@ -18,6 +23,12 @@ public final class Message {
 
     @Element(name = "Sequence")
     public int sequence;
+
+    public final MessagePosition position() {
+        if (KEY_RIGHT.equals(position)) return MessagePosition.RIGHT;
+        else if (KEY_BOTTOM.equals(position)) return MessagePosition.BOTTOM;
+        else return MessagePosition.UNDEFINED;
+    }
 
     @Override
     public boolean equals(Object o) {

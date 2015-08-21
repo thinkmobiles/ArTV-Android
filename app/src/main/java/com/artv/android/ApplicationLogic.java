@@ -2,6 +2,7 @@ package com.artv.android;
 
 import android.content.Context;
 
+import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.app.start.StartWorker;
 import com.artv.android.core.api.ApiWorker;
@@ -38,6 +39,7 @@ public final class ApplicationLogic {
 
     private StartWorker mStartWorker;
     private PlaybackWorker mPlaybackWorker;
+    private MessageWorker mMessageWorker;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -57,8 +59,12 @@ public final class ApplicationLogic {
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setDbWorker(mDbWorker);
 
+        mMessageWorker = new MessageWorker();
+        mMessageWorker.setDbWorker(mDbWorker);
+
         mInitWorker = new InitWorker();
         mInitWorker.setPlaybackWorker(mPlaybackWorker);
+        mInitWorker.setMessageWorker(mMessageWorker);
 
         mDisplaySwitcher = new DisplaySwitcher();
 
@@ -111,6 +117,10 @@ public final class ApplicationLogic {
 
     public final PlaybackWorker getPlaybackWorker() {
         return mPlaybackWorker;
+    }
+
+    public final MessageWorker getMessageWorker() {
+        return mMessageWorker;
     }
 
     /**
