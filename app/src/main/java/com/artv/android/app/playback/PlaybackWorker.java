@@ -157,7 +157,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         }, _timeDelay);
     }
 
-    private void sortAssets(List<Asset> _assets) {
+    public void sortAssets(List<Asset> _assets) {
         Collections.sort(_assets, new Comparator<Asset>() {
             @Override
             public int compare(Asset lhs, Asset rhs) {
@@ -166,7 +166,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         });
     }
 
-    private void sortCampaigns(List<Campaign> _campaigns) {
+    public void sortCampaigns(List<Campaign> _campaigns) {
         Collections.sort(_campaigns, new Comparator<Campaign>() {
             @Override
             public int compare(Campaign lhs, Campaign rhs) {
@@ -184,7 +184,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         return stack;
     }
 
-    private Stack<Asset> getStackAssetsAllCampaigns(List<Campaign> _campaigns) {
+    public Stack<Asset> getStackAssetsAllCampaigns(List<Campaign> _campaigns) {
         List<Asset> assets = new ArrayList<>();
         sortCampaigns(_campaigns);
         for (Campaign campaign : _campaigns) {

@@ -98,7 +98,7 @@ abstract class CampaignAssetHelper {
         campaign1.startDate = "2015-01-01";
         campaign1.endDate = "2015-01-10";
         campaign1.overrideTime = "01:00 PM";
-        campaign1.sequence = 1;
+        campaign1.sequence = 0;
         campaign1.playDay = "1000000";
         campaign1.assets = new ArrayList<>();
         return campaign1;
@@ -111,7 +111,7 @@ abstract class CampaignAssetHelper {
         campaign2.startDate = "2015-02-02";
         campaign2.endDate = "2015-02-20";
         campaign2.overrideTime = "02:00 PM";
-        campaign2.sequence = 2;
+        campaign2.sequence = 1;
         campaign2.playDay = "0100000";
         campaign2.assets = new ArrayList<>();
         return campaign2;
@@ -124,7 +124,7 @@ abstract class CampaignAssetHelper {
         campaign3.startDate = "2015-03-03";
         campaign3.endDate = "2015-03-30";
         campaign3.overrideTime = "03:00 PM";
-        campaign3.sequence = 3;
+        campaign3.sequence = 2;
         campaign3.playDay = "0010000";
         campaign3.assets = new ArrayList<>();
         return campaign3;
