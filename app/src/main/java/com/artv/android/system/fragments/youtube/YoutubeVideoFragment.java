@@ -48,7 +48,6 @@ public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.
         mYoutubeVideoID = getVideoNameFromUrl(mYoutubeUrl);
         showFragment();
         initFragment();
-        Log.v("youtube", getVideoNameFromUrl(mYoutubeUrl));
         return view;
     }
 
@@ -80,12 +79,16 @@ public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.
 
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean wasRestored) {
-
-                if (!wasRestored) {
-                    mYouTubePlayer = youTubePlayer;
-                    mYouTubePlayer.setPlayerStateChangeListener(YoutubeVideoFragment.this);
-                    mYouTubePlayer.loadVideo(mYoutubeVideoID);
-                    mYouTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
+                mYouTubePlayer = youTubePlayer;
+                mYouTubePlayer.setPlayerStateChangeListener(YoutubeVideoFragment.this);
+                mYouTubePlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
+                if (mYoutubeVideoID != null) {
+                    if (!wasRestored) {
+                        mYouTubePlayer.loadVideo(mYoutubeVideoID);
+                    }
+                } else {
+                    mYouTubePlayer.release();
+                    onVideoEnded();
                 }
             }
 
@@ -94,9 +97,8 @@ public class YoutubeVideoFragment extends BaseFragment implements YouTubePlayer.
                 if (youTubeInitializationResult.isUserRecoverableError()) {
                     youTubeInitializationResult.getErrorDialog(getActivity(), RECOVERY_DIALOG_REQUEST).show();
                 } else {
-                    String errorMessage = String.format(
-                            getString(R.string.error_player), youTubeInitializationResult.toString());
-                    Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                    //Handle the failure
+                    Toast.makeText(getActivity(), R.string.error_player, Toast.LENGTH_LONG).show();
                 }
             }
         });
