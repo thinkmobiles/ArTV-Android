@@ -130,7 +130,7 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
         final ArTvResult.Builder result = new ArTvResult.Builder();
 
         try {
-            final URL url = UrlHelper.buildUrlFrom(_asset.url);
+            final URL url = new URL(UrlHelper.buildUrlFrom(_asset.url));
 
             final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(10000);

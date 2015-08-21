@@ -37,11 +37,10 @@ public abstract class UrlHelper {
         return uri.getAuthority();
     }
 
-    public static final URL buildUrlFrom(final String _path) throws UnsupportedEncodingException, MalformedURLException {
-        final URL url;
+    public static final String buildUrlFrom(final String _path) {
         try {
-            url = new URL(_path);
-            return url;
+            new URL(_path);
+            return _path;
         } catch (final MalformedURLException _e) {
             _e.printStackTrace();
         }
@@ -52,8 +51,12 @@ public abstract class UrlHelper {
                 .path(_path)
                 .build();
 
-        final String address = URLDecoder.decode(uri.toString(), "utf-8");
-        return new URL(address);
+        try {
+            return URLDecoder.decode(uri.toString(), "utf-8");
+        } catch (final UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public static final boolean isYoutubeUrl(final String _url) {

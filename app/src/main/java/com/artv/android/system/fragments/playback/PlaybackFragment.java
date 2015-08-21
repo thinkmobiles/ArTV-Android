@@ -199,19 +199,11 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     }
 
     private final void loadBottomBg(final String _path) {
-        try {
-            Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path).toString()).into(ivBottomBg);
-        } catch (UnsupportedEncodingException | MalformedURLException e) {
-            e.printStackTrace();
-        }
+        Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path)).into(ivBottomBg);
     }
 
     private final void loadRightBg(final String _path) {
-        try {
-            Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path).toString()).into(ivRightBg);
-        } catch (UnsupportedEncodingException | MalformedURLException e) {
-            e.printStackTrace();
-        }
+        Picasso.with(getActivity()).load(UrlHelper.buildUrlFrom(_path)).into(ivRightBg);
     }
 
 }
