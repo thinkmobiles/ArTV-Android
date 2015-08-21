@@ -36,6 +36,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -75,6 +77,12 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         final View view = _inflater.inflate(R.layout.fragment_playback, _container, false);
 
         findViews(view);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        Log.v("hours", String.valueOf(calendar.get(Calendar.HOUR)));
+        Log.v("hours", String.valueOf(new Date().getHours()));
+        Log.v("hours", String.valueOf(calendar.get(Calendar.MINUTE)));
+        Log.v("hours", String.valueOf(new Date().getMinutes()));
         prepareVideoViews();
 
         return view;

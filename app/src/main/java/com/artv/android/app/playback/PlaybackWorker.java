@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.artv.android.core.Constants;
 import com.artv.android.core.UrlHelper;
+import com.artv.android.core.date.DayConverter;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.GlobalConfig;
@@ -48,6 +49,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     public final void startPlayback() {
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager = new PlayModeManager();
+        mPlayModeManager.setDayConverter(new DayConverter());
         mCampaigns = mDbWorker.getAllCampaigns();
         prepareStackToPlay(mPlayModeManager, mCampaigns);
     }

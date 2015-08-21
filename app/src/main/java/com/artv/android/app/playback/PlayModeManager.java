@@ -6,6 +6,7 @@ import com.artv.android.core.model.Campaign;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -15,6 +16,11 @@ import java.util.Locale;
  * mRogach on 17.08.2015.
  */
 public class PlayModeManager {
+    private DayConverter mDayConverter;
+
+    public void setDayConverter(DayConverter mDayConverter) {
+        this.mDayConverter = mDayConverter;
+    }
 
     private Date getDateFromString(final String _date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM");
@@ -64,13 +70,15 @@ public class PlayModeManager {
 
     private boolean hasPlayCampaignInCurentDay(final List<Campaign> _campaigns) {
         List<Day> daysToDplay;
-        Day day = DayConverter.getCurrentDay(getCurrentDate().getDay());
-        if (!_campaigns.isEmpty()) {
-            for (Campaign campaign : _campaigns) {
-                if (!campaign.playDay.isEmpty()) {
-                    daysToDplay = DayConverter.getDaysToPlay(campaign.playDay);
-                    if (!daysToDplay.isEmpty() && daysToDplay.contains(day)) {
-                        return true;
+        if (mDayConverter != null) {
+            Day day = mDayConverter.getCurrentDay();
+            if (!_campaigns.isEmpty()) {
+                for (Campaign campaign : _campaigns) {
+                    if (!campaign.playDay.isEmpty()) {
+                        daysToDplay = mDayConverter.getDaysToPlay(campaign.playDay);
+                        if (!daysToDplay.isEmpty() && daysToDplay.contains(day)) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -79,7 +87,9 @@ public class PlayModeManager {
     }
 
     public long getTimeInMills(final Date _time) {
-        return _time.getHours() * 60 * 60 * 1000 + _time.getMinutes() * 60 * 1000;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(_time);
+        return calendar.get(Calendar.HOUR) * 60 * 60 * 1000 + calendar.get(Calendar.MINUTE) * 60 * 1000;
     }
 
     public int campainToPlay(final List<Campaign> _campaigns) {
