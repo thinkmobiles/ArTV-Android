@@ -62,8 +62,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 break;
             case 1:
                 campaignToPlay = hasPlayCampaignInCurrentTime(_campaigns, _playModeManager);
-                if (campaignToPlay != null) {
-                    mAssetStack = getStackAssets(campaignToPlay.assets);
+                if (campaignToPlay != null && !campaignToPlay.assets.isEmpty()) {
+                    List<Asset> assets = campaignToPlay.assets;
+                    sortAssets(assets);
+                    mAssetStack = getStackAssets(assets);
                 } else
                     mAssetStack = getStackAssetsAllCampaigns(_campaigns);
                 break;
@@ -148,11 +150,14 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     public void startCheckTimeDelay(final Campaign _campaign, final long _timeDelay) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        final List<Asset> assets = _campaign.assets;
+        if (!assets.isEmpty()) {
+            sortAssets(assets);
+        }
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mAssetStack = getStackAssets(_campaign.assets);
+                mAssetStack = getStackAssets(assets);
                 play();
             }
         }, _timeDelay);
@@ -182,7 +187,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     private Stack<Asset> getStackAssets(final List<Asset> _assets) {
         if (!_assets.isEmpty()) {
-            sortAssets(_assets);
             Stack<Asset> stack = new Stack<>();
             for (Asset asset : _assets) {
                 stack.push(asset);
