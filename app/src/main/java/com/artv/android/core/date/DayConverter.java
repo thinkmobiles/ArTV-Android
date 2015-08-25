@@ -1,5 +1,7 @@
 package com.artv.android.core.date;
 
+import junit.framework.Assert;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -47,36 +49,46 @@ public final class DayConverter {
 
     public Day getCurrentDay() {
         Calendar calendar = Calendar.getInstance();
-       return getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-    }
-
-    public final Day getClosestDayFrom(final Day _currentDay, final List<Day> _days) {
-        if (_days.size() == 1) return _days.get(0);
-
-        final Day maxDay = Collections.max(_days);
-        final int compare =_currentDay.compareTo(maxDay);
-        if (compare >= 0) {
-            return Collections.min(_days);
-        } else {
-            return getClosestBiggestDayFrom(_currentDay, _days);
-        }
+        return getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
     }
 
     /**
-     * Returns closest biggest day from current day.
+     * Returns next playing day after current day.
+     *
      * @param _currentDay current day.
-     * @param _days must not be empty.
-     * @return closest biggest day.
+     * @param _days       playing days. List must not be empty, must not contains current day,
+     *                    should contain 2 or more elements.
+     * @return next closest day.
      */
-    public final Day getClosestBiggestDayFrom(final Day _currentDay, final List<Day> _days) {
-        for (final Day day : _days) {
-            if (day.compareTo(_currentDay) > 0) return day;
+    public final Day getNextPlayingDay(Day _currentDay, final List<Day> _days) {
+        Assert.assertTrue("List must not be empty", !_days.isEmpty());
+        Assert.assertTrue("List must not contains current day", !_days.contains(_currentDay));
+        Assert.assertTrue("List should contain 2 or more elements", _days.size() >= 2);
+
+        while (!_days.contains(_currentDay)) {
+            _currentDay = _currentDay.getNext();
         }
 
-        throw new RuntimeException("Days must not be empty");
+        return _currentDay;
     }
 
-    public final long getTimeToDay(final Day _day) {
-        return -1;
+    public final long getMillisToNextDay() {
+        final Calendar calendar = Calendar.getInstance();
+        final long currMillis = calendar.getTimeInMillis();
+        calendar.add(Calendar.DAY_OF_WEEK, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        final long nextMillis = calendar.getTimeInMillis();
+        return nextMillis - currMillis;
+    }
+
+    public final long getMillisInDay() {
+        return 1000 * 60 * 60 * 24;
+    }
+
+    public final long getMillisInHour() {
+        return 1000 * 60 * 60;
     }
 }
