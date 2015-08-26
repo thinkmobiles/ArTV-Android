@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Handler;
 
 import com.artv.android.core.UrlHelper;
-import com.artv.android.core.date.DayConverter;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.core.model.Message;
@@ -12,9 +11,6 @@ import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.DbWorker;
 import com.google.common.collect.Iterables;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,11 +19,12 @@ import java.util.List;
  */
 public final class MessageWorker {
 
+    private MessageHelper mHelper;
+
     private MsgBoardCampaign mMsgBoardCampaign;
     private IMessageController mMessageController;
     private GlobalConfig mGlobalConfig;
     private DbWorker mDbWorker;
-    private DayConverter mDayConverter;
 
     private boolean mPlay = false;
     private Iterator<Message> mBottomMsgCycle;
@@ -36,7 +33,7 @@ public final class MessageWorker {
     private Handler mHandler;
 
     public MessageWorker() {
-        mDayConverter = new DayConverter();
+        mHelper = new MessageHelper();
     }
 
     public final void setMessageController(final IMessageController _controller) {
@@ -51,57 +48,80 @@ public final class MessageWorker {
         mDbWorker = _dbWorker;
     }
 
+    private final void createHandler() {
+        if (mHandler == null) mHandler = new Handler();
+    }
+
     public final void playMessages() {
         mMsgBoardCampaign = mDbWorker.getMsgBoardCampaign();
-        if (mMsgBoardCampaign == null) {
+        if (mMsgBoardCampaign == null || !mHelper.hasPlayDays(mMsgBoardCampaign.playDay)) {
             mMessageController.hideMessageUi();
             return;
         }
 
-        if (shouldPlayMessagesToday()) {
-            mMessageController.showMessageUi();
-        } else {
+        createHandler();
+
+        if (!mHelper.shouldPlayMessagesToday(mMsgBoardCampaign.playDay)) {
             mMessageController.hideMessageUi();
-            mHandler.postDelayed(playMessagesLater, getRemainTimeToPlay());
+            final long ms = mHelper.getRemainMsToBeginPlay(mMsgBoardCampaign.playDay);
+            mHandler.postDelayed(playMessagesLater, ms);
+            ArTvLogger.printMessage(String.format("Set play messages after %d ms", ms));
             return;
         }
+
+        mMessageController.showMessageUi();
+        ArTvLogger.printMessage("Start playing messages now");
+        final long ms = mHelper.getMillisToNextDay();
+        mHandler.postDelayed(playMessagesLater, ms);
+        ArTvLogger.printMessage(String.format("Set to check play messages again after %d ms", ms));
 
         mPlay = true;
-
-        setBackground();
-        setTextColor();
-
-        final List<Message> bottomMessages = getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.BOTTOM);
-        final List<Message> rightMessages = getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.RIGHT);
-
-        sortMessagesBySequence(bottomMessages);
-        sortMessagesBySequence(rightMessages);
-
-        mBottomMsgCycle = Iterables.cycle(bottomMessages).iterator();
-        mRightMsgCycle = Iterables.cycle(rightMessages).iterator();
-
-        mHandler = new Handler();
-
-        play();
+        prepareUiAndMsgCycle();
+        playNextMessage();
     }
 
     public final void stopMessages() {
         mPlay = false;
+        mMessageController.hideMessageUi();
         if (mHandler != null) {
             mHandler.removeCallbacks(nextMsg);
             mHandler.removeCallbacks(playMessagesLater);
         }
     }
 
-    private final boolean shouldPlayMessagesToday() {
-//        final Day currentDay = mDayConverter.getCurrentDay();
-//        final List<Day> playedDays = mDayConverter.getDays(mMsgBoardCampaign.playDay);
-//        return playedDays.contains(currentDay);
-        return true;
+    private final void playNextMessage() {
+        mMessageController.showBottomMessage(mBottomMsgCycle.next().text);
+        mMessageController.showRightMessage(mRightMsgCycle.next().text);
+
+        if (mPlay) mHandler.postDelayed(nextMsg, mGlobalConfig.getServerDefaultPlayTime() * 1000);
     }
 
-    private final long getRemainTimeToPlay() {
-        return 1000;
+    private final Runnable nextMsg = new Runnable() {
+        @Override
+        public final void run() {
+            playNextMessage();
+        }
+    };
+
+    private final Runnable playMessagesLater = new Runnable() {
+        @Override
+        public final void run() {
+            playMessages();
+        }
+    };
+
+    private final void prepareUiAndMsgCycle() {
+        setBackground();
+        setTextColor();
+
+        final List<Message> bottomMessages = mHelper.getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.BOTTOM);
+        final List<Message> rightMessages = mHelper.getMessagesWithPosition(mMsgBoardCampaign.messages, MessagePosition.RIGHT);
+
+        mHelper.sortMessagesBySequence(bottomMessages);
+        mHelper.sortMessagesBySequence(rightMessages);
+
+        mBottomMsgCycle = Iterables.cycle(bottomMessages).iterator();
+        mRightMsgCycle = Iterables.cycle(rightMessages).iterator();
     }
 
     private final void setBackground() {
@@ -118,43 +138,5 @@ public final class MessageWorker {
     private final void setTextColor() {
         mMessageController.setTextColor(Color.parseColor(mMsgBoardCampaign.textColor));
     }
-
-    protected final void sortMessagesBySequence(final List<Message> _messages) {
-        Collections.sort(_messages, new Comparator<Message>() {
-            @Override
-            public final int compare(final Message _lhs, final Message _rhs) {
-                return _lhs.sequence - _rhs.sequence;
-            }
-        });
-    }
-
-    protected final List<Message> getMessagesWithPosition(final List<Message> _from, final MessagePosition _position) {
-        final List<Message> messages = new ArrayList<>();
-        for (final Message message : _from) {
-            if (message.position() == _position) messages.add(message);
-        }
-        return messages;
-    }
-
-    private final void play() {
-        mMessageController.showBottomMessage(mBottomMsgCycle.next().text);
-        mMessageController.showRightMessage(mRightMsgCycle.next().text);
-
-        if (mPlay) mHandler.postDelayed(nextMsg, mGlobalConfig.getServerDefaultPlayTime() * 1000);
-    }
-
-    private final Runnable nextMsg = new Runnable() {
-        @Override
-        public final void run() {
-            play();
-        }
-    };
-
-    private final Runnable playMessagesLater = new Runnable() {
-        @Override
-        public final void run() {
-            playMessages();
-        }
-    };
 
 }

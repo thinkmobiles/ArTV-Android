@@ -20,6 +20,7 @@ import java.util.List;
 public final class MessageWorkerTest {
 
     private MessageWorker mMessageWorker;
+    private MessageHelper mMessageHelper;
 
     @Before
     public final void Init() {
@@ -29,7 +30,7 @@ public final class MessageWorkerTest {
     @Test
     public final void Messages_SortBySequence() {
         final List<Message> messages = buildMessages();
-        mMessageWorker.sortMessagesBySequence(messages);
+        mMessageHelper.sortMessagesBySequence(messages);
         for (int i = 0; i < messages.size(); i++) {
             Assert.assertEquals(i, messages.get(i).sequence);
         }
@@ -39,8 +40,8 @@ public final class MessageWorkerTest {
     public final void Messages_FillBottomAndRightMessages_PositionRight() {
         final List<Message> messages = buildMessages();
 
-        final List<Message> bottomMessages = mMessageWorker.getMessagesWithPosition(messages, MessagePosition.BOTTOM);
-        final List<Message> rightMessages = mMessageWorker.getMessagesWithPosition(messages, MessagePosition.RIGHT);
+        final List<Message> bottomMessages = mMessageHelper.getMessagesWithPosition(messages, MessagePosition.BOTTOM);
+        final List<Message> rightMessages = mMessageHelper.getMessagesWithPosition(messages, MessagePosition.RIGHT);
 
         for (final Message message : bottomMessages) Assert.assertEquals(MessagePosition.BOTTOM, message.position());
         for (final Message message : rightMessages) Assert.assertEquals(MessagePosition.RIGHT, message.position());
@@ -50,11 +51,11 @@ public final class MessageWorkerTest {
     public final void Messages_FillBottomAndRightMessages_SequenceIncrementing() {
         final List<Message> messages = buildMessages();
 
-        final List<Message> bottomMessages = mMessageWorker.getMessagesWithPosition(messages, MessagePosition.BOTTOM);
-        final List<Message> rightMessages = mMessageWorker.getMessagesWithPosition(messages, MessagePosition.RIGHT);
+        final List<Message> bottomMessages = mMessageHelper.getMessagesWithPosition(messages, MessagePosition.BOTTOM);
+        final List<Message> rightMessages = mMessageHelper.getMessagesWithPosition(messages, MessagePosition.RIGHT);
 
-        mMessageWorker.sortMessagesBySequence(bottomMessages);
-        mMessageWorker.sortMessagesBySequence(rightMessages);
+        mMessageHelper.sortMessagesBySequence(bottomMessages);
+        mMessageHelper.sortMessagesBySequence(rightMessages);
 
         for (int i = 0; i < bottomMessages.size() - 1; i++) {
             Assert.assertTrue(
