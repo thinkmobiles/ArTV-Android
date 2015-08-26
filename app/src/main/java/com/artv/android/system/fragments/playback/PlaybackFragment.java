@@ -46,6 +46,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
     private MessageWorker mMessageWorker;
+    private YoutubeVideoFragment mFragment;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
@@ -164,8 +165,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         setVideoVisibility(false);
         setImageVisibility(false);
         vvVideoPlayer.setVisibility(View.GONE);
-        final YoutubeVideoFragment fragment = YoutubeVideoFragment.newInstance(_url);
-        fragment.setYoutubeVideoListener(new YoutubeVideoListener() {
+        mFragment = YoutubeVideoFragment.newInstance(_url);
+        mFragment.setYoutubeVideoListener(new YoutubeVideoListener() {
             @Override
             public final void onVideoStarted() {
 
@@ -173,11 +174,24 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
             @Override
             public final void onVideoEnded() {
-                getChildFragmentManager().beginTransaction().remove(fragment).commit();
+                getChildFragmentManager().beginTransaction().remove(mFragment).commit();
                 mVideoCompletionListener.onVideoCompleted();
             }
         });
-        getChildFragmentManager().beginTransaction().replace(R.id.rlPlayContainer_FP, fragment).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.rlPlayContainer_FP, mFragment).commit();
+    }
+
+    @Override
+    public void stopPlaying() {
+        if(vvVideoPlayer != null && vvVideoPlayer.isPlaying()) {
+            vvVideoPlayer.stopPlayback();
+            vvVideoPlayer.setVisibility(View.GONE);
+        } else if (mFragment != null) {
+            getChildFragmentManager().beginTransaction().remove(mFragment).commit();
+            mFragment = null;
+        } else {
+            setImageVisibility(false);
+        }
     }
     //endregion
 

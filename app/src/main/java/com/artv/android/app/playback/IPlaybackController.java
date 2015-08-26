@@ -12,5 +12,6 @@ public interface IPlaybackController {
     void playLocalVideo(final String _path);
     void playLocalPicture(final String _path);
     void playYoutubeLink(final String _url);
+    void stopPlaying();
 
 }

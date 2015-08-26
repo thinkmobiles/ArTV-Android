@@ -158,6 +158,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
             @Override
             public void run() {
                 mAssetStack = getStackAssets(assets);
+                mPlaybackController.stopPlaying();
                 play();
             }
         }, _timeDelay);
