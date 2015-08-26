@@ -16,6 +16,16 @@ import java.util.List;
  */
 public final class DayConverter {
 
+    private Calendar mCalendar;
+
+    public final void setCalendar(final Calendar _calendar) {
+        mCalendar = _calendar;
+    }
+
+    public final Calendar getCalendar() {
+        return mCalendar != null ? mCalendar : Calendar.getInstance();
+    }
+
     public Day getDayOfWeek(final int _currentDay) {
 
         switch (_currentDay) {
@@ -37,8 +47,13 @@ public final class DayConverter {
         return null;
     }
 
-    public List<Day> getDays(final String _playDays) {
-        List<Day> days = new ArrayList<>();
+    public final Day getCurrentDay() {
+        final Calendar calendar = getCalendar();
+        return getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK) - 1);
+    }
+
+    public final List<Day> getDays(final String _playDays) {
+        final List<Day> days = new ArrayList<>();
         for (int i = 0; i < _playDays.length(); i++) {
             if (_playDays.charAt(i) == '1') {
                 days.add(getDayOfWeek(i));
@@ -47,23 +62,17 @@ public final class DayConverter {
         return days;
     }
 
-    public Day getCurrentDay() {
-        Calendar calendar = Calendar.getInstance();
-        return getDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
-    }
-
     /**
      * Returns next playing day after current day.
      *
      * @param _currentDay current day.
-     * @param _days       playing days. List must not be empty, must not contains current day,
-     *                    should contain 2 or more elements.
+     * @param _days       playing days. List must not be empty, must not contains current day.
      * @return next closest day.
      */
-    public final Day getNextPlayingDay(Day _currentDay, final List<Day> _days) {
+    public final Day getPlayDay(Day _currentDay, final List<Day> _days) {
         Assert.assertTrue("List must not be empty", !_days.isEmpty());
         Assert.assertTrue("List must not contains current day", !_days.contains(_currentDay));
-        Assert.assertTrue("List should contain 2 or more elements", _days.size() >= 2);
+        if (_days.size() == 1) return _days.get(0);
 
         while (!_days.contains(_currentDay)) {
             _currentDay = _currentDay.getNext();
@@ -72,8 +81,21 @@ public final class DayConverter {
         return _currentDay;
     }
 
+    public final long getMillisBetweenDays(Day _first, final Day _last) {
+        Assert.assertFalse("Days must no be equals", _first.equals(_last));
+
+        long millis = getMillisToNextDay();
+        _first = _first.getNext();
+        while (!_first.equals(_last)) {
+            millis += getMillisInDay();
+            _first = _first.getNext();
+        }
+
+        return millis;
+    }
+
     public final long getMillisToNextDay() {
-        final Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = (Calendar) getCalendar().clone();
         final long currMillis = calendar.getTimeInMillis();
         calendar.add(Calendar.DAY_OF_WEEK, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 0);

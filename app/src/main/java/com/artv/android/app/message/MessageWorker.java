@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Handler;
 
 import com.artv.android.core.UrlHelper;
+import com.artv.android.core.date.Day;
 import com.artv.android.core.date.DayConverter;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.GlobalConfig;
@@ -58,11 +59,21 @@ public final class MessageWorker {
             return;
         }
 
+        mHandler = new Handler();
+
         if (shouldPlayMessagesToday()) {
             mMessageController.showMessageUi();
+            ArTvLogger.printMessage("Should play messages today");
+            final long remainTime = mDayConverter.getMillisToNextDay();
+            mHandler.postDelayed(stopPlayingMessages, remainTime);
+            ArTvLogger.printMessage(String.format("Stop messages after %d millis", remainTime));
         } else {
             mMessageController.hideMessageUi();
-            mHandler.postDelayed(playMessagesLater, getRemainTimeToPlay());
+            final long remainTime = getRemainMillisToPlay();
+            if (remainTime != -1) {
+                mHandler.postDelayed(playMessagesLater, remainTime);
+                ArTvLogger.printMessage(String.format("Play messages after %d millis", remainTime));
+            }
             return;
         }
 
@@ -80,28 +91,34 @@ public final class MessageWorker {
         mBottomMsgCycle = Iterables.cycle(bottomMessages).iterator();
         mRightMsgCycle = Iterables.cycle(rightMessages).iterator();
 
-        mHandler = new Handler();
-
         play();
     }
 
     public final void stopMessages() {
         mPlay = false;
+        mMessageController.hideMessageUi();
         if (mHandler != null) {
             mHandler.removeCallbacks(nextMsg);
             mHandler.removeCallbacks(playMessagesLater);
+            mHandler.removeCallbacks(stopPlayingMessages);
         }
     }
 
     private final boolean shouldPlayMessagesToday() {
-//        final Day currentDay = mDayConverter.getCurrentDay();
-//        final List<Day> playedDays = mDayConverter.getDays(mMsgBoardCampaign.playDay);
-//        return playedDays.contains(currentDay);
-        return true;
+        final Day currentDay = mDayConverter.getCurrentDay();
+        final List<Day> playDays = mDayConverter.getDays(mMsgBoardCampaign.playDay);
+        return playDays.contains(currentDay);
     }
 
-    private final long getRemainTimeToPlay() {
-        return 1000;
+    private final long getRemainMillisToPlay() {
+        final Day currentDay = mDayConverter.getCurrentDay();
+        final List<Day> playDays = mDayConverter.getDays(mMsgBoardCampaign.playDay);
+        if (playDays.isEmpty()) return -1;
+
+        final Day playDay = mDayConverter.getPlayDay(currentDay, playDays);
+        final long millis = mDayConverter.getMillisBetweenDays(currentDay, playDay);
+
+        return millis;
     }
 
     private final void setBackground() {
@@ -154,6 +171,13 @@ public final class MessageWorker {
         @Override
         public final void run() {
             playMessages();
+        }
+    };
+
+    private final Runnable stopPlayingMessages = new Runnable() {
+        @Override
+        public final void run() {
+            stopMessages();
         }
     };
 
