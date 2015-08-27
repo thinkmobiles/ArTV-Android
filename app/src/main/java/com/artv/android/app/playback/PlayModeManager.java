@@ -55,7 +55,7 @@ public class PlayModeManager {
                 if (campaign.startDate != null) {
                     startDate = getDateFromString(campaign.startDate).getTime();
                 }
-                if (campaign.startDate != null) {
+                if (campaign.endDate != null) {
                     endDate = getDateFromString(campaign.endDate).getTime();
                 }
                 if (startDate != 0 && endDate != 0 && startDate <= currentDate && currentDate <= endDate) {
@@ -89,7 +89,7 @@ public class PlayModeManager {
     public long getTimeInMills(final Date _time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(_time);
-        return calendar.get(Calendar.HOUR) * 60 * 60 * 1000 + calendar.get(Calendar.MINUTE) * 60 * 1000;
+        return calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60 * 1000 + calendar.get(Calendar.MINUTE) * 60 * 1000;
     }
 
     public int campainToPlay(final List<Campaign> _campaigns) {

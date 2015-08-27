@@ -25,6 +25,8 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="c780c398ef112570ef7e76b9ccdd38ed942e3e92" />
+
+        <receiver android:name=".core.display.AlarmTurnOffReceiver" android:process=":remote" />
     </application>
 
 </manifest>
