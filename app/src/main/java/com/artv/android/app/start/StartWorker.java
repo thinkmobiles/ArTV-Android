@@ -89,7 +89,7 @@ public class StartWorker {
 
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printMessage("Has campaigns to play");
-                doBeaconRequest();
+//                doBeaconRequest();
                 break;
         }
     }
@@ -122,41 +122,7 @@ public class StartWorker {
     private final void doBeaconRequest() {
         mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mBeaconWorker.setInitData(mInitWorker.getInitData());
-        mBeaconWorker.doBeacon(beaconCallback);
+//        mBeaconWorker.doBeacon(beaconCallback);
     }
-
-    private final ICampaignCallback beaconCallback = new ICampaignCallback() {
-        @Override
-        public final void onFinished(final CampaignResult _result) {
-            if (_result.getSuccess()) {
-                ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
-                ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
-                mDbWorker.write(_result.getMsgBoardCampaign());
-
-                if (!_result.getCampaigns().isEmpty()) {
-                    mCampaignWorker.loadCampaigns(_result.getCampaigns(),
-                            regularCampaignDownloadListener);
-                } else {
-                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-                }
-            } else {
-                ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
-                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);   //temp
-            }
-        }
-    };
-
-    private final ICampaignDownloadListener regularCampaignDownloadListener = new ICampaignDownloadListener() {
-        @Override
-        public final void onCampaignDownloadFinished(final ArTvResult _result) {
-            ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
-            mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-        }
-
-        @Override
-        public final void onPercentLoaded(final double _percent) {
-            if (mSplashFragmentListener != null) mSplashFragmentListener.onPercentLoaded(_percent);
-        }
-    };
 
 }
