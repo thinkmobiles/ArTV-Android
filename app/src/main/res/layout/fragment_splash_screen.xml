@@ -11,7 +11,8 @@
         android:id="@+id/btnClearConfigInfo_FSS"
         android:layout_centerHorizontal="true"
         style="@style/Button"
-        android:layout_marginTop="@dimen/main_distance" />
+        android:layout_marginTop="@dimen/main_distance"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="300dp"
