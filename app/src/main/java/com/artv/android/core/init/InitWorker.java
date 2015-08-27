@@ -1,6 +1,7 @@
 package com.artv.android.core.init;
 
 import com.artv.android.ArTvResult;
+import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.api.ApiWorker;
@@ -30,6 +31,7 @@ public class InitWorker {
     private ApiWorker mApiWorker;
     private PlaybackWorker mPlaybackWorker;
     private MessageWorker mMessageWorker;
+    private BeaconScheduler mBeaconScheduler;
 
     private InitData mInitData;
     private IInitCallback mCallback;
@@ -56,6 +58,10 @@ public class InitWorker {
 
     public final void setMessageWorker(final MessageWorker _worker) {
         mMessageWorker = _worker;
+    }
+
+    public final void setBeaconScheduler(final BeaconScheduler _scheduler) {
+        mBeaconScheduler = _scheduler;
     }
 
     public final void startInitializing(final IInitCallback _callback) {
@@ -122,6 +128,7 @@ public class InitWorker {
                 mInitData.setGlobalConfig(_respObj.globalConfig);
                 mPlaybackWorker.setGlobalConfig(_respObj.globalConfig);
                 mMessageWorker.setGlobalConfig(_respObj.globalConfig);
+                mBeaconScheduler.setGlobalConfig(_respObj.globalConfig);
 
                 ArTvLogger.printMessage(_respObj.apiType + " : success");
                 getDeviceConfig();

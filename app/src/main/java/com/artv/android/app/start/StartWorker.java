@@ -90,6 +90,7 @@ public class StartWorker {
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printMessage("Has campaigns to play");
 //                doBeaconRequest();
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
                 break;
         }
     }
@@ -120,8 +121,8 @@ public class StartWorker {
     }
 
     private final void doBeaconRequest() {
-        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
-        mBeaconWorker.setInitData(mInitWorker.getInitData());
+//        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+//        mBeaconWorker.setInitData(mInitWorker.getInitData());
 //        mBeaconWorker.doBeacon(beaconCallback);
     }
 

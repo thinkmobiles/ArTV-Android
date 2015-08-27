@@ -23,10 +23,11 @@ import java.util.List;
 public final class BeaconScheduler {
 
     private BeaconWorker mBeaconWorker;
-    private GlobalConfig mGlobalConfig;
     private DbWorker mDbWorker;
     private MessageWorker mMessageWorker;
     private CampaignWorker mCampaignWorker;
+
+    private GlobalConfig mGlobalConfig;
 
     private Handler mHandler;
 
@@ -111,7 +112,7 @@ public final class BeaconScheduler {
         @Override
         public final void onCampaignDownloadFinished(final ArTvResult _result) {
             ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
-            //restart campaigns play
+            //todo: restart campaigns play
         }
 
         @Override
