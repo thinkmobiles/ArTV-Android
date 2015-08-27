@@ -96,7 +96,7 @@ public class PlayModeManager {
     public long getTimeInMills(final Date _time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(_time);
-        return calendar.get(Calendar.HOUR_OF_DAY) * 60 * 60 * 1000 + calendar.get(Calendar.MINUTE) * 60 * 1000;
+        return calendar.get(Calendar.HOUR) * 60 * 60 * 1000 + calendar.get(Calendar.MINUTE) * 60 * 1000;
     }
 
     public int campainToPlay(final List<Campaign> _campaigns) {
