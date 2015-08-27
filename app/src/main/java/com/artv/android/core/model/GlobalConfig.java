@@ -5,15 +5,19 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
+import retrofit.http.PUT;
+
 /**
  * Created by ZOG on 8/12/2015.
  */
 @Root(name = "GlobalConfigXML")
 public final class GlobalConfig {
 
-    public static final int DEF_PLAY_TIME = 5;
+    public static final int DEF_PLAY_TIME = 5;  //sec
+    public static final int DEF_BEACON_INTERVAL = 1;   //min
 
     public static final String KEY_DEF_PLAY_TIME = "DefaultPlayTime";
+    public static final String KEY_BEACON_INTERVAL = "BeaconInterval";
 
     @ElementList(name = "Entry", inline = true)
     public ArrayList<Entry> entries;
@@ -48,6 +52,27 @@ public final class GlobalConfig {
         }
 
         return DEF_PLAY_TIME;
+    }
+
+    /**
+     * Returns beacon interval time.
+     * @return time in minutes.
+     */
+    public final int getServerBeaconInterval() {
+        for (final Entry entry : entries) {
+            if (KEY_BEACON_INTERVAL.equals(entry.getName())) {
+                int time;
+                try {
+                    time = Integer.parseInt(entry.getValue());
+                } catch (final NumberFormatException _e) {
+                    _e.printStackTrace();
+                    continue;
+                }
+                return time;
+            }
+        }
+
+        return DEF_BEACON_INTERVAL;
     }
 
 }

@@ -123,7 +123,6 @@ public class InitWorker {
                 mPlaybackWorker.setGlobalConfig(_respObj.globalConfig);
                 mMessageWorker.setGlobalConfig(_respObj.globalConfig);
 
-
                 ArTvLogger.printMessage(_respObj.apiType + " : success");
                 getDeviceConfig();
             }
