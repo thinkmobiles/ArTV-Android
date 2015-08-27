@@ -11,14 +11,15 @@
         android:id="@+id/btnClearConfigInfo_FSS"
         android:layout_centerHorizontal="true"
         style="@style/Button"
-        android:layout_marginTop="@dimen/main_distance" />
+        android:layout_marginTop="@dimen/main_distance"
+        android:visibility="invisible" />
 
     <ImageView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:id="@+id/ivLogo_FSS"
         style="@style/LogoImage"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerInParent="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
         android:gravity="bottom"
         android:background="#5e070707"
         android:textColor="#e400ff00"
-        android:freezesText="true"/>
+        android:freezesText="true"
+        android:visibility="invisible" />
 
 </RelativeLayout>

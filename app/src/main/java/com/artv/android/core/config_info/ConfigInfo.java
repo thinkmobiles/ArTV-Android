@@ -7,6 +7,7 @@ public class ConfigInfo {
 
     private String mDeviceId;
     private String mMasterDeviceIp;
+    private String mAddress;
     private String mUser;
     private String mPassword;
 
@@ -23,6 +24,10 @@ public class ConfigInfo {
         return mMasterDeviceIp;
     }
 
+    public final String getAddress() {
+        return mAddress;
+    }
+
     public final String getUser() {
         return mUser;
     }
@@ -33,21 +38,22 @@ public class ConfigInfo {
 
     public boolean hasConfigInfo() {
         return mDeviceId != null && !mDeviceId.isEmpty()
-//                && mMasterDeviceIp != null && !mMasterDeviceIp.isEmpty()
                 && mUser != null && !mUser.isEmpty()
                 && mPassword != null && !mPassword.isEmpty();
     }
 
     @Override
     public final boolean equals(final Object _o) {
+        if (_o == null) return false;
         if (!(_o instanceof ConfigInfo)) return false;
 
         final boolean idE = String.valueOf(mDeviceId).equals(String.valueOf(((ConfigInfo) _o).getDeviceId()));
         final boolean ipE = String.valueOf(mMasterDeviceIp).equals(String.valueOf(((ConfigInfo) _o).getMasterDeviceIp()));
+        final boolean aE = String.valueOf(mAddress).equals(String.valueOf(((ConfigInfo) _o).getAddress()));
         final boolean uE = String.valueOf(mUser).equals(String.valueOf(((ConfigInfo) _o).getUser()));
         final boolean pE = String.valueOf(mPassword).equals(String.valueOf(((ConfigInfo) _o).getPassword()));
 
-        return idE && ipE && uE && pE;
+        return idE && ipE && aE && uE && pE;
     }
 
     @Override
@@ -74,6 +80,11 @@ public class ConfigInfo {
             return this;
         }
 
+        public final Builder setAddress(final String _address) {
+            mConfigInfo.mAddress = _address;
+            return this;
+        }
+
         public final Builder setUser(final String _user) {
             mConfigInfo.mUser = _user;
             return this;
@@ -89,4 +100,5 @@ public class ConfigInfo {
         }
 
     }
+
 }

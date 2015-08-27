@@ -37,19 +37,35 @@ public final class GlobalConfigTest {
     }
 
     @Test
-    public final void NoTimeInGonfig_ReturnDefaultTime() throws NoSuchFieldException, IllegalAccessException {
+    public final void NoTimeInConfig_ReturnDefaultTime() {
         mGlobalConfig.entries = new ArrayList<>();
         Assert.assertEquals(GlobalConfig.DEF_PLAY_TIME, mGlobalConfig.getServerDefaultPlayTime());
     }
 
     @Test
-    public final void HasTimeInGonfig_ReturnThatTime() throws NoSuchFieldException, IllegalAccessException {
+    public final void HasTimeInConfig_ReturnThatTime() {
         mGlobalConfig.entries = new ArrayList<>();
         final Entry entry = new Entry();
         entry.setName(GlobalConfig.KEY_DEF_PLAY_TIME);
         entry.setValue("155");
         mGlobalConfig.entries.add(entry);
         Assert.assertEquals(155, mGlobalConfig.getServerDefaultPlayTime());
+    }
+
+    @Test
+    public final void NoIntervalInConfig_ReturnDefaultInterval() {
+        mGlobalConfig.entries = new ArrayList<>();
+        Assert.assertEquals(GlobalConfig.DEF_BEACON_INTERVAL, mGlobalConfig.getServerBeaconInterval());
+    }
+
+    @Test
+    public final void HasIntervalInConfig_ReturnThatInterval() {
+        mGlobalConfig.entries = new ArrayList<>();
+        final Entry entry = new Entry();
+        entry.setName(GlobalConfig.KEY_BEACON_INTERVAL);
+        entry.setValue("123");
+        mGlobalConfig.entries.add(entry);
+        Assert.assertEquals(123, mGlobalConfig.getServerBeaconInterval());
     }
 
 }

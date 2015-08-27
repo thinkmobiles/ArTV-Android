@@ -9,7 +9,7 @@ import android.content.SharedPreferences;
 public final class SpHelper {
 
     private static final String SP_NAME             = "artv_sp";
-    private static final String DEF_STRING_VAL      = null;
+    private static final String DEF_STRING_VAL      = "";
 
     private SharedPreferences mSp;
 

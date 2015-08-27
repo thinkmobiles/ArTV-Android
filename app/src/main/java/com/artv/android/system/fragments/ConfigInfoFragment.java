@@ -11,6 +11,7 @@ import com.artv.android.R;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.UrlHelper;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.config_info.ConfigInfoWorker;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -19,9 +20,21 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
 
     private EditText etDeviceId;
     private EditText etMasterDeviceIp;
+    private EditText etAddress;
     private EditText etUserName;
     private EditText etPassword;
-    private EditText etAddress;
+
+    private ConfigInfoWorker mConfigInfoWorker;
+
+    @Override
+    public final void onCreate(final Bundle _savedInstanceState) {
+        super.onCreate(_savedInstanceState);
+        initLogic();
+    }
+
+    private final void initLogic() {
+        mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
+    }
 
     @Override
     public final View onCreateView(final LayoutInflater _inflater, final ViewGroup _container, final Bundle _savedInstanceState) {
@@ -29,13 +42,31 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
 
         etDeviceId = (EditText) view.findViewById(R.id.etDeviceId_FCI);
         etMasterDeviceIp = (EditText) view.findViewById(R.id.etMasterDeviceIp_FCI);
+        etAddress = (EditText) view.findViewById(R.id.etAddress_FCI);
         etUserName = (EditText) view.findViewById(R.id.etUserName_FCI);
         etPassword = (EditText) view.findViewById(R.id.etPassword_FCI);
-        etAddress = (EditText) view.findViewById(R.id.etAddress_FCI);
 
         view.findViewById(R.id.btnSave_FCI).setOnClickListener(this);
 
         return view;
+    }
+
+    @Override
+    public final void onActivityCreated(final Bundle _savedInstanceState) {
+        super.onActivityCreated(_savedInstanceState);
+        if (_savedInstanceState == null) showConfigInfoInUi();
+    }
+
+    private final void showConfigInfoInUi() {
+        mConfigInfoWorker.loadConfigInfo();
+        final ConfigInfo info = mConfigInfoWorker.getConfigInfo();
+        if (info == null) return;
+
+        etDeviceId.setText(info.getDeviceId());
+        etMasterDeviceIp.setText(info.getMasterDeviceIp());
+        etAddress.setText(info.getAddress());
+        etUserName.setText(info.getUser());
+        etPassword.setText(info.getPassword());
     }
 
     @Override
@@ -81,6 +112,6 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
             }
         }
 
-        getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(configInfo);
+        mConfigInfoWorker.notifyEnteredConfigInfo(configInfo);
     }
 }
