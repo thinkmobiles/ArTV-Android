@@ -16,6 +16,7 @@ public class ConfigInfoWorker {
     private static final String KEY_MASTER_DEVICE_IP    = "key_master_device_ip";
     private static final String KEY_USER                = "key_user";
     private static final String KEY_PASSWORD            = "key_password";
+    private static final String KEY_ADDRESS             = "key_address";
 
     private ConfigInfo mConfigInfo;
     private SpHelper mSpHelper;
@@ -65,6 +66,7 @@ public class ConfigInfoWorker {
         mSpHelper.putString(KEY_MASTER_DEVICE_IP, mConfigInfo.getMasterDeviceIp());
         mSpHelper.putString(KEY_USER, mConfigInfo.getUser());
         mSpHelper.putString(KEY_PASSWORD, mConfigInfo.getPassword());
+        mSpHelper.putString(KEY_ADDRESS, mConfigInfo.getAddress());
     }
 
     public final void loadConfigInfo() {
@@ -73,6 +75,7 @@ public class ConfigInfoWorker {
                 .setMasterDeviceIp(mSpHelper.getString(KEY_MASTER_DEVICE_IP))
                 .setUser(mSpHelper.getString(KEY_USER))
                 .setPassword(mSpHelper.getString(KEY_PASSWORD))
+                .setAddress(mSpHelper.getString(KEY_ADDRESS))
                 .build();
     }
 
@@ -82,6 +85,7 @@ public class ConfigInfoWorker {
         mSpHelper.removeString(KEY_MASTER_DEVICE_IP);
         mSpHelper.removeString(KEY_USER);
         mSpHelper.removeString(KEY_PASSWORD);
+        mSpHelper.removeString(KEY_ADDRESS);
     }
 
 
