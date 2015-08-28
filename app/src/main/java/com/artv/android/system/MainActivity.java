@@ -12,8 +12,6 @@ import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.display.DeviceAdministrator;
-import com.artv.android.core.display.TurnOffWorker;
-import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
@@ -26,8 +24,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
     private StateWorker mStateWorker;
     private ConfigInfoWorker mConfigInfoWorker;
-    private TurnOffWorker mTurnOffWorker;
-    private InitWorker mInitWorker;
 
     @Override
     protected final void onCreate(final Bundle _savedInstanceState) {
@@ -48,8 +44,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private final void initLogic() {
         mStateWorker = getApplicationLogic().getStateWorker();
         mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
-        mInitWorker = getApplicationLogic().getInitWorker();
-        mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
     }
 
     @Override
@@ -95,7 +89,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
-                setTimeTurnOffDisplay();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
 //                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
                 break;
@@ -110,14 +103,5 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     @Override
     public final void onNeedRemoveConfigInfo() {}
 
-    private void setTimeTurnOffDisplay() {
-        if (mInitWorker != null) {
-            String turnOff = mInitWorker.getInitData().getDeviceConfig().turnOffDisp;
-            String turnOn = mInitWorker.getInitData().getDeviceConfig().turnOnDisp;
-            if (!turnOff.isEmpty()) {
-                mTurnOffWorker.turnOff(turnOff, turnOn);
-            }
-        }
-    }
 
 }
