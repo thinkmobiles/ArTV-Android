@@ -77,12 +77,14 @@ public final class ApplicationLogic {
         mBeaconWorker.setApiWorker(mApiWorker);
         mBeaconWorker.setDateWorker(mDateWorker);
         mBeaconWorker.setDbWorker(mDbWorker);
+        mBeaconWorker.setPlaybackWorker(mPlaybackWorker);
 
         mBeaconScheduler = new BeaconScheduler();
         mBeaconScheduler.setBeaconWorker(mBeaconWorker);
         mBeaconScheduler.setDbWorker(mDbWorker);
         mBeaconScheduler.setMessageWorker(mMessageWorker);
         mBeaconScheduler.setCampaignsWorker(mCampaignWorker);
+        mBeaconScheduler.setPlaybackWorker(mPlaybackWorker);
 
         mInitWorker = new InitWorker();
         mInitWorker.setPlaybackWorker(mPlaybackWorker);
@@ -94,6 +96,8 @@ public final class ApplicationLogic {
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
+        mTurnOffWorker = new TurnOffWorker(mContext, new PlayModeManager());
+
         mStartWorker = new StartWorker();
         mStartWorker.setInitWorker(mInitWorker);
         mStartWorker.setConfigInfoWorker(mConfigInfoWorker);
@@ -101,8 +105,7 @@ public final class ApplicationLogic {
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
-
-        mTurnOffWorker = new TurnOffWorker(mContext, new PlayModeManager());
+        mStartWorker.setTurnOffWorker(mTurnOffWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {

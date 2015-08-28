@@ -4,6 +4,7 @@ import android.os.Handler;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.app.message.MessageWorker;
+import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
@@ -26,6 +27,7 @@ public final class BeaconScheduler {
     private DbWorker mDbWorker;
     private MessageWorker mMessageWorker;
     private CampaignWorker mCampaignWorker;
+    private PlaybackWorker mPlaybackWorker;
 
     private GlobalConfig mGlobalConfig;
 
@@ -51,7 +53,12 @@ public final class BeaconScheduler {
         mCampaignWorker = _worker;
     }
 
+    public final void setPlaybackWorker(final PlaybackWorker _worker) {
+        mPlaybackWorker = _worker;
+    }
+
     public final void startSchedule() {
+        ArTvLogger.printMessage("Started beacon schedule");
         createHandler();
 
         mBeaconWorker.doBeacon(mBeaconCallback);
@@ -116,14 +123,13 @@ public final class BeaconScheduler {
         @Override
         public final void onCampaignDownloadFinished(final ArTvResult _result) {
             ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
-            //todo: restart campaigns play
-
+            mPlaybackWorker.stopPlayback();
+            mPlaybackWorker.startPlayback();
             startWithDelay(/*mGlobalConfig.getServerBeaconInterval()*/10 * 1000);
         }
 
         @Override
         public final void onPercentLoaded(final double _percent) {
-            if (((int) _percent) % 10 == 0)  ArTvLogger.printMessage(String.format("Loaded %.2f%%", _percent));
         }
     };
 

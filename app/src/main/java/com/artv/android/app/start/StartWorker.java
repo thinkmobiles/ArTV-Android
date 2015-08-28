@@ -5,6 +5,7 @@ import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.log.ArTvLogger;
@@ -24,6 +25,7 @@ public class StartWorker {
     private CampaignWorker mCampaignWorker;
     private BeaconWorker mBeaconWorker;
     private DbWorker mDbWorker;
+    private TurnOffWorker mTurnOffWorker;
 
     private ISplashFragmentListener mSplashFragmentListener;
 
@@ -49,6 +51,10 @@ public class StartWorker {
 
     public final void setDbWorker(final DbWorker _dbWorker) {
         mDbWorker = _dbWorker;
+    }
+
+    public final void setTurnOffWorker(final TurnOffWorker _worker) {
+        mTurnOffWorker = _worker;
     }
 
     public final void setSplashFragmentListener(final ISplashFragmentListener _listener) {
@@ -83,6 +89,8 @@ public class StartWorker {
 
         mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mBeaconWorker.setInitData(mInitWorker.getInitData());
+
+        mTurnOffWorker.setDeviceConfig(mInitWorker.getInitData().getDeviceConfig());
     }
 
     private final void beginCampaignLogic() {

@@ -19,6 +19,7 @@ import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -48,6 +49,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private IVideoCompletionListener mVideoCompletionListener;
     private MessageWorker mMessageWorker;
     private BeaconScheduler mBeaconScheduler;
+    private TurnOffWorker mTurnOffWorker;
 
     private YoutubeVideoFragment mFragment;
 
@@ -63,6 +65,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         mMessageWorker.setMessageController(this);
 
         mBeaconScheduler = getApplicationLogic().getBeaconScheduler();
+        mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
     }
 
     @Override
@@ -124,6 +127,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
             mPlaybackWorker.startPlayback();
             mMessageWorker.playMessages();
             mBeaconScheduler.startSchedule();
+            mTurnOffWorker.turnOff();
         }
     }
 
@@ -194,7 +198,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
             vvVideoPlayer.stopPlayback();
             vvVideoPlayer.setVisibility(View.GONE);
         } else if (mFragment != null) {
-            getChildFragmentManager().beginTransaction().remove(mFragment).commit();
+            getChildFragmentManager().beginTransaction().remove(mFragment).commitAllowingStateLoss();
             mFragment = null;
         } else {
             setImageVisibility(false);

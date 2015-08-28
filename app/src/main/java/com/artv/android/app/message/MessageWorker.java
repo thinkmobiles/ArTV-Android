@@ -59,6 +59,8 @@ public final class MessageWorker {
             return;
         }
 
+        ArTvLogger.printMessage("Started messages");
+
         createHandler();
 
         if (!mHelper.shouldPlayMessagesToday(mMsgBoardCampaign.playDay)) {

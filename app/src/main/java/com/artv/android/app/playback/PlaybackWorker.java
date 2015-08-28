@@ -57,6 +57,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     public final void startPlayback() {
+        ArTvLogger.printMessage("Started playback");
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager = new PlayModeManager();
         mPlayModeManager.setDayConverter(new DayConverter());
@@ -87,8 +88,8 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mCurrentCampaignId = 0;
         mCurrentAssetPlayingId = 0;
         mPlaybackController.stopPlaying();
-        mCampaigns = null;
-        mAssetStack = null;
+        mCampaigns.clear();
+        mAssetStack.clear();
         ArTvLogger.printMessage("Stopped playback");
     }
 
