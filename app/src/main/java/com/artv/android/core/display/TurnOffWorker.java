@@ -8,7 +8,6 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.artv.android.app.playback.PlayModeManager;
-import com.artv.android.core.init.InitWorker;
 
 import java.util.Calendar;
 
@@ -21,25 +20,20 @@ public final class TurnOffWorker {
     private AlarmManager mAlarmManager;
     private Context mContext;
     private PlayModeManager mPlayModeManager;
-    private InitWorker mInitWorker;
 
     public TurnOffWorker(final Context _context, final PlayModeManager _playModeManager) {
         this.mContext = _context;
         this.mPlayModeManager = _playModeManager;
     }
 
-    public void setInitWorker(InitWorker mInitWorker) {
-        this.mInitWorker = mInitWorker;
+    public void turnOff(final String _offTime, final String _onTime) {
+        long timeOffInMills = getTurnTimeInMills(_offTime);
+        long timeOnInMills = getTurnTimeInMills(_onTime);
+        startAlarmToTurnOffDevice(timeOffInMills, timeOnInMills);
     }
 
-    public void turnOff(final String _offTime) {
-        long timeOffInMills = getTurnTimeInMills(_offTime);
-        startAlarmToTurnOffDevice(timeOffInMills);
-    }
-
-    public void turnOn(final String _offTime) {
-        long timeOffInMills = getTurnTimeInMills(_offTime);
-        startAlarmToTurnOnDevice(timeOffInMills);
+    public void turnOn(final long _onTime) {
+        startAlarmToTurnOnDevice(_onTime);
     }
 
     public void cancel() {
@@ -83,7 +77,7 @@ public final class TurnOffWorker {
         }
     }
 
-    private void startAlarmToTurnOffDevice(final long _timeTurnOff) {
+    private void startAlarmToTurnOffDevice(final long _timeTurnOff, final long _timeTurnOn) {
         Calendar calendar = Calendar.getInstance();
         calendar.getTimeInMillis();
         long timeOff = _timeTurnOff - calendar.getTimeInMillis();
@@ -93,7 +87,7 @@ public final class TurnOffWorker {
         Log.v("turnOff", "turnOff " + timeOff);
 
         Intent intent = new Intent(mContext, AlarmTurnOffReceiver.class);
-        intent.putExtra("on", mInitWorker.getInitData().getDeviceConfig().turnOnDisp);
+        intent.putExtra("on", _timeTurnOn);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 2, intent, 0);
         mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         if (timeOff > 0) {

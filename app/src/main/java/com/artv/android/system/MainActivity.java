@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.artv.android.R;
-import com.artv.android.app.playback.PlayModeManager;
 import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
@@ -50,6 +49,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mStateWorker = getApplicationLogic().getStateWorker();
         mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
         mInitWorker = getApplicationLogic().getInitWorker();
+        mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
     }
 
     @Override
@@ -112,11 +112,10 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
     private void setTimeTurnOffDisplay() {
         if (mInitWorker != null) {
-            mTurnOffWorker = new TurnOffWorker(getApplicationContext(), new PlayModeManager());
-            mTurnOffWorker.setInitWorker(getApplicationLogic().getInitWorker());
             String turnOff = mInitWorker.getInitData().getDeviceConfig().turnOffDisp;
+            String turnOn = mInitWorker.getInitData().getDeviceConfig().turnOnDisp;
             if (!turnOff.isEmpty()) {
-                mTurnOffWorker.turnOff(turnOff);
+                mTurnOffWorker.turnOff(turnOff, turnOn);
             }
         }
     }

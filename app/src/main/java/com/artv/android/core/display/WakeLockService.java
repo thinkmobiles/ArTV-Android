@@ -14,15 +14,15 @@ import com.artv.android.app.playback.PlayModeManager;
 public class WakeLockService extends Service {
     private TurnOffWorker mTurnOffWorker;
     private PlayModeManager mPlayModeManager;
-    private String mTimeTurnOn;
+    private long mTimeTurnOn;
 
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mTimeTurnOn = intent.getStringExtra("turn_on");
+        mTimeTurnOn = intent.getLongExtra("turn_on", 0);
         mPlayModeManager = new PlayModeManager();
         mTurnOffWorker = new TurnOffWorker(getApplicationContext(), mPlayModeManager);
-        if (!mTimeTurnOn.isEmpty()) {
+        if (mTimeTurnOn != 0) {
             mTurnOffWorker.turnOn(mTimeTurnOn);
         }
         return Service.START_STICKY;

@@ -14,8 +14,8 @@ public class AlarmTurnOffReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context arg0, Intent arg1) {
         Log.v("wake", "off");
-        if (!arg1.getStringExtra("on").isEmpty()) {
-            DeviceAdministrator.lockScreen(arg0, arg1.getStringExtra("on"));
+        if (arg1.getLongExtra("on", 0) != 0) {
+            DeviceAdministrator.lockScreen(arg0, arg1.getLongExtra("on", 0));
         }
     }
 }

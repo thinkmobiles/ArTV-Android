@@ -42,7 +42,7 @@ public final class DeviceAdministrator {
         }
     }
 
-    public static void lockScreen(final Context _context, final String _timeTurnOn) {
+    public static void lockScreen(final Context _context, final long _timeTurnOn) {
         initObjects(_context);
         if (adminComponent != null && devicePolicyManager != null) {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
