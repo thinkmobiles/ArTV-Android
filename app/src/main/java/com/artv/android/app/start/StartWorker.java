@@ -2,9 +2,7 @@ package com.artv.android.app.start;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.core.beacon.BeaconWorker;
-import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.init.IInitCallback;
@@ -67,6 +65,7 @@ public class StartWorker {
                     public final void onInitSuccess(final ArTvResult _result) {
                         ArTvLogger.printMessage("Initializing success");
                         mSplashFragmentListener.showProgressUi();
+                        addDataToWorkers();
                         beginCampaignLogic();
                     }
 
@@ -78,10 +77,15 @@ public class StartWorker {
         );
     }
 
-    private final void beginCampaignLogic() {
+    private final void addDataToWorkers() {
         mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mCampaignWorker.setInitData(mInitWorker.getInitData());
 
+        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mBeaconWorker.setInitData(mInitWorker.getInitData());
+    }
+
+    private final void beginCampaignLogic() {
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
                 doInitialCampaignDownload();
@@ -89,7 +93,6 @@ public class StartWorker {
 
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printMessage("Has campaigns to play");
-//                doBeaconRequest();
                 mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
                 break;
         }
@@ -118,12 +121,6 @@ public class StartWorker {
     public final void cancel() {
         ArTvLogger.printMessage("Cancel downloading campaign...");
         mCampaignWorker.cancelLoading();
-    }
-
-    private final void doBeaconRequest() {
-//        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
-//        mBeaconWorker.setInitData(mInitWorker.getInitData());
-//        mBeaconWorker.doBeacon(beaconCallback);
     }
 
 }

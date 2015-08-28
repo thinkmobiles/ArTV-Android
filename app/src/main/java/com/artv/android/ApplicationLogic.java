@@ -97,7 +97,7 @@ public final class ApplicationLogic {
         mStartWorker.setStateWorker(mStateWorker);
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
-        mStartWorker.setDbWorker(mDbWorker);//todo: proceed here
+        mStartWorker.setDbWorker(mDbWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -130,6 +130,10 @@ public final class ApplicationLogic {
 
     public final MessageWorker getMessageWorker() {
         return mMessageWorker;
+    }
+
+    public final BeaconScheduler getBeaconScheduler() {
+        return mBeaconScheduler;
     }
 
     /**
