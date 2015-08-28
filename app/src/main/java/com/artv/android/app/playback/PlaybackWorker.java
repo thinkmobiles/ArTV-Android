@@ -29,6 +29,8 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private PlayModeManager mPlayModeManager;
     private List<Campaign> mCampaigns;
     private Stack<Asset> mAssetStack;
+    private int mCurrentCampaignId;
+    private int mCurrentAssetPlayingId;
 
     public final void setPlaybackController(final IPlaybackController _controller) {
         mPlaybackController = _controller;
@@ -46,6 +48,13 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         return this;
     }
 
+    public int getCurrentCampaignId() {
+        return mCurrentCampaignId;
+    }
+
+    public int getCurrentAssetPlayingId() {
+        return mCurrentAssetPlayingId;
+    }
 
     public final void startPlayback() {
         mCampaigns = mDbWorker.getAllCampaigns();
@@ -75,6 +84,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     public final void stopPlayback() {
+        mCurrentCampaignId = 0;
+        mCurrentAssetPlayingId = 0;
+        mPlaybackController.stopPlaying();
+        mCampaigns = null;
+        mAssetStack = null;
         ArTvLogger.printMessage("Stopped playback");
     }
 
@@ -86,6 +100,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private void play() {
         if (!mAssetStack.isEmpty()) {
             Asset asset = mAssetStack.pop();
+            mCurrentAssetPlayingId = asset.getAssetId();
             if (isVideoFormat(asset.url)) {
                 mPlaybackController.playLocalVideo(Constants.PATH + asset.url);
             } else if (isPictureFormat(asset.url)) {
@@ -142,6 +157,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
             }
             if (owerrideTimeInMills != 0 && owerrideTimeInMills == currentTimeInMills) {
+                mCurrentCampaignId = campaign.campaignId;
                 return campaign;
             } else if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
                 startCheckTimeDelay(campaign, owerrideTimeInMills - currentTimeInMills);

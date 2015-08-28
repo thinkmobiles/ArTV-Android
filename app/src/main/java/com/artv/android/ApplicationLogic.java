@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.MessageWorker;
+import com.artv.android.app.playback.PlayModeManager;
 import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.app.start.StartWorker;
 import com.artv.android.core.api.ApiWorker;
@@ -12,6 +13,7 @@ import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.display.DisplaySwitcher;
+import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
@@ -37,6 +39,7 @@ public final class ApplicationLogic {
     private CampaignWorker mCampaignWorker;
     private DbWorker mDbWorker;
     private DateWorker mDateWorker;
+    private TurnOffWorker mTurnOffWorker;
 
     private StartWorker mStartWorker;
     private PlaybackWorker mPlaybackWorker;
@@ -98,6 +101,8 @@ public final class ApplicationLogic {
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
+
+        mTurnOffWorker = new TurnOffWorker(mContext, new PlayModeManager());
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -130,6 +135,10 @@ public final class ApplicationLogic {
 
     public final MessageWorker getMessageWorker() {
         return mMessageWorker;
+    }
+
+    public TurnOffWorker getTurnOffWorker() {
+        return mTurnOffWorker;
     }
 
     public final BeaconScheduler getBeaconScheduler() {

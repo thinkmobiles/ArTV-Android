@@ -11,6 +11,7 @@ import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.config_info.IConfigInfoListener;
+import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
@@ -79,6 +80,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private final void handleAppState() {
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
+                DeviceAdministrator.getInstance(this).initAdmin();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
                 break;
 
@@ -100,5 +102,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
     @Override
     public final void onNeedRemoveConfigInfo() {}
+
 
 }

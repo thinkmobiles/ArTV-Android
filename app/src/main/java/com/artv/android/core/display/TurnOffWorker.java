@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
+import android.util.Log;
 
 import com.artv.android.app.playback.PlayModeManager;
 
@@ -24,17 +26,26 @@ public final class TurnOffWorker {
         this.mPlayModeManager = _playModeManager;
     }
 
-    public void setOffTime(final String _offTime) {
-        long timeOffInMills = getTurnOffTimeInMills(_offTime);
-        startAlarmToTurnOffDevice(timeOffInMills);
+    public void turnOff(final String _offTime, final String _onTime) {
+        long timeOffInMills = getTurnTimeInMills(_offTime);
+        long timeOnInMills = getTurnTimeInMills(_onTime);
+        startAlarmToTurnOffDevice(timeOffInMills, timeOnInMills);
+    }
+
+    public void turnOn(final long _onTime) {
+        startAlarmToTurnOnDevice(_onTime);
     }
 
     public void cancel() {
-        if (mAlarmManager != null) {
-            Intent intent = new Intent(mContext, AlarmTurnOffReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 1, intent, 0);
-            mAlarmManager.cancel(pendingIntent);
+        if (mAlarmManager == null) {
+            mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         }
+        Intent intentOff = new Intent(mContext, AlarmTurnOffReceiver.class);
+        PendingIntent pendingIntentOff = PendingIntent.getBroadcast(mContext, 2, intentOff, 0);
+        mAlarmManager.cancel(pendingIntentOff);
+        Intent intentOn = new Intent(mContext, AlarmTurnOnReceiver.class);
+        PendingIntent pendingIntentOn = PendingIntent.getBroadcast(mContext, 1, intentOn, 0);
+        mAlarmManager.cancel(pendingIntentOn);
     }
 
     private long getCurrentDayInMills() {
@@ -46,19 +57,45 @@ public final class TurnOffWorker {
         return calNow.getTimeInMillis();
     }
 
-    private long getTurnOffTimeInMills(final String _timeToTurnOff) {
-        if(mPlayModeManager != null) {
+    private long getTurnTimeInMills(final String _timeToTurnOff) {
+        if (mPlayModeManager != null) {
             return getCurrentDayInMills() + mPlayModeManager.getTimeInMills(mPlayModeManager.getTimeFromString(_timeToTurnOff));
         } else
             return 0;
     }
 
-    private void startAlarmToTurnOffDevice(final long _timeTurnOff) {
-        if (_timeTurnOff != 0) {
-            Intent intent = new Intent(mContext, AlarmTurnOffReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 1, intent, 0);
-            mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-            mAlarmManager.set(AlarmManager.RTC_WAKEUP, _timeTurnOff, pendingIntent);
+    private void startAlarmToTurnOnDevice(final long _timeTurnOn) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.getTimeInMillis();
+        long timeOn = _timeTurnOn - calendar.getTimeInMillis();
+        if (timeOn < 0) {
+            timeOn = _timeTurnOn + (24 * 3600 * 1000) - calendar.getTimeInMillis();
+        }
+        Log.v("turnOff", "turnOn " + timeOn);
+
+        Intent intent = new Intent(mContext, AlarmTurnOnReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 1, intent, 0);
+        mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        if (timeOn > 0) {
+            mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + timeOn, pendingIntent);
+        }
+    }
+
+    private void startAlarmToTurnOffDevice(final long _timeTurnOff, final long _timeTurnOn) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.getTimeInMillis();
+        long timeOff = _timeTurnOff - calendar.getTimeInMillis();
+        if (timeOff < 0) {
+            timeOff = _timeTurnOff + (24 * 3600 * 1000) - calendar.getTimeInMillis();
+        }
+        Log.v("turnOff", "turnOff " + timeOff);
+
+        Intent intent = new Intent(mContext, AlarmTurnOffReceiver.class);
+        intent.putExtra("on", _timeTurnOn);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 2, intent, 0);
+        mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        if (timeOff > 0) {
+            mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + timeOff, pendingIntent);
         }
     }
 
