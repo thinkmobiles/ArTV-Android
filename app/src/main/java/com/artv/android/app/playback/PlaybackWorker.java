@@ -83,7 +83,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     public final void stopPlayback() {
-
+        mCurrentCampaignId = 0;
+        mCurrentAssetPlayingId = 0;
+        mPlaybackController.stopPlaying();
+        mCampaigns = null;
+        mAssetStack = null;
     }
 
     @Override
