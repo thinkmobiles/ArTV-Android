@@ -87,7 +87,7 @@ public class BeaconWorker {
         beacon.tagId = mConfigInfo.getDeviceId();
         beacon.currentDateTime = mDateWorker.getCurrentFormattedDate();
         beacon.currentCampaign = 0; //set current playing campaign id
-        beacon.currentAsset = 0; //set current playing asset id
+        beacon.currentAsset = 0; //set current playing asset sequence
         beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
         beacon.mMessageBoardCampaigns = new ArrayList<>();
         beacon.mMessageBoardCampaigns.add(mDbWorker.getMsgBoardCampaign());

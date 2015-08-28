@@ -81,6 +81,7 @@ public final class MessageWorker {
     }
 
     public final void stopMessages() {
+        ArTvLogger.printMessage("Stopped messages");
         mPlay = false;
         mMessageController.hideMessageUi();
         if (mHandler != null) {

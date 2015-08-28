@@ -13,6 +13,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
+import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.IMessageController;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
@@ -46,6 +47,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
     private MessageWorker mMessageWorker;
+    private BeaconScheduler mBeaconScheduler;
+
     private YoutubeVideoFragment mFragment;
 
     @Override
@@ -58,6 +61,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
         mMessageWorker = getApplicationLogic().getMessageWorker();
         mMessageWorker.setMessageController(this);
+
+        mBeaconScheduler = getApplicationLogic().getBeaconScheduler();
     }
 
     @Override
@@ -118,6 +123,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         if (_savedInstanceState == null) {
             mPlaybackWorker.startPlayback();
             mMessageWorker.playMessages();
+            mBeaconScheduler.startSchedule();
         }
     }
 
@@ -126,6 +132,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         super.onStop();
         mPlaybackWorker.stopPlayback();
         mMessageWorker.stopMessages();
+        mBeaconScheduler.stopSchedule();
     }
 
     //region playing assets

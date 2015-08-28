@@ -5,6 +5,7 @@ import android.os.Handler;
 import com.artv.android.core.Constants;
 import com.artv.android.core.UrlHelper;
 import com.artv.android.core.date.DayConverter;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.GlobalConfig;
@@ -74,7 +75,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     public final void stopPlayback() {
-
+        ArTvLogger.printMessage("Stopped playback");
     }
 
     @Override

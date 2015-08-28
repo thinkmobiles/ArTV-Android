@@ -51,13 +51,14 @@ public final class BeaconScheduler {
         mCampaignWorker = _worker;
     }
 
-    public final void start() {
+    public final void startSchedule() {
         createHandler();
 
         mBeaconWorker.doBeacon(mBeaconCallback);
     }
 
-    public final void stop() {
+    public final void stopSchedule() {
+        ArTvLogger.printMessage("Stopped beacon schedule");
         mCampaignWorker.cancelLoading();
         mHandler.removeCallbacks(delay);
     }
@@ -73,7 +74,7 @@ public final class BeaconScheduler {
     private final Runnable delay = new Runnable() {
         @Override
         public final void run() {
-            start();
+            startSchedule();
         }
     };
 
@@ -82,7 +83,7 @@ public final class BeaconScheduler {
         public final void onFinished(final CampaignResult _result) {
             if (!_result.getSuccess()) {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
-                startWithDelay(10 * 1000);
+                startWithDelay(5 * 1000);
                 return;
             }
 
@@ -90,22 +91,25 @@ public final class BeaconScheduler {
             ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
 
             processMsgBoardCampaign(_result.getMsgBoardCampaign());
-            processCampaigns(_result.getCampaigns());
 
-            startWithDelay(mGlobalConfig.getServerBeaconInterval());
+            if (_result.getCampaigns().isEmpty()) {
+                startWithDelay(/*mGlobalConfig.getServerBeaconInterval()*/10 * 1000);
+            } else {
+                processCampaigns(_result.getCampaigns());
+            }
         }
     };
 
     private final void processMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
-        mDbWorker.write(_msgBoardCampaign);
-        mMessageWorker.stopMessages();
-        mMessageWorker.playMessages();
+        if (_msgBoardCampaign != null) {
+            mDbWorker.write(_msgBoardCampaign);
+            mMessageWorker.stopMessages();
+            mMessageWorker.playMessages();
+        }
     }
 
     private final void processCampaigns(final List<Campaign> _campaigns) {
-        if (!_campaigns.isEmpty()) {
-            mCampaignWorker.loadCampaigns(_campaigns, mCampaignDownloadListener);
-        }
+        mCampaignWorker.loadCampaigns(_campaigns, mCampaignDownloadListener);
     }
 
     private final ICampaignDownloadListener mCampaignDownloadListener = new ICampaignDownloadListener() {
@@ -113,11 +117,13 @@ public final class BeaconScheduler {
         public final void onCampaignDownloadFinished(final ArTvResult _result) {
             ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
             //todo: restart campaigns play
+
+            startWithDelay(/*mGlobalConfig.getServerBeaconInterval()*/10 * 1000);
         }
 
         @Override
         public final void onPercentLoaded(final double _percent) {
-            if (_percent % 10 < 1)  ArTvLogger.printMessage(String.format("Loaded %.2f%%", _percent));
+            if (((int) _percent) % 10 == 0)  ArTvLogger.printMessage(String.format("Loaded %.2f%%", _percent));
         }
     };
 
