@@ -100,7 +100,7 @@ public final class BeaconScheduler {
             processMsgBoardCampaign(_result.getMsgBoardCampaign());
 
             if (_result.getCampaigns().isEmpty()) {
-                startWithDelay(/*mGlobalConfig.getServerBeaconInterval()*/10 * 1000);
+                startWithDelay(mGlobalConfig.getServerBeaconInterval());
             } else {
                 processCampaigns(_result.getCampaigns());
             }
@@ -125,7 +125,7 @@ public final class BeaconScheduler {
             ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
             mPlaybackWorker.stopPlayback();
             mPlaybackWorker.startPlayback();
-            startWithDelay(/*mGlobalConfig.getServerBeaconInterval()*/10 * 1000);
+            startWithDelay(mGlobalConfig.getServerBeaconInterval());
         }
 
         @Override
