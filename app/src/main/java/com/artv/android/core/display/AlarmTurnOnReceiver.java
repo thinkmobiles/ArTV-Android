@@ -19,6 +19,5 @@ public class AlarmTurnOnReceiver extends BroadcastReceiver {
     public void onReceive(Context arg0, Intent arg1) {
         AlarmAlertWakeLock.acquire(arg0);
         Log.v("wake", "wake");
-//        Toast.makeText(arg0, "Alarm received!", Toast.LENGTH_LONG).show();
     }
 }

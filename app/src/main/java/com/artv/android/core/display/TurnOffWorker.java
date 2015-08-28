@@ -37,11 +37,15 @@ public final class TurnOffWorker {
     }
 
     public void cancel() {
-        if (mAlarmManager != null) {
-            Intent intent = new Intent(mContext, AlarmTurnOnReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 1, intent, 0);
-            mAlarmManager.cancel(pendingIntent);
+        if (mAlarmManager == null) {
+            mAlarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         }
+        Intent intentOff = new Intent(mContext, AlarmTurnOffReceiver.class);
+        PendingIntent pendingIntentOff = PendingIntent.getBroadcast(mContext, 2, intentOff, 0);
+        mAlarmManager.cancel(pendingIntentOff);
+        Intent intentOn = new Intent(mContext, AlarmTurnOnReceiver.class);
+        PendingIntent pendingIntentOn = PendingIntent.getBroadcast(mContext, 1, intentOn, 0);
+        mAlarmManager.cancel(pendingIntentOn);
     }
 
     private long getCurrentDayInMills() {
