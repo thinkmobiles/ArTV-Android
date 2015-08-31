@@ -14,9 +14,9 @@ public class ConfigInfoWorker {
 
     private static final String KEY_DEVICE_ID           = "key_device_id";
     private static final String KEY_MASTER_DEVICE_IP    = "key_master_device_ip";
+    private static final String KEY_ADDRESS             = "key_address";
     private static final String KEY_USER                = "key_user";
     private static final String KEY_PASSWORD            = "key_password";
-    private static final String KEY_ADDRESS             = "key_address";
 
     private ConfigInfo mConfigInfo;
     private SpHelper mSpHelper;
@@ -64,18 +64,18 @@ public class ConfigInfoWorker {
     public final void saveConfigInfo() {
         mSpHelper.putString(KEY_DEVICE_ID, mConfigInfo.getDeviceId());
         mSpHelper.putString(KEY_MASTER_DEVICE_IP, mConfigInfo.getMasterDeviceIp());
+        mSpHelper.putString(KEY_ADDRESS, mConfigInfo.getAddress());
         mSpHelper.putString(KEY_USER, mConfigInfo.getUser());
         mSpHelper.putString(KEY_PASSWORD, mConfigInfo.getPassword());
-        mSpHelper.putString(KEY_ADDRESS, mConfigInfo.getAddress());
     }
 
     public final void loadConfigInfo() {
         mConfigInfo = new ConfigInfo.Builder()
                 .setDeviceId(mSpHelper.getString(KEY_DEVICE_ID))
                 .setMasterDeviceIp(mSpHelper.getString(KEY_MASTER_DEVICE_IP))
+                .setAddress(mSpHelper.getString(KEY_ADDRESS))
                 .setUser(mSpHelper.getString(KEY_USER))
                 .setPassword(mSpHelper.getString(KEY_PASSWORD))
-                .setAddress(mSpHelper.getString(KEY_ADDRESS))
                 .build();
     }
 
@@ -83,9 +83,9 @@ public class ConfigInfoWorker {
         mConfigInfo = null;
         mSpHelper.removeString(KEY_DEVICE_ID);
         mSpHelper.removeString(KEY_MASTER_DEVICE_IP);
+        mSpHelper.removeString(KEY_ADDRESS);
         mSpHelper.removeString(KEY_USER);
         mSpHelper.removeString(KEY_PASSWORD);
-        mSpHelper.removeString(KEY_ADDRESS);
     }
 
 

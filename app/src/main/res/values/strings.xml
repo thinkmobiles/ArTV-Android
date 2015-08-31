@@ -8,7 +8,7 @@
     <string name="error_player">There was an error initializing the YouTubePlayer (%1$s)</string>
     <string name="hint_device_id">device id</string>
     <string name="hint_master_ip">master ip</string>
-    <string name="hint_server_address">address or empty</string>
+    <string name="hint_server_address">address</string>
     <string name="hint_user_name">user name</string>
     <string name="hint_password">password</string>
 </resources>

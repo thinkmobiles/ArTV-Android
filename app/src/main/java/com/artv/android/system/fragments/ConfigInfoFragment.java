@@ -85,13 +85,14 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
     private final void saveState() {
         final String deviceId = etDeviceId.getText().toString();
         final String masterDeviceIp = etMasterDeviceIp.getText().toString();
+        final String address = etAddress.getText().toString();
         final String userName = etUserName.getText().toString();
         final String password = etPassword.getText().toString();
-        final String address = etAddress.getText().toString();
 
         final ConfigInfo configInfo = new ConfigInfo.Builder()
                 .setDeviceId(deviceId)
                 .setMasterDeviceIp(masterDeviceIp)
+                .setAddress(address)
                 .setUser(userName)
                 .setPassword(password)
                 .build();
@@ -101,15 +102,13 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
             return;
         }
 
-        if (!address.isEmpty()) {       //user want another server
-            if (!UrlHelper.isValidAddress(address)) {
-                Toast.makeText(getActivity().getApplicationContext(), "Bad address, enter like \n\"http://site.com\"", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                ApiConst.setProtocol(UrlHelper.getProtocolFrom(address));
-                ApiConst.setAuthority(UrlHelper.getAuthorityFrom(address));
-                ApiConst.addressUpdated();
-            }
+        if (!UrlHelper.isValidAddress(address)) {
+            Toast.makeText(getActivity().getApplicationContext(), "Bad address, enter like \n\"http://site.com\"", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            ApiConst.setProtocol(UrlHelper.getProtocolFrom(address));
+            ApiConst.setAuthority(UrlHelper.getAuthorityFrom(address));
+            ApiConst.addressUpdated();
         }
 
         mConfigInfoWorker.notifyEnteredConfigInfo(configInfo);

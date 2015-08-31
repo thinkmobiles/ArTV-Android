@@ -38,6 +38,7 @@ public class ConfigInfo {
 
     public boolean hasConfigInfo() {
         return mDeviceId != null && !mDeviceId.isEmpty()
+                && mAddress != null && !mAddress.isEmpty()
                 && mUser != null && !mUser.isEmpty()
                 && mPassword != null && !mPassword.isEmpty();
     }
