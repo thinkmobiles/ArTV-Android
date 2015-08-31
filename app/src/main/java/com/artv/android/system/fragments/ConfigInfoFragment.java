@@ -5,13 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.artv.android.R;
-import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.UrlHelper;
+import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 

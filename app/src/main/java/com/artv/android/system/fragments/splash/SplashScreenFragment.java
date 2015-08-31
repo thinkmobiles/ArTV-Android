@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.artv.android.R;
 import com.artv.android.app.start.StartWorker;
 import com.artv.android.core.config_info.ConfigInfo;
-import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.log.ILogger;
 import com.artv.android.system.fragments.BaseFragment;

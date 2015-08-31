@@ -5,8 +5,6 @@ import org.simpleframework.xml.Root;
 
 import java.util.ArrayList;
 
-import retrofit.http.PUT;
-
 /**
  * Created by ZOG on 8/12/2015.
  */

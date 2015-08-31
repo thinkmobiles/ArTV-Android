@@ -1,12 +1,10 @@
 package com.artv.android.core.campaign;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.core.Constants;
 import com.artv.android.core.UrlHelper;
-import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -18,11 +16,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.List;
 
 /**

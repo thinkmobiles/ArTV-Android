@@ -1,6 +1,5 @@
 package com.artv.android.system.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 
 import com.artv.android.ApplicationLogic;

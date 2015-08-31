@@ -11,7 +11,6 @@ import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.config_info.IConfigInfoListener;
-import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;

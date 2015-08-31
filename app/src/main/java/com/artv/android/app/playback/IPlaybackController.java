@@ -1,7 +1,5 @@
 package com.artv.android.app.playback;
 
-import com.artv.android.core.model.MsgBoardCampaign;
-
 /**
  * Used to control playback.
  *

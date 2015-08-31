@@ -4,7 +4,6 @@ import com.artv.android.ArTvResult;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
-import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;

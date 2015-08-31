@@ -3,7 +3,6 @@ package com.artv.android.core.init;
 import android.content.res.Resources;
 
 import com.artv.android.ArTvResult;
-import com.artv.android.R;
 import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlaybackWorker;

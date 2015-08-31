@@ -1,6 +1,5 @@
 package com.artv.android.core.config_info;
 
-import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.SpHelper;
 
