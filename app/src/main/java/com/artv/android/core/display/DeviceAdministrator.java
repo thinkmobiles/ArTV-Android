@@ -5,6 +5,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.system.BaseActivity;
@@ -48,6 +49,7 @@ public final class DeviceAdministrator {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
                 Intent i = new Intent(_context, WakeLockService.class);
                 i.putExtra("turn_on", _timeTurnOn);
+                Log.v("onnnnnnnn", String.valueOf(_timeTurnOn));
                 _context.startService(i);
                 devicePolicyManager.lockNow();
             }
