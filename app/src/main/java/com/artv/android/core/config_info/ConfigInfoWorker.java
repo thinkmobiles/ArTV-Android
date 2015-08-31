@@ -38,7 +38,7 @@ public class ConfigInfoWorker {
         mStateWorker = _stateWorker;
     }
 
-    public final void setConfigInfo(final ConfigInfo _configInfo) {
+    protected final void setConfigInfo(final ConfigInfo _configInfo) {
         mConfigInfo = _configInfo;
     }
 
@@ -58,11 +58,7 @@ public class ConfigInfoWorker {
         for (final IConfigInfoListener listener : mConfigInfoListeners) listener.onEnteredConfigInfo(_configInfo);
     }
 
-    public final void notifyNeedRemoveConfigInfo() {
-        for (final IConfigInfoListener listener : mConfigInfoListeners) listener.onNeedRemoveConfigInfo();
-    }
-
-    public final void saveConfigInfo() {
+    protected final void saveConfigInfo() {
         mSpHelper.putString(KEY_DEVICE_ID, mConfigInfo.getDeviceId());
         mSpHelper.putString(KEY_MASTER_DEVICE_IP, mConfigInfo.getMasterDeviceIp());
         mSpHelper.putString(KEY_ADDRESS, mConfigInfo.getAddress());
@@ -98,12 +94,6 @@ public class ConfigInfoWorker {
         public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
             setConfigInfo(_configInfo);
             saveConfigInfo();
-        }
-
-        @Override
-        public final void onNeedRemoveConfigInfo() {
-            removeConfigInfo();
-            mStateWorker.setState(ArTvState.STATE_APP_START);
         }
     };
 

@@ -6,6 +6,7 @@ import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.GetCampaignRequestObject;
 import com.artv.android.core.api.api_model.response.GetCampaignResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.init.InitData;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Campaign;
@@ -22,7 +23,7 @@ import static com.artv.android.core.campaign.CampaignHelper.getCampaignsCount;
  *
  * Created by ZOG on 7/28/2015.
  */
-public class CampaignWorker {
+public class CampaignWorker implements IConfigInfoListener {
 
     private static final int ID_ALL_CAMPAIGN = 0;
     private static final int ID_ALL_MSG_BOARD_CAMPAIGN = 0;
@@ -41,12 +42,13 @@ public class CampaignWorker {
         mInitData = _initData;
     }
 
-    public final void setConfigInfo(final ConfigInfo _configInfo) {
-        mConfigInfo = _configInfo;
-    }
-
     public void setDbWorker(final DbWorker _dbWorker) {
         mDbWorker = _dbWorker;
+    }
+
+    @Override
+    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+        mConfigInfo = _configInfo;
     }
 
     public boolean hasCampaignToPlay() {
@@ -128,10 +130,6 @@ public class CampaignWorker {
             mCampaignLoaderTask.cancel(true);
             mCampaignLoaderTask = null;
         }
-    }
-
-    public final void doRegularDownload() {
-
     }
 
 }

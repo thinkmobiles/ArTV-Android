@@ -100,8 +100,4 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
     }
 
-    @Override
-    public final void onNeedRemoveConfigInfo() {}
-
-
 }

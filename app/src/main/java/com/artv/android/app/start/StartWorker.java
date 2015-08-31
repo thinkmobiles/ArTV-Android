@@ -20,7 +20,6 @@ import com.artv.android.system.fragments.splash.ISplashFragmentListener;
 public class StartWorker {
 
     private InitWorker mInitWorker;
-    private ConfigInfoWorker mConfigInfoWorker;
     private StateWorker mStateWorker;
     private CampaignWorker mCampaignWorker;
     private BeaconWorker mBeaconWorker;
@@ -31,10 +30,6 @@ public class StartWorker {
 
     public final void setInitWorker(final InitWorker _worker) {
         mInitWorker = _worker;
-    }
-
-    public final void setConfigInfoWorker(final ConfigInfoWorker _worker) {
-        mConfigInfoWorker = _worker;
     }
 
     public final void setStateWorker(final StateWorker _worker) {
@@ -62,8 +57,6 @@ public class StartWorker {
     }
 
     public final void beginInitializing() {
-        mInitWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
-
         ArTvLogger.printDivider();
         ArTvLogger.printMessage("Start initializing");
 
@@ -87,12 +80,8 @@ public class StartWorker {
     }
 
     private final void addDataToWorkers() {
-        mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mCampaignWorker.setInitData(mInitWorker.getInitData());
-
-        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mBeaconWorker.setInitData(mInitWorker.getInitData());
-
         mTurnOffWorker.setDeviceConfig(mInitWorker.getInitData().getDeviceConfig());
     }
 

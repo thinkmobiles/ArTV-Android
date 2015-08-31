@@ -17,6 +17,7 @@ import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.log.ArTvLogger;
 
 /**
@@ -25,7 +26,7 @@ import com.artv.android.core.log.ArTvLogger;
  * Class, used for initial authentication (getToken) and load configs (GetGlobalConfig, GetDeviceConfig).
  * todo: rework to queue
  */
-public class InitWorker {
+public class InitWorker implements IConfigInfoListener {
 
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
@@ -38,10 +39,6 @@ public class InitWorker {
 
     public InitWorker() {
         mInitData = new InitData();
-    }
-
-    public final void setConfigInfo(final ConfigInfo _configInfo) {
-        mConfigInfo = _configInfo;
     }
 
     public final void setApiWorker(final ApiWorker _apiWorker) {
@@ -58,6 +55,11 @@ public class InitWorker {
 
     public final void setBeaconScheduler(final BeaconScheduler _scheduler) {
         mBeaconScheduler = _scheduler;
+    }
+
+    @Override
+    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+        mConfigInfo = _configInfo;
     }
 
     public final void startInitializing(final IInitCallback _callback) {
@@ -144,5 +146,4 @@ public class InitWorker {
                 .setMessage(_message + (_success ? "" : " \tfuuuuuuuuuu"))
                 .build();
     }
-
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.artv.android.R;
 import com.artv.android.app.start.StartWorker;
+import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.log.ILogger;
@@ -26,7 +27,7 @@ public final class SplashScreenFragment extends BaseFragment implements ILogger,
     private TextView tvPercent;
 
     private StartWorker mStartWorker;
-    private ConfigInfoWorker mConfigInfoWorker;
+    private ConfigInfo mConfigInfo;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
@@ -36,7 +37,7 @@ public final class SplashScreenFragment extends BaseFragment implements ILogger,
 
     private final void initLogic() {
         mStartWorker = getApplicationLogic().getStartWorker();
-        mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
+        mConfigInfo = getApplicationLogic().getConfigInfoWorker().getConfigInfo();
     }
 
     @Override
@@ -58,7 +59,7 @@ public final class SplashScreenFragment extends BaseFragment implements ILogger,
 
     private final void prepareViews() {
         tvLog.setMovementMethod(new ScrollingMovementMethod());
-        tvLog.setVisibility(mConfigInfoWorker.getConfigInfo().getShowDebugInfo()
+        tvLog.setVisibility(mConfigInfo.getShowDebugInfo()
                 ? View.VISIBLE : View.INVISIBLE);
     }
 

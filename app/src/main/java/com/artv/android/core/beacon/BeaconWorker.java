@@ -9,6 +9,7 @@ import com.artv.android.core.api.api_model.response.BeaconResponseObject;
 import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.config_info.ConfigInfo;
+import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.init.InitData;
 import com.artv.android.core.log.ArTvLogger;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by ZOG on 7/27/2015.
  */
-public class BeaconWorker {
+public class BeaconWorker implements IConfigInfoListener {
 
     private ConfigInfo mConfigInfo;
     private InitData mInitData;
@@ -28,10 +29,6 @@ public class BeaconWorker {
     private DateWorker mDateWorker;
     private DbWorker mDbWorker;
     private PlaybackWorker mPlaybackWorker;
-
-    public void setConfigInfo(final ConfigInfo _configInfo) {
-        mConfigInfo = _configInfo;
-    }
 
     public void setInitData(final InitData _initData) {
         mInitData = _initData;
@@ -51,6 +48,11 @@ public class BeaconWorker {
 
     public final void setPlaybackWorker(final PlaybackWorker _worker) {
         mPlaybackWorker = _worker;
+    }
+
+    @Override
+    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+        mConfigInfo = _configInfo;
     }
 
     public final void doBeacon(final ICampaignCallback _callback) {
