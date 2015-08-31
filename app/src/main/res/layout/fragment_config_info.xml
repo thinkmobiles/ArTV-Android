@@ -3,168 +3,170 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    android:paddingTop="@dimen/cis_padding_top"
-    android:paddingBottom="@dimen/cis_padding_bottom">
+    android:paddingBottom="@dimen/cis_padding_bottom"
+    android:paddingTop="@dimen/cis_padding_top">
 
     <ImageView
+        android:id="@+id/ivLogo_FCI"
+        style="@style/LogoImage"
         android:layout_width="@dimen/cis_logo_width"
         android:layout_height="wrap_content"
-        android:id="@+id/ivLogo_FCI"
-        android:layout_centerHorizontal="true"
-        style="@style/LogoImage" />
+        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/rlDevice_FCI"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/rlDevice_FCI"
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/tvDeviceId_FCI"
+                style="@style/TextMedium"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:id="@+id/tvDeviceId_FCI"
-                android:layout_toLeftOf="@+id/etDeviceId_FCI"
-                android:layout_marginRight="@dimen/main_distance"
                 android:layout_marginBottom="@dimen/main_distance"
-                style="@style/TextMedium"
-                android:text="@string/device_id"
-                android:gravity="center_vertical|right" />
+                android:layout_marginRight="@dimen/main_distance"
+                android:layout_toLeftOf="@+id/etDeviceId_FCI"
+                android:gravity="center_vertical|right"
+                android:text="@string/device_id" />
 
             <EditText
+                android:id="@+id/etDeviceId_FCI"
+                style="@style/CIS_EditText"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:id="@+id/etDeviceId_FCI"
                 android:layout_alignParentRight="true"
-                style="@style/CIS_EditText"
                 android:layout_marginBottom="@dimen/main_distance"
-                android:nextFocusForward="@+id/etMasterDeviceIp_FCI"
+                android:hint="@string/hint_device_id"
                 android:imeOptions="flagNoExtractUi|actionNext"
-                android:hint="@string/hint_device_id">
-                <requestFocus/>
+                android:nextFocusForward="@+id/etMasterDeviceIp_FCI">
+
+                <requestFocus />
             </EditText>
 
             <TextView
-                android:text="@string/master_device_ip"
                 android:id="@+id/tvMasterDeviceIp_FCI"
-                android:layout_below="@+id/etDeviceId_FCI"
-                android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
-                android:layout_marginRight="@dimen/main_distance"
                 style="@style/TextSmall"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:gravity="center_vertical|right" />
+                android:layout_below="@+id/etDeviceId_FCI"
+                android:layout_marginRight="@dimen/main_distance"
+                android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
+                android:gravity="center_vertical|right"
+                android:text="@string/master_device_ip" />
 
             <EditText
+                android:id="@+id/etMasterDeviceIp_FCI"
+                style="@style/CIS_EditText"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:id="@+id/etMasterDeviceIp_FCI"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tvMasterDeviceIp_FCI"
-                style="@style/CIS_EditText"
                 android:layout_marginBottom="@dimen/main_distance"
-                android:nextFocusForward="@+id/etAddress_FCI"
+                android:hint="@string/hint_master_ip"
                 android:imeOptions="flagNoExtractUi|actionNext"
-                android:hint="@string/hint_master_ip" />
+                android:nextFocusForward="@+id/etAddress_FCI" />
 
             <TextView
+                android:id="@+id/tvAddress_FCI"
+                style="@style/TextMedium"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:text="Address"
-                android:id="@+id/tvAddress_FCI"
                 android:layout_below="@+id/etMasterDeviceIp_FCI"
-                android:layout_toLeftOf="@+id/etAddress_FCI"
-                style="@style/TextMedium"
                 android:layout_marginRight="@dimen/main_distance"
-                android:gravity="center_vertical|right" />
+                android:layout_toLeftOf="@+id/etAddress_FCI"
+                android:gravity="center_vertical|right"
+                android:text="Address" />
 
             <EditText
+                android:id="@+id/etAddress_FCI"
+                style="@style/CIS_EditText"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:id="@+id/etAddress_FCI"
-                android:layout_alignTop="@+id/tvAddress_FCI"
                 android:layout_alignParentRight="true"
-                style="@style/CIS_EditText"
-                android:nextFocusForward="@+id/etUserName_FCI"
+                android:layout_alignTop="@+id/tvAddress_FCI"
+                android:hint="@string/hint_server_address"
                 android:imeOptions="flagNoExtractUi|actionNext"
-                android:hint="@string/hint_server_address" />
+                android:nextFocusForward="@+id/etUserName_FCI" />
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rlUser_FCI"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/rlUser_FCI"
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/tvUserName_FCI"
+                style="@style/TextMedium"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:text="@string/user"
-                android:id="@+id/tvUserName_FCI"
+                android:layout_marginBottom="@dimen/main_distance"
                 android:layout_marginRight="@dimen/main_distance"
-                style="@style/TextMedium"
                 android:gravity="center_vertical|right"
-                android:layout_marginBottom="@dimen/main_distance" />
+                android:text="@string/user" />
 
             <EditText
+                android:id="@+id/etUserName_FCI"
+                style="@style/CIS_EditText"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:id="@+id/etUserName_FCI"
-                android:layout_toRightOf="@+id/tvUserName_FCI"
-                style="@style/CIS_EditText"
                 android:layout_marginBottom="@dimen/main_distance"
-                android:nextFocusForward="@+id/etPassword_FCI"
+                android:layout_toRightOf="@+id/tvUserName_FCI"
+                android:hint="@string/hint_user_name"
                 android:imeOptions="flagNoExtractUi|actionNext"
-                android:hint="@string/hint_user_name" />
+                android:nextFocusForward="@+id/etPassword_FCI" />
 
             <TextView
+                android:id="@+id/tvPassword_FCI"
+                style="@style/TextMedium"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:text="@string/password"
-                android:id="@+id/tvPassword_FCI"
                 android:layout_below="@+id/etUserName_FCI"
                 android:layout_marginRight="@dimen/main_distance"
-                style="@style/TextMedium"
-                android:gravity="center_vertical|right" />
+                android:gravity="center_vertical|right"
+                android:text="@string/password" />
 
             <EditText
+                android:id="@+id/etPassword_FCI"
+                style="@style/CIS_EditText"
                 android:layout_width="@dimen/element_width"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:id="@+id/etPassword_FCI"
                 android:layout_alignTop="@+id/tvPassword_FCI"
+                android:layout_marginBottom="@dimen/main_distance"
                 android:layout_toRightOf="@+id/tvPassword_FCI"
-                style="@style/CIS_EditText"
+                android:hint="@string/hint_password"
                 android:imeOptions="flagNoExtractUi|actionDone"
                 android:inputType="textPassword"
-                android:hint="@string/hint_password"
-                android:layout_marginBottom="@dimen/main_distance" />
+                android:nextFocusForward="@+id/cbDebugInfo_FCI" />
 
             <CheckBox
+                android:id="@+id/cbDebugInfo_FCI"
+                style="@style/TextMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:text="@string/show_debug_info"
-                android:id="@+id/cbDebugInfo_FCI"
-                android:layout_below="@+id/etPassword_FCI"
-                style="@style/TextMedium"
                 android:layout_alignRight="@+id/etPassword_FCI"
-                android:checked="false" />
+                android:layout_below="@+id/etPassword_FCI"
+                android:checked="false"
+                android:text="@string/show_debug_info" />
 
         </RelativeLayout>
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnSave_FCI"
+        style="@style/Button"
         android:layout_width="@dimen/element_width"
         android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/btnSave_FCI"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        style="@style/Button"/>
+        android:text="@string/save" />
 
 </RelativeLayout>
