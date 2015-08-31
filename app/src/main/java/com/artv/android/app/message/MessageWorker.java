@@ -59,6 +59,8 @@ public final class MessageWorker {
             return;
         }
 
+        ArTvLogger.printMessage("Started messages");
+
         createHandler();
 
         if (!mHelper.shouldPlayMessagesToday(mMsgBoardCampaign.playDay)) {
@@ -81,6 +83,7 @@ public final class MessageWorker {
     }
 
     public final void stopMessages() {
+        ArTvLogger.printMessage("Stopped messages");
         mPlay = false;
         mMessageController.hideMessageUi();
         if (mHandler != null) {

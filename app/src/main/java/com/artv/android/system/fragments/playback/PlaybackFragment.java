@@ -13,11 +13,13 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
+import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.IMessageController;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -46,6 +48,9 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
     private MessageWorker mMessageWorker;
+    private BeaconScheduler mBeaconScheduler;
+    private TurnOffWorker mTurnOffWorker;
+
     private YoutubeVideoFragment mFragment;
 
     @Override
@@ -58,6 +63,9 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
         mMessageWorker = getApplicationLogic().getMessageWorker();
         mMessageWorker.setMessageController(this);
+
+        mBeaconScheduler = getApplicationLogic().getBeaconScheduler();
+        mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
     }
 
     @Override
@@ -118,6 +126,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         if (_savedInstanceState == null) {
             mPlaybackWorker.startPlayback();
             mMessageWorker.playMessages();
+            mBeaconScheduler.startSchedule();
+            mTurnOffWorker.turnOff();
         }
     }
 
@@ -126,6 +136,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         super.onStop();
         mPlaybackWorker.stopPlayback();
         mMessageWorker.stopMessages();
+        mBeaconScheduler.stopSchedule();
     }
 
     //region playing assets
@@ -187,7 +198,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
             vvVideoPlayer.stopPlayback();
             vvVideoPlayer.setVisibility(View.GONE);
         } else if (mFragment != null) {
-            getChildFragmentManager().beginTransaction().remove(mFragment).commit();
+            getChildFragmentManager().beginTransaction().remove(mFragment).commitAllowingStateLoss();
             mFragment = null;
         } else {
             setImageVisibility(false);

@@ -2,6 +2,7 @@ package com.artv.android;
 
 import android.content.Context;
 
+import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlayModeManager;
 import com.artv.android.app.playback.PlaybackWorker;
@@ -44,6 +45,7 @@ public final class ApplicationLogic {
     private StartWorker mStartWorker;
     private PlaybackWorker mPlaybackWorker;
     private MessageWorker mMessageWorker;
+    private BeaconScheduler mBeaconScheduler;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -68,25 +70,35 @@ public final class ApplicationLogic {
         mMessageWorker = new MessageWorker();
         mMessageWorker.setDbWorker(mDbWorker);
 
-        mInitWorker = new InitWorker();
-        mInitWorker.setPlaybackWorker(mPlaybackWorker);
-        mInitWorker.setMessageWorker(mMessageWorker);
-
-        mDisplaySwitcher = new DisplaySwitcher();
-
         mDateWorker = new DateWorker();
+
+        mCampaignWorker = new CampaignWorker();
+        mCampaignWorker.setApiWorker(mApiWorker);
+        mCampaignWorker.setDbWorker(mDbWorker);
 
         mBeaconWorker = new BeaconWorker();
         mBeaconWorker.setApiWorker(mApiWorker);
         mBeaconWorker.setDateWorker(mDateWorker);
         mBeaconWorker.setDbWorker(mDbWorker);
+        mBeaconWorker.setPlaybackWorker(mPlaybackWorker);
+
+        mBeaconScheduler = new BeaconScheduler();
+        mBeaconScheduler.setBeaconWorker(mBeaconWorker);
+        mBeaconScheduler.setDbWorker(mDbWorker);
+        mBeaconScheduler.setMessageWorker(mMessageWorker);
+        mBeaconScheduler.setCampaignsWorker(mCampaignWorker);
+        mBeaconScheduler.setPlaybackWorker(mPlaybackWorker);
+
+        mInitWorker = new InitWorker();
+        mInitWorker.setPlaybackWorker(mPlaybackWorker);
+        mInitWorker.setMessageWorker(mMessageWorker);
+        mInitWorker.setBeaconScheduler(mBeaconScheduler);
+
+        mDisplaySwitcher = new DisplaySwitcher();
 
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
-
-        mCampaignWorker = new CampaignWorker();
-        mCampaignWorker.setApiWorker(mApiWorker);
-        mCampaignWorker.setDbWorker(mDbWorker);
+       
 
         mStartWorker = new StartWorker();
         mStartWorker.setInitWorker(mInitWorker);
@@ -95,7 +107,8 @@ public final class ApplicationLogic {
         mStartWorker.setCampaignsWorker(mCampaignWorker);
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
-
+        mStartWorker.setTurnOffWorker(mTurnOffWorker);
+        
         mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
     }
 
@@ -137,6 +150,10 @@ public final class ApplicationLogic {
 
     public TurnOffWorker getTurnOffWorker() {
         return mTurnOffWorker;
+    }
+
+    public final BeaconScheduler getBeaconScheduler() {
+        return mBeaconScheduler;
     }
 
     /**

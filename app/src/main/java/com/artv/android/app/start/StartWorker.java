@@ -2,11 +2,10 @@ package com.artv.android.app.start;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.core.beacon.BeaconWorker;
-import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
-import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.log.ArTvLogger;
@@ -26,6 +25,7 @@ public class StartWorker {
     private CampaignWorker mCampaignWorker;
     private BeaconWorker mBeaconWorker;
     private DbWorker mDbWorker;
+    private TurnOffWorker mTurnOffWorker;
 
     private ISplashFragmentListener mSplashFragmentListener;
 
@@ -53,6 +53,10 @@ public class StartWorker {
         mDbWorker = _dbWorker;
     }
 
+    public final void setTurnOffWorker(final TurnOffWorker _worker) {
+        mTurnOffWorker = _worker;
+    }
+
     public final void setSplashFragmentListener(final ISplashFragmentListener _listener) {
         mSplashFragmentListener = _listener;
     }
@@ -67,6 +71,7 @@ public class StartWorker {
                     public final void onInitSuccess(final ArTvResult _result) {
                         ArTvLogger.printMessage("Initializing success");
                         mSplashFragmentListener.showProgressUi();
+                        addDataToWorkers();
                         beginCampaignLogic();
                     }
 
@@ -78,10 +83,17 @@ public class StartWorker {
         );
     }
 
-    private final void beginCampaignLogic() {
+    private final void addDataToWorkers() {
         mCampaignWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
         mCampaignWorker.setInitData(mInitWorker.getInitData());
 
+        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+        mBeaconWorker.setInitData(mInitWorker.getInitData());
+
+        mTurnOffWorker.setDeviceConfig(mInitWorker.getInitData().getDeviceConfig());
+    }
+
+    private final void beginCampaignLogic() {
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
                 doInitialCampaignDownload();
@@ -89,7 +101,7 @@ public class StartWorker {
 
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printMessage("Has campaigns to play");
-                doBeaconRequest();
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
                 break;
         }
     }
@@ -118,45 +130,5 @@ public class StartWorker {
         ArTvLogger.printMessage("Cancel downloading campaign...");
         mCampaignWorker.cancelLoading();
     }
-
-    private final void doBeaconRequest() {
-        mBeaconWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
-        mBeaconWorker.setInitData(mInitWorker.getInitData());
-        mBeaconWorker.doBeacon(beaconCallback);
-    }
-
-    private final ICampaignCallback beaconCallback = new ICampaignCallback() {
-        @Override
-        public final void onFinished(final CampaignResult _result) {
-            if (_result.getSuccess()) {
-                ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
-                ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
-                mDbWorker.write(_result.getMsgBoardCampaign());
-
-                if (!_result.getCampaigns().isEmpty()) {
-                    mCampaignWorker.loadCampaigns(_result.getCampaigns(),
-                            regularCampaignDownloadListener);
-                } else {
-                    mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-                }
-            } else {
-                ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
-                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);   //temp
-            }
-        }
-    };
-
-    private final ICampaignDownloadListener regularCampaignDownloadListener = new ICampaignDownloadListener() {
-        @Override
-        public final void onCampaignDownloadFinished(final ArTvResult _result) {
-            ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
-            mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-        }
-
-        @Override
-        public final void onPercentLoaded(final double _percent) {
-            if (mSplashFragmentListener != null) mSplashFragmentListener.onPercentLoaded(_percent);
-        }
-    };
 
 }

@@ -1,5 +1,6 @@
 package com.artv.android.core.beacon;
 
+import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
@@ -26,6 +27,7 @@ public class BeaconWorker {
     private ApiWorker mApiWorker;
     private DateWorker mDateWorker;
     private DbWorker mDbWorker;
+    private PlaybackWorker mPlaybackWorker;
 
     public void setConfigInfo(final ConfigInfo _configInfo) {
         mConfigInfo = _configInfo;
@@ -45,6 +47,10 @@ public class BeaconWorker {
 
     public void setDbWorker(final DbWorker _dbWorker) {
         mDbWorker = _dbWorker;
+    }
+
+    public final void setPlaybackWorker(final PlaybackWorker _worker) {
+        mPlaybackWorker = _worker;
     }
 
     public final void doBeacon(final ICampaignCallback _callback) {
@@ -86,8 +92,8 @@ public class BeaconWorker {
         final Beacon beacon = new Beacon();
         beacon.tagId = mConfigInfo.getDeviceId();
         beacon.currentDateTime = mDateWorker.getCurrentFormattedDate();
-        beacon.currentCampaign = 0; //set current playing campaign id
-        beacon.currentAsset = 0; //set current playing asset id
+        beacon.currentCampaign = mPlaybackWorker.getCurrentCampaignId();
+        beacon.currentAsset = mPlaybackWorker.getCurrentAssetPlayingId();
         beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
         beacon.mMessageBoardCampaigns = new ArrayList<>();
         beacon.mMessageBoardCampaigns.add(mDbWorker.getMsgBoardCampaign());

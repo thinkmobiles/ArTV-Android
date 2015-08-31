@@ -8,6 +8,8 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.artv.android.app.playback.PlayModeManager;
+import com.artv.android.core.log.ArTvLogger;
+import com.artv.android.core.model.DeviceConfig;
 
 import java.util.Calendar;
 
@@ -20,15 +22,24 @@ public final class TurnOffWorker {
     private AlarmManager mAlarmManager;
     private Context mContext;
     private PlayModeManager mPlayModeManager;
+    private DeviceConfig mDeviceConfig;
 
     public TurnOffWorker(final Context _context, final PlayModeManager _playModeManager) {
         this.mContext = _context;
         this.mPlayModeManager = _playModeManager;
     }
 
-    public void turnOff(final String _offTime, final String _onTime) {
-        long timeOffInMills = getTurnTimeInMills(_offTime);
-        long timeOnInMills = getTurnTimeInMills(_onTime);
+    public final void setDeviceConfig(final DeviceConfig _config) {
+        mDeviceConfig = _config;
+    }
+
+    public void turnOff() {
+        ArTvLogger.printMessage("Turn on/off logic activated");
+        ArTvLogger.printMessage(String.format("Off time %s, on time %s",
+                mDeviceConfig.turnOffDisp, mDeviceConfig.turnOnDisp));
+
+        long timeOffInMills = getTurnTimeInMills(mDeviceConfig.turnOffDisp);
+        long timeOnInMills = getTurnTimeInMills(mDeviceConfig.turnOnDisp);
         startAlarmToTurnOffDevice(timeOffInMills, timeOnInMills);
     }
 
