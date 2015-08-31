@@ -37,8 +37,9 @@ public final class ApplicationLogic {
     private CampaignWorker mCampaignWorker;
     private DbWorker mDbWorker;
     private DateWorker mDateWorker;
-    private TurnOffWorker mTurnOffWorker;
+    private PlayModeManager mPlayModeManager;
 
+    private TurnOffWorker mTurnOffWorker;
     private StartWorker mStartWorker;
     private PlaybackWorker mPlaybackWorker;
     private MessageWorker mMessageWorker;
@@ -54,9 +55,11 @@ public final class ApplicationLogic {
         mApiWorker = new ApiWorker(mContext);
 
         mDbWorker = DbManager.getInstance(mContext);
+        mPlayModeManager = new PlayModeManager();
 
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setDbWorker(mDbWorker);
+        mPlaybackWorker.setPlayModeManager(mPlayModeManager);
 
         mMessageWorker = new MessageWorker();
         mMessageWorker.setDbWorker(mDbWorker);
@@ -94,7 +97,7 @@ public final class ApplicationLogic {
 
         mInitWorker.setApiWorker(mApiWorker);
 
-        mTurnOffWorker = new TurnOffWorker(mContext, new PlayModeManager());
+        mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
 
         mStartWorker = new StartWorker();
         mStartWorker.setInitWorker(mInitWorker);
@@ -131,6 +134,10 @@ public final class ApplicationLogic {
 
     public final MessageWorker getMessageWorker() {
         return mMessageWorker;
+    }
+
+    public PlayModeManager getPlayModeManager() {
+        return mPlayModeManager;
     }
 
     public TurnOffWorker getTurnOffWorker() {

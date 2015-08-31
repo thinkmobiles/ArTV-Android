@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private final void handleAppState() {
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
-                DeviceAdministrator.getInstance(this).initAdmin();
+//                DeviceAdministrator.getInstance(this).initAdmin();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
                 break;
 
@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
+//                getApplicationLogic().getTurnOffWorker().turnOff();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
 //                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
                 break;
