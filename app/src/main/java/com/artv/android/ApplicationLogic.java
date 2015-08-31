@@ -98,7 +98,8 @@ public final class ApplicationLogic {
 
         mInitWorker.setApiWorker(mApiWorker);
         mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
-       
+
+        mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
 
         mStartWorker = new StartWorker();
         mStartWorker.setInitWorker(mInitWorker);
@@ -108,8 +109,6 @@ public final class ApplicationLogic {
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
         mStartWorker.setTurnOffWorker(mTurnOffWorker);
-        
-        mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
