@@ -11,4 +11,5 @@
     <string name="hint_server_address">address</string>
     <string name="hint_user_name">user name</string>
     <string name="hint_password">password</string>
+    <string name="show_debug_info">Show Debug Information</string>
 </resources>

@@ -4,15 +4,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient">
 
-    <Button
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="400dp"
         android:layout_height="wrap_content"
-        android:text="Clear Config Info"
-        android:id="@+id/btnClearConfigInfo_FSS"
+        android:id="@+id/tvLog_FSS"
+        android:layout_above="@+id/ivLogo_FSS"
+        android:layout_alignParentTop="true"
+        style="@style/TextLog"
         android:layout_centerHorizontal="true"
-        style="@style/Button"
         android:layout_marginTop="@dimen/main_distance"
-        android:visibility="invisible" />
+        android:layout_marginBottom="@dimen/main_distance" />
 
     <ImageView
         android:layout_width="300dp"
@@ -41,19 +42,6 @@
         android:layout_below="@+id/ivLogo_FSS"
         android:max="10000"
         android:progress="0"
-        android:visibility="invisible" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvLog_FSS"
-        android:layout_below="@+id/pbLoading_FSS"
-        android:scrollbars="vertical"
-        android:text="Log:"
-        android:gravity="bottom"
-        android:background="#5e070707"
-        android:textColor="#e400ff00"
-        android:freezesText="true"
         android:visibility="invisible" />
 
 </RelativeLayout>

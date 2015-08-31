@@ -142,7 +142,18 @@
                 style="@style/CIS_EditText"
                 android:imeOptions="flagNoExtractUi|actionDone"
                 android:inputType="textPassword"
-                android:hint="@string/hint_password" />
+                android:hint="@string/hint_password"
+                android:layout_marginBottom="@dimen/main_distance" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/cis_edit_text_height"
+                android:text="@string/show_debug_info"
+                android:id="@+id/cbDebugInfo_FCI"
+                android:layout_below="@+id/etPassword_FCI"
+                style="@style/TextMedium"
+                android:layout_alignRight="@+id/etPassword_FCI"
+                android:checked="false" />
 
         </RelativeLayout>
     </LinearLayout>

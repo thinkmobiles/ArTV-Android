@@ -44,7 +44,7 @@ public final class SpHelperTest {
     @Test
     public final void RemoveString() {
         mSpHelper.putString("key", "value");
-        mSpHelper.removeString("key");
+        mSpHelper.removeItem("key");
         Assert.assertFalse("value".equals(mSpHelper.getString("key")));
     }
 

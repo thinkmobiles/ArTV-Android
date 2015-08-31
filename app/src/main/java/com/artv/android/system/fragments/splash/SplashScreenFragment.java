@@ -5,7 +5,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,11 +18,10 @@ import com.artv.android.system.fragments.BaseFragment;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class SplashScreenFragment extends BaseFragment implements View.OnClickListener, ILogger,
+public final class SplashScreenFragment extends BaseFragment implements ILogger,
         ISplashFragmentListener {
 
     private ProgressBar pbLoading;
-    private Button btnClearConfigInfo;
     private TextView tvLog;
     private TextView tvPercent;
 
@@ -47,18 +45,21 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         mStartWorker.setSplashFragmentListener(this);
 
         final View view = _inflater.inflate(R.layout.fragment_splash_screen, _container, false);
-        prepareViews(view);
+        findViews(view);
+        prepareViews();
         return view;
     }
 
-    private final void prepareViews(final View _view) {
+    private final void findViews(final View _view) {
         pbLoading = (ProgressBar) _view.findViewById(R.id.pbLoading_FSS);
-        btnClearConfigInfo = (Button) _view.findViewById(R.id.btnClearConfigInfo_FSS);
         tvLog = (TextView) _view.findViewById(R.id.tvLog_FSS);
-        tvLog.setMovementMethod(new ScrollingMovementMethod());
         tvPercent = (TextView) _view.findViewById(R.id.tvPercent_FSS);
+    }
 
-        btnClearConfigInfo.setOnClickListener(this);
+    private final void prepareViews() {
+        tvLog.setMovementMethod(new ScrollingMovementMethod());
+        tvLog.setVisibility(mConfigInfoWorker.getConfigInfo().getShowDebugInfo()
+                ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -72,16 +73,6 @@ public final class SplashScreenFragment extends BaseFragment implements View.OnC
         super.onDestroyView();
         ArTvLogger.removeLogger(this);
         mStartWorker.setSplashFragmentListener(null);
-    }
-
-    @Override
-    public final void onClick(final View _v) {
-        switch (_v.getId()) {
-            case R.id.btnClearConfigInfo_FSS:
-                mStartWorker.cancel();
-                mConfigInfoWorker.notifyNeedRemoveConfigInfo();
-                break;
-        }
     }
 
     @Override

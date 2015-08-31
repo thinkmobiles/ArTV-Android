@@ -17,6 +17,7 @@ public class ConfigInfoWorker {
     private static final String KEY_ADDRESS             = "key_address";
     private static final String KEY_USER                = "key_user";
     private static final String KEY_PASSWORD            = "key_password";
+    private static final String KEY_SHOW_DEBUG_INFO     = "key_show_debug_info";
 
     private ConfigInfo mConfigInfo;
     private SpHelper mSpHelper;
@@ -67,6 +68,7 @@ public class ConfigInfoWorker {
         mSpHelper.putString(KEY_ADDRESS, mConfigInfo.getAddress());
         mSpHelper.putString(KEY_USER, mConfigInfo.getUser());
         mSpHelper.putString(KEY_PASSWORD, mConfigInfo.getPassword());
+        mSpHelper.putBoolean(KEY_SHOW_DEBUG_INFO, mConfigInfo.getShowDebugInfo());
     }
 
     public final void loadConfigInfo() {
@@ -76,20 +78,22 @@ public class ConfigInfoWorker {
                 .setAddress(mSpHelper.getString(KEY_ADDRESS))
                 .setUser(mSpHelper.getString(KEY_USER))
                 .setPassword(mSpHelper.getString(KEY_PASSWORD))
+                .setShowDebugInfo(mSpHelper.getBoolean(KEY_SHOW_DEBUG_INFO))
                 .build();
     }
 
     public final void removeConfigInfo() {
         mConfigInfo = null;
-        mSpHelper.removeString(KEY_DEVICE_ID);
-        mSpHelper.removeString(KEY_MASTER_DEVICE_IP);
-        mSpHelper.removeString(KEY_ADDRESS);
-        mSpHelper.removeString(KEY_USER);
-        mSpHelper.removeString(KEY_PASSWORD);
+        mSpHelper.removeItem(KEY_DEVICE_ID);
+        mSpHelper.removeItem(KEY_MASTER_DEVICE_IP);
+        mSpHelper.removeItem(KEY_ADDRESS);
+        mSpHelper.removeItem(KEY_USER);
+        mSpHelper.removeItem(KEY_PASSWORD);
+        mSpHelper.removeItem(KEY_SHOW_DEBUG_INFO);
     }
 
 
-    private IConfigInfoListener mConfigInfoListener = new IConfigInfoListener() {
+    private final IConfigInfoListener mConfigInfoListener = new IConfigInfoListener() {
         @Override
         public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
             setConfigInfo(_configInfo);

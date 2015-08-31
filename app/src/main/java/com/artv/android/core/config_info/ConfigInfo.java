@@ -10,6 +10,7 @@ public class ConfigInfo {
     private String mAddress;
     private String mUser;
     private String mPassword;
+    private boolean mShowDebugInfo;
 
     /**
      * Construct with Builder.
@@ -36,6 +37,10 @@ public class ConfigInfo {
         return mPassword;
     }
 
+    public final boolean getShowDebugInfo() {
+        return mShowDebugInfo;
+    }
+
     public boolean hasConfigInfo() {
         return mDeviceId != null && !mDeviceId.isEmpty()
                 && mAddress != null && !mAddress.isEmpty()
@@ -53,8 +58,9 @@ public class ConfigInfo {
         final boolean aE = String.valueOf(mAddress).equals(String.valueOf(((ConfigInfo) _o).getAddress()));
         final boolean uE = String.valueOf(mUser).equals(String.valueOf(((ConfigInfo) _o).getUser()));
         final boolean pE = String.valueOf(mPassword).equals(String.valueOf(((ConfigInfo) _o).getPassword()));
+        final boolean sdiE = mShowDebugInfo == ((ConfigInfo) _o).getShowDebugInfo();
 
-        return idE && ipE && aE && uE && pE;
+        return idE && ipE && aE && uE && pE && sdiE;
     }
 
     @Override
@@ -93,6 +99,11 @@ public class ConfigInfo {
 
         public final Builder setPassword(final String _password) {
             mConfigInfo.mPassword = _password;
+            return this;
+        }
+
+        public final Builder setShowDebugInfo(final boolean _showDebugInfo) {
+            mConfigInfo.mShowDebugInfo = _showDebugInfo;
             return this;
         }
 

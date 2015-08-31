@@ -12,7 +12,6 @@ import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.date.DateWorker;
-import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
@@ -34,7 +33,6 @@ public final class ApplicationLogic {
     private ConfigInfoWorker mConfigInfoWorker;
     private ApiWorker mApiWorker;
     private InitWorker mInitWorker;
-    private DisplaySwitcher mDisplaySwitcher;
     private BeaconWorker mBeaconWorker;
     private CampaignWorker mCampaignWorker;
     private DbWorker mDbWorker;
@@ -91,10 +89,7 @@ public final class ApplicationLogic {
         mInitWorker.setMessageWorker(mMessageWorker);
         mInitWorker.setBeaconScheduler(mBeaconScheduler);
 
-        mDisplaySwitcher = new DisplaySwitcher();
-
         mInitWorker.setApiWorker(mApiWorker);
-        mInitWorker.setDisplaySwitcher(mDisplaySwitcher);
 
         mTurnOffWorker = new TurnOffWorker(mContext, new PlayModeManager());
 
@@ -114,10 +109,6 @@ public final class ApplicationLogic {
 
     public final StateWorker getStateWorker() {
         return mStateWorker;
-    }
-
-    public final DisplaySwitcher getDisplaySwitcher() {
-        return mDisplaySwitcher;
     }
 
     public final DbWorker getDbWorker() {

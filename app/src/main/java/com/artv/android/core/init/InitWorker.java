@@ -1,6 +1,9 @@
 package com.artv.android.core.init;
 
+import android.content.res.Resources;
+
 import com.artv.android.ArTvResult;
+import com.artv.android.R;
 import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlaybackWorker;
@@ -14,8 +17,6 @@ import com.artv.android.core.api.api_model.response.GetDeviceConfigResponseObjec
 import com.artv.android.core.api.api_model.response.GetGlobalConfigResponseObject;
 import com.artv.android.core.api.api_model.response.GetTokenResponseObject;
 import com.artv.android.core.config_info.ConfigInfo;
-import com.artv.android.core.display.DisplaySwitcher;
-import com.artv.android.core.display.DisplaySwitcherAdapterCallback;
 import com.artv.android.core.log.ArTvLogger;
 
 /**
@@ -26,7 +27,6 @@ import com.artv.android.core.log.ArTvLogger;
  */
 public class InitWorker {
 
-    private DisplaySwitcher mDisplaySwitcher;
     private ConfigInfo mConfigInfo;
     private ApiWorker mApiWorker;
     private PlaybackWorker mPlaybackWorker;
@@ -38,10 +38,6 @@ public class InitWorker {
 
     public InitWorker() {
         mInitData = new InitData();
-    }
-
-    public final void setDisplaySwitcher(final DisplaySwitcher _displaySwitcher) {
-        mDisplaySwitcher = _displaySwitcher;
     }
 
     public final void setConfigInfo(final ConfigInfo _configInfo) {
@@ -66,31 +62,11 @@ public class InitWorker {
 
     public final void startInitializing(final IInitCallback _callback) {
         mCallback = _callback;
-        turnOnDisplayIfNeed(); //begin
+        getToken(); //begin
     }
 
     public final InitData getInitData() {
         return mInitData;
-    }
-
-    public final void turnOnDisplayIfNeed() {
-        if (mDisplaySwitcher.isDisplayTurnedOn()) {
-            ArTvLogger.printMessage("Display already turned on");
-            getToken();
-        } else {
-            mDisplaySwitcher.turnOn(new DisplaySwitcherAdapterCallback() {
-                @Override
-                public final void turnedOn() {
-                    ArTvLogger.printMessage("Display turned on");
-                    getToken();
-                }
-
-                @Override
-                public final void switchFailed() {
-                    mCallback.onInitFail(buildInitResult(false, "failed to turn on display"));
-                }
-            });
-        }
     }
 
     private final void getToken() {
@@ -104,7 +80,7 @@ public class InitWorker {
             @Override
             public final void onSuccess(final GetTokenResponseObject _respObj) {
                 mInitData.setToken(_respObj.token);
-                ArTvLogger.printMessage(_respObj.apiType + ": success");
+                ArTvLogger.printMessage(_respObj.apiType + ": " + Resources.getSystem().getString(android.R.string.ok));
                 getGlobalConfig();
             }
 
@@ -130,7 +106,7 @@ public class InitWorker {
                 mMessageWorker.setGlobalConfig(_respObj.globalConfig);
                 mBeaconScheduler.setGlobalConfig(_respObj.globalConfig);
 
-                ArTvLogger.printMessage(_respObj.apiType + " : success");
+                ArTvLogger.printMessage(_respObj.apiType + ": " + Resources.getSystem().getString(android.R.string.ok));
                 getDeviceConfig();
             }
 
@@ -151,7 +127,7 @@ public class InitWorker {
             @Override
             public final void onSuccess(final GetDeviceConfigResponseObject _respObj) {
                 mInitData.setDeviceConfig(_respObj.getDeviceConfig());
-                ArTvLogger.printMessage(_respObj.apiType + " : success");
+                ArTvLogger.printMessage(_respObj.apiType + ": " + Resources.getSystem().getString(android.R.string.ok));
                 mCallback.onInitSuccess(buildInitResult(true, "Initializing success"));
             }
 

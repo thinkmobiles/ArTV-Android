@@ -55,4 +55,12 @@
         <item name="android:textCursorDrawable">@null</item>
     </style>
 
+    <style name="TextLog">
+        <item name="android:background">#003366</item>
+        <item name="android:textColor">#FBFBFC</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:freezesText">true</item>
+        <item name="android:scrollbars">vertical</item>
+    </style>
+
 </resources>

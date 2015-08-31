@@ -10,6 +10,7 @@ public final class SpHelper {
 
     private static final String SP_NAME             = "artv_sp";
     private static final String DEF_STRING_VAL      = "";
+    private static final boolean DEF_BOOLEAN_VAL    = false;
 
     private SharedPreferences mSp;
 
@@ -25,7 +26,15 @@ public final class SpHelper {
         return mSp.getString(_key, DEF_STRING_VAL);
     }
 
-    public final void removeString(final String _key) {
+    public final void putBoolean(final String _key, final boolean _value) {
+        mSp.edit().putBoolean(_key, _value).apply();
+    }
+
+    public final boolean getBoolean(final String _key) {
+        return mSp.getBoolean(_key, DEF_BOOLEAN_VAL);
+    }
+
+    public final void removeItem(final String _key) {
         mSp.edit().remove(_key).apply();
     }
 

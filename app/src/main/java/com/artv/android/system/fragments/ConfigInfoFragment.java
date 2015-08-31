@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
     private EditText etAddress;
     private EditText etUserName;
     private EditText etPassword;
+    private CheckBox cbDebugInfo;
 
     private ConfigInfoWorker mConfigInfoWorker;
 
@@ -45,6 +48,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
         etAddress = (EditText) view.findViewById(R.id.etAddress_FCI);
         etUserName = (EditText) view.findViewById(R.id.etUserName_FCI);
         etPassword = (EditText) view.findViewById(R.id.etPassword_FCI);
+        cbDebugInfo = (CheckBox) view.findViewById(R.id.cbDebugInfo_FCI);
 
         view.findViewById(R.id.btnSave_FCI).setOnClickListener(this);
 
@@ -67,6 +71,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
         etAddress.setText(info.getAddress());
         etUserName.setText(info.getUser());
         etPassword.setText(info.getPassword());
+        cbDebugInfo.setChecked(info.getShowDebugInfo());
     }
 
     @Override
@@ -88,6 +93,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
         final String address = etAddress.getText().toString();
         final String userName = etUserName.getText().toString();
         final String password = etPassword.getText().toString();
+        final boolean showDebugInfo = cbDebugInfo.isChecked();
 
         final ConfigInfo configInfo = new ConfigInfo.Builder()
                 .setDeviceId(deviceId)
@@ -95,6 +101,7 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
                 .setAddress(address)
                 .setUser(userName)
                 .setPassword(password)
+                .setShowDebugInfo(showDebugInfo)
                 .build();
 
         if (!configInfo.hasConfigInfo()) {

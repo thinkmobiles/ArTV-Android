@@ -39,6 +39,10 @@ public abstract class ArTvLogger {
         }
     }
 
+    public static final void printDivider() {
+        printMessage("~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~");
+    }
+
     private static class PrintMessageRunnable implements Runnable {
         private boolean mFromNewLine;
         private String mMessage;

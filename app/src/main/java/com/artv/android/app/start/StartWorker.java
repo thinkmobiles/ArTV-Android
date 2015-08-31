@@ -63,6 +63,8 @@ public class StartWorker {
 
     public final void beginInitializing() {
         mInitWorker.setConfigInfo(mConfigInfoWorker.getConfigInfo());
+
+        ArTvLogger.printDivider();
         ArTvLogger.printMessage("Start initializing");
 
         mInitWorker.startInitializing(
@@ -70,6 +72,7 @@ public class StartWorker {
                     @Override
                     public final void onInitSuccess(final ArTvResult _result) {
                         ArTvLogger.printMessage("Initializing success");
+
                         mSplashFragmentListener.showProgressUi();
                         addDataToWorkers();
                         beginCampaignLogic();
@@ -100,6 +103,7 @@ public class StartWorker {
                 break;
 
             case STATE_APP_START_WITH_CONFIG_INFO:
+                ArTvLogger.printDivider();
                 ArTvLogger.printMessage("Has campaigns to play");
                 mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
                 break;
@@ -107,6 +111,7 @@ public class StartWorker {
     }
 
     private final void doInitialCampaignDownload() {
+        ArTvLogger.printDivider();
         ArTvLogger.printMessage("Start initial campaign download");
         mCampaignWorker.doInitialCampaignDownload(new ICampaignDownloadListener() {
             @Override
@@ -128,6 +133,7 @@ public class StartWorker {
 
     public final void cancel() {
         ArTvLogger.printMessage("Cancel downloading campaign...");
+        ArTvLogger.printDivider();
         mCampaignWorker.cancelLoading();
     }
 
