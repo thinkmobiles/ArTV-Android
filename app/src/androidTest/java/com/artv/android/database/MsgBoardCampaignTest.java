@@ -138,7 +138,7 @@ public final class MsgBoardCampaignTest {
     }
 
     @Test
-    public final void WriteMsgBoardCampaignWithMessages_OnlyWroteMessagesSaved() {
+    public final void WriteMsgBoardCampaignWithMoreOrLessMessages_OnlyWroteMessagesSaved() {
         final List<Message> messages = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             messages.add(buildMessage(i));
@@ -158,6 +158,21 @@ public final class MsgBoardCampaignTest {
         dbManager.write(msgBoardCampaign);
 
         Assert.assertEquals(dbManager.getAllMessages().size(), 5);
+    }
+
+    @Test
+    public final void WriteMsgBoardCampaign_WriteNull_HasNoCampaign() {
+        final List<Message> messages = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            messages.add(buildMessage(i));
+        }
+        final MsgBoardCampaign msgBoardCampaign = buildMsgBoardCampaign1();
+        msgBoardCampaign.messages = messages;
+        dbManager.write(msgBoardCampaign);
+
+        dbManager.write((MsgBoardCampaign) null);
+
+        Assert.assertNull(dbManager.getMsgBoardCampaign());
     }
 
 }

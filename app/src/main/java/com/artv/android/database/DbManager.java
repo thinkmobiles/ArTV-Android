@@ -251,13 +251,19 @@ public final class DbManager implements DbWorker {
 
     @Override
     public final long write(final MsgBoardCampaign _msgBoardCampaign) {
-        if (_msgBoardCampaign == null) return -1;
         try {
             openWritableDb();
-            final DBmsgBoardCampaign dBmsgBoardCampaign = mTransformer.createDBmsgBoardCampaign(_msgBoardCampaign);
 
             final DBmsgBoardCampaignDao msgBoardCampaignDao = daoSession.getDBmsgBoardCampaignDao();
             final DBMessageDao messageDao = daoSession.getDBMessageDao();
+
+            if (_msgBoardCampaign == null) {
+                msgBoardCampaignDao.deleteAll();
+                messageDao.deleteAll();
+                return -1;
+            }
+
+            final DBmsgBoardCampaign dBmsgBoardCampaign = mTransformer.createDBmsgBoardCampaign(_msgBoardCampaign);
 
             msgBoardCampaignDao.deleteAll();
             messageDao.deleteAll();
