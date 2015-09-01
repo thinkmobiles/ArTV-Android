@@ -81,19 +81,36 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager.setDayConverter(new DayConverter());
         mCampaigns = mDbWorker.getAllCampaigns();
-        prepareStackToPlay(mPlayModeManager, mCampaigns);
+        checkCampaigns(mPlayModeManager, mCampaigns);
     }
 
-    private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
+    private void checkCampaigns(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
         final List<Campaign> campaignsPlayToday = _playModeManager.campainsToPlayToday(_campaigns);
-        if (campaignsPlayToday.isEmpty()) {
-            setTvStatusOff(true);
-            DeviceAdministrator.lockScreen(mContext);
+        if (getCampaignsWithOutOwerrideTime(campaignsPlayToday).isEmpty()) {
+            turnOff();
         } else {
-            hasPlayCampaignInCurrentTime(campaignsPlayToday, _playModeManager);
-            mAssetStack = getStackAssetsAllCampaigns(campaignsPlayToday);
+            prepareStackToPlay(_playModeManager, campaignsPlayToday);
+            play();
         }
-        play();
+    }
+
+    private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaignsPlayToday) {
+            hasPlayCampaignInCurrentTime(_campaignsPlayToday, _playModeManager);
+            mAssetStack = getStackAssetsAllCampaigns(_campaignsPlayToday);
+    }
+
+    private List<Campaign> getCampaignsWithOutOwerrideTime(final List<Campaign> _campaigns) {
+        for (Campaign campaign : _campaigns) {
+            if (campaign.overrideTime.isEmpty()) {
+                _campaigns.remove(campaign);
+            }
+        }
+        return _campaigns;
+    }
+
+    private void turnOff() {
+        setTvStatusOff(true);
+        DeviceAdministrator.lockScreen(mContext);
     }
 
     public final void stopPlayback() {
@@ -127,7 +144,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 mPlaybackController.playYoutubeLink(asset.url);
             }
         } else {
-            prepareStackToPlay(mPlayModeManager, mCampaigns);
+            checkCampaigns(mPlayModeManager, mCampaigns);
         }
     }
 
@@ -189,6 +206,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mRunnableThread = new Runnable() {
             @Override
             public void run() {
+                if (mTvStatus.isTurnStatusOff()) {
+                    mTvStatus.setTurnStatusOff(false);
+                    AlarmAlertWakeLock.acquire(mContext);
+                }
                 mAssetStack = getStackAssets(assets);
                 mPlaybackController.stopPlaying();
                 play();
