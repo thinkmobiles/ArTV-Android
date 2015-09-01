@@ -11,5 +11,8 @@
     <string name="hint_server_address">address</string>
     <string name="hint_user_name">user name</string>
     <string name="hint_password">password</string>
+    <string name="admin_root">Continue ot exit?</string>
+    <string name="admin_retry">Retry</string>
+    <string name="app_exit">Exit</string>
     <string name="show_debug_info">Show Debug Information</string>
 </resources>

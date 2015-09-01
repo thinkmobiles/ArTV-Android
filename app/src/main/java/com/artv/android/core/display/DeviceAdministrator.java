@@ -30,7 +30,7 @@ public final class DeviceAdministrator {
     public static DeviceAdministrator getInstance(final Activity _activity) {
         if (instance == null) {
             instance = new DeviceAdministrator(_activity);
-        }
+    }
         return instance;
     }
 
@@ -43,14 +43,28 @@ public final class DeviceAdministrator {
         }
     }
 
+    public static boolean isAdmin() {
+        return adminComponent != null && devicePolicyManager != null
+                && devicePolicyManager.isAdminActive(adminComponent);
+    }
+
     public static void lockScreen(final Context _context, final long _timeTurnOn) {
-        initObjects(_context);
+//        initObjects(_context);
         if (adminComponent != null && devicePolicyManager != null) {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
                 Intent i = new Intent(_context, WakeLockService.class);
                 i.putExtra("turn_on", _timeTurnOn);
                 Log.v("onnnnnnnn", String.valueOf(_timeTurnOn));
                 _context.startService(i);
+                devicePolicyManager.lockNow();
+            }
+        }
+    }
+
+    public static void lockScreen(final Context _context) {
+//        initObjects(_context);
+        if (adminComponent != null && devicePolicyManager != null) {
+            if (devicePolicyManager.isAdminActive(adminComponent)) {
                 devicePolicyManager.lockNow();
             }
         }

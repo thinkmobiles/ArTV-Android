@@ -1,5 +1,7 @@
 package com.artv.android.system;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -7,9 +9,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.artv.android.R;
 import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.core.config_info.IConfigInfoListener;
+import com.artv.android.core.display.AlarmAlertWakeLock;
+import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
@@ -18,7 +24,7 @@ import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
 public class MainActivity extends BaseActivity implements IArTvStateChangeListener,
         IMainActivityProceedListener, IMainActivitySleepController {
-
+    private static final int REQUEST_ENABLE = 0;
     private FrameLayout mFragmentContainer;
 
     private StateWorker mStateWorker;
@@ -37,7 +43,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
         //don't replace existing fragment when recreating
-        if (_savedInstanceState == null) handleAppState();
+        if (_savedInstanceState == null) getAdminStatusAndHandleAppState();
     }
 
     private final void initLogic() {
@@ -49,6 +55,12 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     protected final void onStart() {
         super.onStart();
         mStateWorker.addStateChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AlarmAlertWakeLock.release();
     }
 
     @Override
@@ -80,6 +92,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
+                getApplicationLogic().getTurnOffWorker().turnOff();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
                 break;
         }
@@ -96,5 +109,54 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         if (fragment == null) return;
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
         getSupportFragmentManager().executePendingTransactions();
+    }
+
+    private void getAdminStatusAndHandleAppState() {
+        if (!DeviceAdministrator.isAdmin()) {
+            DeviceAdministrator.getInstance(this).initAdmin();
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case Activity.RESULT_OK:
+                if (requestCode == REQUEST_ENABLE) {
+                    handleAppState();
+                }
+                break;
+            case Activity.RESULT_CANCELED:
+                showDialog();
+                break;
+        }
+    }
+
+    private void showDialog() {
+        new MaterialDialog.Builder(this)
+                .backgroundColorRes(android.R.color.white)
+                .title(R.string.app_name)
+                .titleColorRes(android.R.color.black)
+                .content(getString(R.string.admin_root))
+                .contentColorRes(android.R.color.black)
+                .positiveText(R.string.admin_retry)
+                .negativeText(R.string.app_exit)
+                .cancelable(false)
+                .callback(new MaterialDialog.ButtonCallback() {
+                    @Override
+                    public void onPositive(MaterialDialog dialog) {
+                        super.onPositive(dialog);
+                        getAdminStatusAndHandleAppState();
+                    }
+
+                    @Override
+                    public void onNegative(MaterialDialog dialog) {
+                        super.onNegative(dialog);
+                        finish();
+                        System.exit(0);
+                    }
+                })
+                .show();
     }
 }
