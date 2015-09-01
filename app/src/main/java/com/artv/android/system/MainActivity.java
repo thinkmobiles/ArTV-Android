@@ -70,7 +70,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private final void handleAppState() {
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
-//                DeviceAdministrator.getInstance(this).initAdmin();
                 final ConfigInfoFragment fragment = new ConfigInfoFragment();
                 fragment.setMainActivityProceedListener(this);
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, fragment).commit();
@@ -81,9 +80,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
-//                getApplicationLogic().getTurnOffWorker().turnOff();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
-//                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, YoutubeVideoFragment.newInstance("https://www.youtube.com/watch?v=3pn2SI4KGJc")).commit();
                 break;
         }
     }
@@ -97,6 +94,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     public final void prepareToSleep() {
         final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM);
         if (fragment == null) return;
-        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        getSupportFragmentManager().executePendingTransactions();
     }
 }
