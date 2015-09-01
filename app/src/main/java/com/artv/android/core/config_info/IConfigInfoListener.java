@@ -5,6 +5,6 @@ package com.artv.android.core.config_info;
  */
 public interface IConfigInfoListener {
 
-    void onEnteredConfigInfo(final ConfigInfo _configInfo);
+    void onConfigInfoLoaded(final ConfigInfo _configInfo);
 
 }

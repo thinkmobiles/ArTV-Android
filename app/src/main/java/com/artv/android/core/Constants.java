@@ -11,6 +11,6 @@ public abstract class Constants {
 
     public static final String FOLDER_NAME = "artv_data";
     public static final String PATH = Environment.getExternalStorageDirectory() + File.separator + FOLDER_NAME;
-    public static final int TIME_API_RECALL = 3;
+    public static final int TIME_API_RECALL = 3;    //sec
 
 }

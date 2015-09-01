@@ -5,6 +5,7 @@ import android.os.Handler;
 import com.artv.android.ArTvResult;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.core.Constants;
 import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
@@ -17,6 +18,7 @@ import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.database.DbWorker;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ZOG on 8/27/2015.
@@ -32,6 +34,7 @@ public final class BeaconScheduler {
     private GlobalConfig mGlobalConfig;
 
     private Handler mHandler;
+    private boolean mScheduling = false;
 
     public final void setBeaconWorker(final BeaconWorker _beaconWorker) {
         mBeaconWorker = _beaconWorker;
@@ -59,13 +62,18 @@ public final class BeaconScheduler {
 
     public final void startSchedule() {
         ArTvLogger.printMessage("Started beacon schedule");
+        mScheduling = true;
         createHandler();
+        doBeacon();
+    }
 
-        mBeaconWorker.doBeacon(mBeaconCallback);
+    private final void doBeacon() {
+        if (mScheduling) mBeaconWorker.doBeacon(mBeaconCallback);
     }
 
     public final void stopSchedule() {
         ArTvLogger.printMessage("Stopped beacon schedule");
+        mScheduling = false;
         mCampaignWorker.cancelLoading();
         mHandler.removeCallbacks(delay);
     }
@@ -75,13 +83,14 @@ public final class BeaconScheduler {
     }
 
     private final void startWithDelay(final long _delay) {
+        ArTvLogger.printMessage(String.format("Next beacon in %d ms", _delay));
         mHandler.postDelayed(delay, _delay);
     }
 
     private final Runnable delay = new Runnable() {
         @Override
         public final void run() {
-            startSchedule();
+            doBeacon();
         }
     };
 
@@ -90,17 +99,17 @@ public final class BeaconScheduler {
         public final void onFinished(final CampaignResult _result) {
             if (!_result.getSuccess()) {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
-                startWithDelay(5 * 1000);
+                startWithDelay(TimeUnit.SECONDS.toMillis(Constants.TIME_API_RECALL));
                 return;
             }
 
             ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
-            ArTvLogger.printMessage("Has MsgBoardMessage " + (_result.getMsgBoardCampaign() != null));
+            ArTvLogger.printMessage("MsgBoard to update: " + (_result.getMsgBoardCampaign() != null));
 
             processMsgBoardCampaign(_result.getMsgBoardCampaign());
 
             if (_result.getCampaigns().isEmpty()) {
-                startWithDelay(mGlobalConfig.getServerBeaconInterval());
+                startWithDelay(TimeUnit.MINUTES.toMillis(mGlobalConfig.getServerBeaconInterval()));
             } else {
                 processCampaigns(_result.getCampaigns());
             }
@@ -123,9 +132,11 @@ public final class BeaconScheduler {
         @Override
         public final void onCampaignDownloadFinished(final ArTvResult _result) {
             ArTvLogger.printMessage("Campaigns update success: " + _result.getSuccess());
-            mPlaybackWorker.stopPlayback();
-            mPlaybackWorker.startPlayback();
-            startWithDelay(mGlobalConfig.getServerBeaconInterval());
+            if (_result.getSuccess()) {
+                mPlaybackWorker.stopPlayback();
+                mPlaybackWorker.startPlayback();
+            }
+            doBeacon();
         }
 
         @Override

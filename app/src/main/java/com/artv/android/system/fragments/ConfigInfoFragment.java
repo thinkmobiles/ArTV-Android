@@ -13,6 +13,7 @@ import com.artv.android.core.UrlHelper;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
+import com.artv.android.system.IMainActivityProceedListener;
 
 /**
  * Created by Misha on 6/30/2015.
@@ -27,6 +28,12 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
     private CheckBox cbDebugInfo;
 
     private ConfigInfoWorker mConfigInfoWorker;
+
+    private IMainActivityProceedListener mMainActivityProceedListener;
+
+    public final void setMainActivityProceedListener(final IMainActivityProceedListener _listener) {
+        mMainActivityProceedListener = _listener;
+    }
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
@@ -61,7 +68,6 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
     }
 
     private final void showConfigInfoInUi() {
-        mConfigInfoWorker.loadConfigInfo();
         final ConfigInfo info = mConfigInfoWorker.getConfigInfo();
         if (info == null) return;
 
@@ -117,6 +123,11 @@ public final class ConfigInfoFragment extends BaseFragment implements View.OnCli
             ApiConst.addressUpdated();
         }
 
-        mConfigInfoWorker.notifyEnteredConfigInfo(configInfo);
+        mConfigInfoWorker.setConfigInfo(configInfo);
+        mConfigInfoWorker.saveConfigInfo();
+        mConfigInfoWorker.notifyConfigInfoLoaded();
+
+        mMainActivityProceedListener.proceedToSplashFragment();
     }
+
 }

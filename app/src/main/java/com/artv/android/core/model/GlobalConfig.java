@@ -57,20 +57,21 @@ public final class GlobalConfig {
      * @return time in minutes.
      */
     public final int getServerBeaconInterval() {
-        for (final Entry entry : entries) {
-            if (KEY_BEACON_INTERVAL.equals(entry.getName())) {
-                int time;
-                try {
-                    time = Integer.parseInt(entry.getValue());
-                } catch (final NumberFormatException _e) {
-                    _e.printStackTrace();
-                    continue;
-                }
-                return time;
-            }
-        }
-
-        return DEF_BEACON_INTERVAL;
+        return 1;
+//        for (final Entry entry : entries) {
+//            if (KEY_BEACON_INTERVAL.equals(entry.getName())) {
+//                int time;
+//                try {
+//                    time = Integer.parseInt(entry.getValue());
+//                } catch (final NumberFormatException _e) {
+//                    _e.printStackTrace();
+//                    continue;
+//                }
+//                return time;
+//            }
+//        }
+//
+//        return DEF_BEACON_INTERVAL;
     }
 
 }

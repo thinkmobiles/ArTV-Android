@@ -47,7 +47,7 @@ public class CampaignWorker implements IConfigInfoListener {
     }
 
     @Override
-    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+    public final void onConfigInfoLoaded(final ConfigInfo _configInfo) {
         mConfigInfo = _configInfo;
     }
 

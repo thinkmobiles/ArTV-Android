@@ -64,7 +64,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
 //                .setPassword("password")
 //                .build();
 //
-//        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
+//        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyConfigInfoLoaded(ci);
 //        Assert.assertEquals(ArTvState.STATE_APP_START_WITH_CONFIG_INFO, mMainActivity.getApplicationLogic().getStateWorker().getArTvState());
 //
 //        mMainActivity.finish();
@@ -88,7 +88,7 @@ public final class MainActivityTest extends ActivityInstrumentationTestCase2<Mai
 //                .setPassword("password")
 //                .build();
 //
-//        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyEnteredConfigInfo(ci);
+//        mMainActivity.getApplicationLogic().getConfigInfoWorker().notifyConfigInfoLoaded(ci);
 //        runTestOnUiThread(new Runnable() {
 //            @Override
 //            public void run() {

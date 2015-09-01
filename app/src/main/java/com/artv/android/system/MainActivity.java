@@ -8,16 +8,14 @@ import android.widget.FrameLayout;
 
 import com.artv.android.R;
 import com.artv.android.core.api.Temp;
-import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
-import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.playback.PlaybackFragment;
 import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
-public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IConfigInfoListener {
+public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IMainActivityProceedListener {
 
     private FrameLayout mFragmentContainer;
 
@@ -49,14 +47,12 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     protected final void onStart() {
         super.onStart();
         mStateWorker.addStateChangeListener(this);
-        mConfigInfoWorker.addConfigInfoListener(this);
     }
 
     @Override
     protected final void onStop() {
         super.onStop();
         mStateWorker.removeStateChangeListener(this);
-        mConfigInfoWorker.removeConfigInfoListener(this);
     }
 
     private void getDeviceId() {
@@ -80,7 +76,9 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         switch (mStateWorker.getArTvState()) {
             case STATE_APP_START:
 //                DeviceAdministrator.getInstance(this).initAdmin();
-                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new ConfigInfoFragment()).commit();
+                final ConfigInfoFragment fragment = new ConfigInfoFragment();
+                fragment.setMainActivityProceedListener(this);
+                getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, fragment).commit();
                 break;
 
             case STATE_APP_START_WITH_CONFIG_INFO:
@@ -96,8 +94,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     @Override
-    public final void onEnteredConfigInfo(final ConfigInfo _configInfo) {
+    public final void proceedToSplashFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
     }
-
 }

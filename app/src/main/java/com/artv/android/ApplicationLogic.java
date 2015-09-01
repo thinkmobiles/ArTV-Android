@@ -153,6 +153,7 @@ public final class ApplicationLogic {
      */
     public final void determineStateWhenAppStart() {
         mConfigInfoWorker.loadConfigInfo();
+        mConfigInfoWorker.notifyConfigInfoLoaded();
 
         if (!mConfigInfoWorker.getConfigInfo().hasConfigInfo() ||
                 !mCampaignWorker.hasCampaignToPlay()) {
