@@ -14,6 +14,7 @@ import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.display.DisplaySwitcher;
 import com.artv.android.core.display.TurnOffWorker;
+import com.artv.android.core.display.TvStatus;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
@@ -46,6 +47,7 @@ public final class ApplicationLogic {
     private PlaybackWorker mPlaybackWorker;
     private MessageWorker mMessageWorker;
     private BeaconScheduler mBeaconScheduler;
+    private TvStatus mTvStatus;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -62,10 +64,13 @@ public final class ApplicationLogic {
 
         mDbWorker = DbManager.getInstance(mContext);
         mPlayModeManager = new PlayModeManager();
+        mTvStatus = new TvStatus();
 
         mPlaybackWorker = new PlaybackWorker();
+        mPlaybackWorker.setContext(mContext);
         mPlaybackWorker.setDbWorker(mDbWorker);
         mPlaybackWorker.setPlayModeManager(mPlayModeManager);
+        mPlaybackWorker.setTvStatus(mTvStatus);
 
         mMessageWorker = new MessageWorker();
         mMessageWorker.setDbWorker(mDbWorker);

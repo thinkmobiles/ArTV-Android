@@ -4,13 +4,14 @@ import android.content.Context;
 import android.os.PowerManager;
 
 /**
- * Created by mRogach on 27.08.2015.
+ * Created by
+ * mRogach on 27.08.2015.
  */
-class AlarmAlertWakeLock {
+public final class AlarmAlertWakeLock {
 
     private static PowerManager.WakeLock sWakeLock;
 
-    static void acquire(Context context) {
+    public static void acquire(Context context) {
         if (sWakeLock != null) {
             sWakeLock.release();
         }
@@ -24,7 +25,7 @@ class AlarmAlertWakeLock {
         sWakeLock.acquire();
     }
 
-    static void release() {
+    public static void release() {
         if (sWakeLock != null) {
             sWakeLock.release();
             sWakeLock = null;
