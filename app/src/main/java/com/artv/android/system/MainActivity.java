@@ -3,17 +3,12 @@ package com.artv.android.system;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.artv.android.R;
-import com.artv.android.core.api.Temp;
 import com.artv.android.core.config_info.ConfigInfoWorker;
-import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.display.AlarmAlertWakeLock;
 import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.state.IArTvStateChangeListener;

@@ -81,14 +81,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager.setDayConverter(new DayConverter());
         mCampaigns = mDbWorker.getAllCampaigns();
-        //-------------------------------------------
-        mCampaigns.get(0).startDate = "2015-25-08";
-        mCampaigns.get(1).startDate = "2015-25-08";
-        mCampaigns.get(2).startDate = "2015-25-08";
-        mCampaigns.get(0).endDate = "2015-25-09";
-        mCampaigns.get(1).endDate = "2015-25-09";
-        mCampaigns.get(2).endDate = "2015-25-09";
-        //-------------------------------------------
         prepareStackToPlay(mPlayModeManager, mCampaigns);
     }
 
