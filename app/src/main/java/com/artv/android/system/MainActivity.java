@@ -2,6 +2,7 @@ package com.artv.android.system;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -15,7 +16,8 @@ import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.playback.PlaybackFragment;
 import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
-public class MainActivity extends BaseActivity implements IArTvStateChangeListener, IMainActivityProceedListener {
+public class MainActivity extends BaseActivity implements IArTvStateChangeListener,
+        IMainActivityProceedListener, IMainActivitySleepController {
 
     private FrameLayout mFragmentContainer;
 
@@ -55,16 +57,9 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mStateWorker.removeStateChangeListener(this);
     }
 
-    private void getDeviceId() {
-        String deviceId = null;
-        if (TextUtils.isEmpty(deviceId))
-            deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        Log.v("deviceId", deviceId);
-    }
-
-    private void checkTestApi() {
-        Temp temp = new Temp();
-        temp.example();
+    //todo: use it when recreate after sleep (with no fragment)?
+    private final boolean hasFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM) != null;
     }
 
     @Override
@@ -96,5 +91,12 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     @Override
     public final void proceedToSplashFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
+    }
+
+    @Override
+    public final void prepareToSleep() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM);
+        if (fragment == null) return;
+        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
     }
 }
