@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +38,10 @@ public final class Campaign {
     @ElementList(name = "Assets", required = false)
     public List<Asset> assets;
 
+    public final boolean hasOverrideTime() {
+        return overrideTime != null && !overrideTime.isEmpty();
+    }
+
     @Override
     public final boolean equals(final Object _o) {
         if (this == _o) return true;
@@ -48,16 +53,9 @@ public final class Campaign {
     }
 
     @Override
-    public String toString() {
-        return "Campaign{" +
-                "mCampaignID=" + campaignId +
-                ", mCRCVersion=" + crcVersion +
-                ", mStartDate='" + startDate + '\'' +
-                ", mEndDate='" + endDate + '\'' +
-                ", mSequence=" + sequence +
-                ", mPlayDay='" + playDay + '\'' +
-                ", mOverrideTime='" + overrideTime + '\'' +
-                ", mAssets=" + assets +
-                '}';
+    public final String toString() {
+        return "CampaignID = " + campaignId +
+                ", StartDate = '" + startDate + '\'' +
+                ", EndDate = '" + endDate + '\'';
     }
 }

@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 22
         versionCode 13
-        versionName "0.11.5"
+        versionName "0.11.10"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -54,4 +54,5 @@ dependencies {
 
 
     compile files('libs/YouTubeAndroidPlayerApi.jar')
+    compile 'com.afollestad:material-dialogs:0.7.6.0'
 }

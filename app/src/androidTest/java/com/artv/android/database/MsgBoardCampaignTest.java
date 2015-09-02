@@ -16,9 +16,9 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.artv.android.database.DbTestHelper.buildMessage;
-import static com.artv.android.database.DbTestHelper.buildMsgBoardCampaign1;
-import static com.artv.android.database.DbTestHelper.buildMsgBoardCampaign2;
+import static com.artv.android.ModelsTestHelper.buildMessage;
+import static com.artv.android.ModelsTestHelper.buildMsgBoardCampaign1;
+import static com.artv.android.ModelsTestHelper.buildMsgBoardCampaign2;
 
 /**
  * Created by ZOG on 8/18/2015.

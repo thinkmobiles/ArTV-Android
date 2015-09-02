@@ -1,10 +1,15 @@
 package com.artv.android.app.playback;
 
+import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.artv.android.core.Constants;
 import com.artv.android.core.UrlHelper;
 import com.artv.android.core.date.DayConverter;
+import com.artv.android.core.display.AlarmAlertWakeLock;
+import com.artv.android.core.display.DeviceAdministrator;
+import com.artv.android.core.display.TvStatus;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -23,6 +28,7 @@ import java.util.Stack;
  */
 public final class PlaybackWorker implements IVideoCompletionListener {
 
+    private Context mContext;
     private DbWorker mDbWorker;
     private GlobalConfig mGlobalConfig;
     private IPlaybackController mPlaybackController;
@@ -31,6 +37,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private Stack<Asset> mAssetStack;
     private int mCurrentCampaignId;
     private int mCurrentAssetPlayingId;
+    private TvStatus mTvStatus;
+    private Handler mHandlerPostPlay;
+    private Runnable mRunnableThread;
+    private DeviceAdministrator mDeviceAdministrator;
 
     public final void setPlaybackController(final IPlaybackController _controller) {
         mPlaybackController = _controller;
@@ -48,6 +58,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         this.mPlayModeManager = mPlayModeManager;
     }
 
+    public void setTvStatus(TvStatus _tvStatus) {
+        this.mTvStatus = _tvStatus;
+    }
+
     public final IVideoCompletionListener getVideoCompletionListener() {
         return this;
     }
@@ -60,39 +74,71 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         return mCurrentAssetPlayingId;
     }
 
+    public void setContext(final Context _context) {
+        this.mContext = _context;
+    }
+
+    public void setDeviceAdministrator(final DeviceAdministrator _deviceAdministrator) {
+        this.mDeviceAdministrator = _deviceAdministrator;
+    }
+
     public final void startPlayback() {
         ArTvLogger.printMessage("Started playback");
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager.setDayConverter(new DayConverter());
         mCampaigns = mDbWorker.getAllCampaigns();
-        prepareStackToPlay(mPlayModeManager, mCampaigns);
+        checkCampaigns(mPlayModeManager, mCampaigns);
     }
 
-    private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
-        Campaign campaignToPlay;
-        switch (_playModeManager.campainToPlay(_campaigns)) {
-            case 0:
-                mAssetStack = getStackAssetsAllCampaigns(_campaigns);
-                break;
-            case 1:
-                campaignToPlay = hasPlayCampaignInCurrentTime(_campaigns, _playModeManager);
-                if (campaignToPlay != null && !campaignToPlay.assets.isEmpty()) {
-                    List<Asset> assets = campaignToPlay.assets;
-                    sortAssets(assets);
-                    mAssetStack = getStackAssets(assets);
-                } else
-                    mAssetStack = getStackAssetsAllCampaigns(_campaigns);
-                break;
+    private void checkCampaigns(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
+        final List<Campaign> campaignsPlayToday = _playModeManager.campainsToPlayToday(_campaigns);
+        if (getCampaignsWithOutOwerrideTime(campaignsPlayToday).isEmpty()) {
+            hasPlayCampaignInCurrentTime(campaignsPlayToday, _playModeManager);
+            turnOff();
+        } else {
+            prepareStackToPlay(_playModeManager, campaignsPlayToday);
+            play();
         }
-        play();
+    }
+
+    private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaignsPlayToday) {
+        hasPlayCampaignInCurrentTime(_campaignsPlayToday, _playModeManager);
+        mAssetStack = getStackAssetsAllCampaigns(getCampaignsWithOutOwerrideTime(_campaignsPlayToday));
+    }
+
+    private List<Campaign> getCampaignsWithOutOwerrideTime(final List<Campaign> _campaigns) {
+        final List<Campaign> campaignsToRemove = new ArrayList<>();
+
+        final ArrayList<Campaign> campaignsWithoutOverrideTime = new ArrayList<>(_campaigns);
+        for (final Campaign campaign : campaignsWithoutOverrideTime) {
+            if (!campaign.hasOverrideTime()) {
+                campaignsToRemove.add(campaign);
+            }
+        }
+
+        for (final Campaign campaign : campaignsToRemove) {
+            campaignsWithoutOverrideTime.remove(campaign);
+        }
+
+        return campaignsWithoutOverrideTime;
+    }
+
+    private void turnOff() {
+        setTvStatusOff(true);
+        mDeviceAdministrator.lockScreen();
     }
 
     public final void stopPlayback() {
         mCurrentCampaignId = 0;
         mCurrentAssetPlayingId = 0;
-//        mPlaybackController.stopPlaying();
+//        if (mHandlerPostPlay != null && mRunnableThread != null) {
+//            mHandlerPostPlay.removeCallbacks(mRunnableThread);
+//        }
+        mPlaybackController.stopPlaying();
         mCampaigns.clear();
-        mAssetStack.clear();
+        if (mAssetStack != null) {
+            mAssetStack.clear();
+        }
         ArTvLogger.printMessage("Stopped playback");
     }
 
@@ -113,7 +159,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 mPlaybackController.playYoutubeLink(asset.url);
             }
         } else {
-            prepareStackToPlay(mPlayModeManager, mCampaigns);
+            checkCampaigns(mPlayModeManager, mCampaigns);
         }
     }
 
@@ -149,25 +195,21 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         playNextAsset(_asset);
     }
 
-    private Campaign hasPlayCampaignInCurrentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
+    private void hasPlayCampaignInCurrentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
         Date owerrideTime;
         Date currentTime = _playModeManager.getCurrentDate();
         long currentTimeInMills = _playModeManager.getTimeInMills(currentTime);
-        long owerrideTimeInMills = 0;
+        long owerrideTimeInMills;
 
         for (Campaign campaign : _campaigns) {
-            if (campaign.overrideTime != null) {
+            if (campaign.overrideTime != null && !campaign.overrideTime.isEmpty()) {
                 owerrideTime = _playModeManager.getTimeFromString(campaign.overrideTime);
                 owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
-            }
-            if (owerrideTimeInMills != 0 && owerrideTimeInMills == currentTimeInMills) {
-                mCurrentCampaignId = campaign.campaignId;
-                return campaign;
-            } else if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
-                startCheckTimeDelay(campaign, owerrideTimeInMills - currentTimeInMills);
+                if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
+                    startCheckTimeDelay(campaign, owerrideTimeInMills - currentTimeInMills);
+                }
             }
         }
-        return null;
     }
 
     public void startCheckTimeDelay(final Campaign _campaign, final long _timeDelay) {
@@ -175,14 +217,19 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         if (!assets.isEmpty()) {
             sortAssets(assets);
         }
-        new Handler().postDelayed(new Runnable() {
+        mHandlerPostPlay = new Handler();
+        mRunnableThread = new Runnable() {
             @Override
             public void run() {
+                Log.d("runTest", "runTest");
+                mTvStatus.setTurnStatusOff(false);
+                AlarmAlertWakeLock.acquire(mContext);
                 mAssetStack = getStackAssets(assets);
                 mPlaybackController.stopPlaying();
                 play();
             }
-        }, _timeDelay);
+        };
+        mHandlerPostPlay.postDelayed(mRunnableThread, _timeDelay);
     }
 
     public void sortAssets(List<Asset> _assets) {
@@ -229,6 +276,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
             return getStackAssets(assets);
         }
         return null;
+    }
+
+    private void setTvStatusOff(final boolean _off) {
+        mTvStatus.setTurnStatusOff(_off);
     }
 
 }
