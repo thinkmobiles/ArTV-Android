@@ -2,6 +2,7 @@ package com.artv.android.app.playback;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.artv.android.core.Constants;
 import com.artv.android.core.UrlHelper;
@@ -39,6 +40,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private TvStatus mTvStatus;
     private Handler mHandlerPostPlay;
     private Runnable mRunnableThread;
+    private DeviceAdministrator mDeviceAdministrator;
 
     public final void setPlaybackController(final IPlaybackController _controller) {
         mPlaybackController = _controller;
@@ -76,6 +78,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         this.mContext = _context;
     }
 
+    public void setDeviceAdministrator(final DeviceAdministrator _deviceAdministrator) {
+        this.mDeviceAdministrator = _deviceAdministrator;
+    }
+
     public final void startPlayback() {
         ArTvLogger.printMessage("Started playback");
         mCampaigns = mDbWorker.getAllCampaigns();
@@ -87,6 +93,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private void checkCampaigns(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
         final List<Campaign> campaignsPlayToday = _playModeManager.campainsToPlayToday(_campaigns);
         if (getCampaignsWithOutOwerrideTime(campaignsPlayToday).isEmpty()) {
+            hasPlayCampaignInCurrentTime(campaignsPlayToday, _playModeManager);
             turnOff();
         } else {
             prepareStackToPlay(_playModeManager, campaignsPlayToday);
@@ -95,30 +102,31 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaignsPlayToday) {
-            hasPlayCampaignInCurrentTime(_campaignsPlayToday, _playModeManager);
-            mAssetStack = getStackAssetsAllCampaigns(_campaignsPlayToday);
+        hasPlayCampaignInCurrentTime(_campaignsPlayToday, _playModeManager);
+        mAssetStack = getStackAssetsAllCampaigns(getCampaignsWithOutOwerrideTime(_campaignsPlayToday));
     }
 
     private List<Campaign> getCampaignsWithOutOwerrideTime(final List<Campaign> _campaigns) {
-        for (Campaign campaign : _campaigns) {
-            if (campaign.overrideTime.isEmpty()) {
-                _campaigns.remove(campaign);
+        final List<Campaign> campaignsWithOutOwerrideTime = new ArrayList<>(_campaigns);
+        for (Campaign campaign : campaignsWithOutOwerrideTime) {
+            if (!campaign.overrideTime.isEmpty()) {
+                campaignsWithOutOwerrideTime.remove(campaign);
             }
         }
-        return _campaigns;
+        return campaignsWithOutOwerrideTime;
     }
 
     private void turnOff() {
         setTvStatusOff(true);
-        DeviceAdministrator.lockScreen(mContext);
+        mDeviceAdministrator.lockScreen();
     }
 
     public final void stopPlayback() {
         mCurrentCampaignId = 0;
         mCurrentAssetPlayingId = 0;
-        if (mHandlerPostPlay != null && mRunnableThread != null) {
-            mHandlerPostPlay.removeCallbacks(mRunnableThread);
-        }
+//        if (mHandlerPostPlay != null && mRunnableThread != null) {
+//            mHandlerPostPlay.removeCallbacks(mRunnableThread);
+//        }
         mPlaybackController.stopPlaying();
         mCampaigns.clear();
         if (mAssetStack != null) {
@@ -187,7 +195,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         long owerrideTimeInMills;
 
         for (Campaign campaign : _campaigns) {
-            if (campaign.overrideTime != null) {
+            if (campaign.overrideTime != null && !campaign.overrideTime.isEmpty()) {
                 owerrideTime = _playModeManager.getTimeFromString(campaign.overrideTime);
                 owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
                 if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
@@ -206,10 +214,9 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mRunnableThread = new Runnable() {
             @Override
             public void run() {
-                if (mTvStatus.isTurnStatusOff()) {
-                    mTvStatus.setTurnStatusOff(false);
-                    AlarmAlertWakeLock.acquire(mContext);
-                }
+                Log.d("runTest", "runTest");
+                mTvStatus.setTurnStatusOff(false);
+                AlarmAlertWakeLock.acquire(mContext);
                 mAssetStack = getStackAssets(assets);
                 mPlaybackController.stopPlaying();
                 play();

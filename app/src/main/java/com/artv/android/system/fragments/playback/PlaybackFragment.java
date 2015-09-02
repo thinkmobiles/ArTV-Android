@@ -59,6 +59,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
         mPlaybackWorker = getApplicationLogic().getPlaybackWorker();
         mPlaybackWorker.setPlaybackController(this);
+        mPlaybackWorker.setDeviceAdministrator(getApplicationLogic().getDeviceAdministrator());
         mVideoCompletionListener = mPlaybackWorker.getVideoCompletionListener();
 
         mMessageWorker = getApplicationLogic().getMessageWorker();

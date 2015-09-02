@@ -12,6 +12,7 @@ import com.artv.android.core.beacon.BeaconWorker;
 import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.date.DateWorker;
+import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.display.TvStatus;
 import com.artv.android.core.init.InitWorker;
@@ -46,6 +47,7 @@ public final class ApplicationLogic {
     private MessageWorker mMessageWorker;
     private BeaconScheduler mBeaconScheduler;
     private TvStatus mTvStatus;
+    private DeviceAdministrator mDeviceAdministrator;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -59,6 +61,7 @@ public final class ApplicationLogic {
         mDbWorker = DbManager.getInstance(mContext);
         mPlayModeManager = new PlayModeManager();
         mTvStatus = new TvStatus();
+        mDeviceAdministrator = new DeviceAdministrator();
 
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setContext(mContext);
@@ -111,6 +114,8 @@ public final class ApplicationLogic {
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
         mStartWorker.setTurnOffWorker(mTurnOffWorker);
+        mDeviceAdministrator.setInitWorker(mInitWorker);
+        mDeviceAdministrator.setStateWorker(mStateWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -151,6 +156,10 @@ public final class ApplicationLogic {
 
     public final BeaconScheduler getBeaconScheduler() {
         return mBeaconScheduler;
+    }
+
+    public DeviceAdministrator getDeviceAdministrator() {
+        return mDeviceAdministrator;
     }
 
     /**

@@ -24,6 +24,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
 
     private StateWorker mStateWorker;
     private ConfigInfoWorker mConfigInfoWorker;
+    private DeviceAdministrator mDeviceAdministrator;
 
     @Override
     protected final void onCreate(final Bundle _savedInstanceState) {
@@ -44,18 +45,21 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private final void initLogic() {
         mStateWorker = getApplicationLogic().getStateWorker();
         mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
+        mDeviceAdministrator = getApplicationLogic().getDeviceAdministrator();
     }
 
     @Override
     protected final void onStart() {
         super.onStart();
         mStateWorker.addStateChangeListener(this);
+        mDeviceAdministrator.setMainActivitySleepController(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         AlarmAlertWakeLock.release();
+        mDeviceAdministrator.setMainActivitySleepController(null);
     }
 
     @Override
@@ -103,12 +107,14 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM);
         if (fragment == null) return;
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-        getSupportFragmentManager().executePendingTransactions();
+//        getSupportFragmentManager().executePendingTransactions();
     }
 
     private void getAdminStatusAndHandleAppState() {
-        if (!DeviceAdministrator.isAdmin()) {
-            DeviceAdministrator.getInstance(this).initAdmin();
+        if (mDeviceAdministrator != null && !mDeviceAdministrator.isAdmin()) {
+            mDeviceAdministrator.initAdmin(this);
+        } else {
+            handleAppState();
         }
 
     }
