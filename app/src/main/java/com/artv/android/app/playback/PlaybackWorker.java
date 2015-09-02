@@ -40,6 +40,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private TvStatus mTvStatus;
     private Handler mHandlerPostPlay;
     private Runnable mRunnableThread;
+    private DeviceAdministrator mDeviceAdministrator;
 
     public final void setPlaybackController(final IPlaybackController _controller) {
         mPlaybackController = _controller;
@@ -75,6 +76,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     public void setContext(final Context _context) {
         this.mContext = _context;
+    }
+
+    public void setDeviceAdministrator(final DeviceAdministrator _deviceAdministrator) {
+        this.mDeviceAdministrator = _deviceAdministrator;
     }
 
     public final void startPlayback() {
@@ -113,15 +118,15 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     private void turnOff() {
         setTvStatusOff(true);
-        DeviceAdministrator.lockScreen(mContext);
+        mDeviceAdministrator.lockScreen();
     }
 
     public final void stopPlayback() {
         mCurrentCampaignId = 0;
         mCurrentAssetPlayingId = 0;
-        if (mHandlerPostPlay != null && mRunnableThread != null) {
-            mHandlerPostPlay.removeCallbacks(mRunnableThread);
-        }
+//        if (mHandlerPostPlay != null && mRunnableThread != null) {
+//            mHandlerPostPlay.removeCallbacks(mRunnableThread);
+//        }
         mPlaybackController.stopPlaying();
         mCampaigns.clear();
         if (mAssetStack != null) {

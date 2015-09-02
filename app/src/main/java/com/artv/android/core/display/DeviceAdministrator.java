@@ -18,53 +18,44 @@ import com.artv.android.system.IMainActivitySleepController;
  * mRogach on 27.08.2015.
  */
 public final class DeviceAdministrator {
-    private BaseActivity mActivity;
     private static final int REQUEST_ENABLE = 0;
-    private static DevicePolicyManager devicePolicyManager;
-    private static ComponentName adminComponent;
-    private static volatile DeviceAdministrator instance;
-    private static InitWorker mInitWorker;
-    private static IMainActivitySleepController mMainActivitySleepController;
-    private static StateWorker mStateWorker;
+    private DevicePolicyManager devicePolicyManager;
+    private ComponentName adminComponent;
+    private InitWorker mInitWorker;
+    private IMainActivitySleepController mMainActivitySleepController;
+    private StateWorker mStateWorker;
 
-    public DeviceAdministrator(final Activity _activity) {
-        mActivity = (BaseActivity) _activity;
-        mInitWorker = mActivity.getApplicationLogic().getInitWorker();
-    }
-
-    public static DeviceAdministrator getInstance(final Activity _activity) {
-        if (instance == null) {
-            instance = new DeviceAdministrator(_activity);
-    }
-        return instance;
-    }
-
-    public static void setMainActivitySleepController(final IMainActivitySleepController _controller) {
+    public void setMainActivitySleepController(final IMainActivitySleepController _controller) {
         mMainActivitySleepController = _controller;
     }
 
-    public static void setStateWorker(final StateWorker _worker) {
+    public void setStateWorker(final StateWorker _worker) {
         mStateWorker = _worker;
     }
 
-    public void initAdmin() {
-        initObjects(mActivity);
+    public void setInitWorker(final InitWorker _initWorker) {
+        mInitWorker = _initWorker;
+    }
+
+    public void initAdmin(final Activity _activity) {
+        initObjects(_activity);
         if (!devicePolicyManager.isAdminActive(adminComponent)) {
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-            mActivity.startActivityForResult(intent, REQUEST_ENABLE);
+            _activity.startActivityForResult(intent, REQUEST_ENABLE);
         }
     }
 
-    public static boolean isAdmin() {
+    public boolean isAdmin() {
         return adminComponent != null && devicePolicyManager != null
                 && devicePolicyManager.isAdminActive(adminComponent);
     }
 
-    public static void lockScreen(final Context _context, final long _timeTurnOn) {
-//        initObjects(_context);
+    public void lockScreen(final Context _context, final long _timeTurnOn) {
         if (adminComponent != null && devicePolicyManager != null) {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
+                if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
+                mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
                 Intent i = new Intent(_context, WakeLockService.class);
                 i.putExtra("turn_on", _timeTurnOn);
                 Log.v("onnnnnnnn", String.valueOf(_timeTurnOn));
@@ -74,8 +65,7 @@ public final class DeviceAdministrator {
         }
     }
 
-    public static void lockScreen(final Context _context) {
-//        initObjects(_context);
+    public void lockScreen() {
         if (adminComponent != null && devicePolicyManager != null) {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
                 if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
@@ -86,7 +76,7 @@ public final class DeviceAdministrator {
         }
     }
 
-    private static void initObjects(final Context _context) {
+    private void initObjects(final Context _context) {
         adminComponent = new ComponentName(_context, Darclass.class);
         devicePolicyManager = (DevicePolicyManager) _context.getSystemService(Context.DEVICE_POLICY_SERVICE);
     }
