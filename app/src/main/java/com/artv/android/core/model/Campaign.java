@@ -4,6 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,16 +49,9 @@ public final class Campaign {
     }
 
     @Override
-    public String toString() {
-        return "Campaign{" +
-                "mCampaignID=" + campaignId +
-                ", mCRCVersion=" + crcVersion +
-                ", mStartDate='" + startDate + '\'' +
-                ", mEndDate='" + endDate + '\'' +
-                ", mSequence=" + sequence +
-                ", mPlayDay='" + playDay + '\'' +
-                ", mOverrideTime='" + overrideTime + '\'' +
-                ", mAssets=" + assets +
-                '}';
+    public final String toString() {
+        return "CampaignID = " + campaignId +
+                ", StartDate = '" + startDate + '\'' +
+                ", EndDate = '" + endDate + '\'';
     }
 }

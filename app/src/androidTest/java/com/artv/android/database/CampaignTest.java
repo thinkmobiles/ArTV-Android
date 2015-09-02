@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.artv.android.database.DbTestHelper.buildAsset1;
-import static com.artv.android.database.DbTestHelper.buildAsset2;
-import static com.artv.android.database.DbTestHelper.buildAsset3;
-import static com.artv.android.database.DbTestHelper.buildCampaign1;
-import static com.artv.android.database.DbTestHelper.buildCampaign2;
-import static com.artv.android.database.DbTestHelper.buildCampaign3;
+import static com.artv.android.ModelsTestHelper.buildAsset1;
+import static com.artv.android.ModelsTestHelper.buildAsset2;
+import static com.artv.android.ModelsTestHelper.buildAsset3;
+import static com.artv.android.ModelsTestHelper.buildCampaign1;
+import static com.artv.android.ModelsTestHelper.buildCampaign2;
+import static com.artv.android.ModelsTestHelper.buildCampaign3;
 
 /**
  * Created by ZOG on 8/18/2015.
