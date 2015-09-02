@@ -38,9 +38,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private int mCurrentCampaignId;
     private int mCurrentAssetPlayingId;
     private TvStatus mTvStatus;
-    private Handler mHandlerPostPlay;
+    private Handler mHandlerPostPlay = new Handler();
     private Runnable mRunnableThread;
     private DeviceAdministrator mDeviceAdministrator;
+    private Handler mHandler = new Handler();
 
     public final void setPlaybackController(final IPlaybackController _controller) {
         mPlaybackController = _controller;
@@ -87,10 +88,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager.setDayConverter(new DayConverter());
         mCampaigns = mDbWorker.getAllCampaigns();
-        //------------------------------------
-        mCampaigns.get(0).overrideTime = "";
-        mCampaigns.get(1).overrideTime = "";
-        //------------------------------------
         checkCampaigns(mPlayModeManager, mCampaigns);
     }
 
@@ -115,7 +112,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
         final ArrayList<Campaign> campaignsWithoutOverrideTime = new ArrayList<>(_campaigns);
         for (final Campaign campaign : campaignsWithoutOverrideTime) {
-            if (!campaign.hasOverrideTime()) {
+            if (campaign.hasOverrideTime()) {
                 campaignsToRemove.add(campaign);
             }
         }
@@ -129,7 +126,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     private void turnOff() {
         setTvStatusOff(true);
-        mDeviceAdministrator.lockScreen(mContext);
+        mDeviceAdministrator.lockScreen();
     }
 
     public final void stopPlayback() {
@@ -138,6 +135,9 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 //        if (mHandlerPostPlay != null && mRunnableThread != null) {
 //            mHandlerPostPlay.removeCallbacks(mRunnableThread);
 //        }
+        if (mHandler != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
         mPlaybackController.stopPlaying();
         mCampaigns.clear();
         if (mAssetStack != null) {
@@ -179,13 +179,15 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private void playNextAsset(final Asset _asset) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                play();
-            }
-        }, playDuration(_asset));
+        mHandler.postDelayed(mRunnable, playDuration(_asset));
     }
+
+    Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            play();
+        }
+    };
 
     private int playDuration(final Asset _asset) {
         if (_asset.duration != null && _asset.duration > 0) {
@@ -221,7 +223,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         if (!assets.isEmpty()) {
             sortAssets(assets);
         }
-        mHandlerPostPlay = new Handler();
         mRunnableThread = new Runnable() {
             @Override
             public void run() {

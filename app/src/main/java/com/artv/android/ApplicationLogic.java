@@ -61,7 +61,7 @@ public final class ApplicationLogic {
         mDbWorker = DbManager.getInstance(mContext);
         mPlayModeManager = new PlayModeManager();
         mTvStatus = new TvStatus();
-        mDeviceAdministrator = new DeviceAdministrator();
+        mDeviceAdministrator = new DeviceAdministrator(mContext);
 
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setContext(mContext);

@@ -39,8 +39,8 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
         //don't replace existing fragment when recreating
-//        if (_savedInstanceState == null || !hasFragment()) getAdminStatusAndHandleAppState();
-        if (_savedInstanceState == null || !hasFragment()) handleAppState();
+        if (_savedInstanceState == null || !hasFragment()) getAdminStatusAndHandleAppState();
+//        if (_savedInstanceState == null || !hasFragment()) handleAppState();
     }
 
     private final void initLogic() {
@@ -60,13 +60,13 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     protected void onPause() {
         super.onPause();
         AlarmAlertWakeLock.release();
-        mDeviceAdministrator.setMainActivitySleepController(null);
     }
 
     @Override
     protected final void onStop() {
         super.onStop();
         mStateWorker.removeStateChangeListener(this);
+        mDeviceAdministrator.setMainActivitySleepController(null);
     }
 
     //todo: use it when recreate after sleep (with no fragment)?
@@ -112,12 +112,11 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     private void getAdminStatusAndHandleAppState() {
-        if (!mDeviceAdministrator.isAdmin(this)) {
+        if (!mDeviceAdministrator.isAdmin()) {
             mDeviceAdministrator.initAdmin(this);
         } else {
             handleAppState();
         }
-
     }
 
     @Override

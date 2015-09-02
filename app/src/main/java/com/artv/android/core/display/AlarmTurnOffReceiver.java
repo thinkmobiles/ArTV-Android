@@ -23,7 +23,7 @@ public class AlarmTurnOffReceiver extends BroadcastReceiver {
         Log.v("wake", "off");
         Log.v("onAlarmOff", String.valueOf(arg1.getLongExtra("on", 0)));
         if (arg1.getLongExtra("on", 0) > 0) {
-            mDeviceAdministrator.lockScreen(arg0, arg1.getLongExtra("on", 0));
+            mDeviceAdministrator.lockScreen(arg1.getLongExtra("on", 0));
         }
     }
 }
