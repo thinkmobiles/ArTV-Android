@@ -38,6 +38,10 @@ public final class Campaign {
     @ElementList(name = "Assets", required = false)
     public List<Asset> assets;
 
+    public final boolean hasOverrideTime() {
+        return overrideTime != null && !overrideTime.isEmpty();
+    }
+
     @Override
     public final boolean equals(final Object _o) {
         if (this == _o) return true;

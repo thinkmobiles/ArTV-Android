@@ -39,7 +39,8 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
         //don't replace existing fragment when recreating
-        if (_savedInstanceState == null || !hasFragment()) getAdminStatusAndHandleAppState();
+//        if (_savedInstanceState == null || !hasFragment()) getAdminStatusAndHandleAppState();
+        if (_savedInstanceState == null || !hasFragment()) handleAppState();
     }
 
     private final void initLogic() {

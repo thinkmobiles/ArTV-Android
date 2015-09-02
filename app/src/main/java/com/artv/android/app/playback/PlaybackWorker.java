@@ -107,13 +107,20 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private List<Campaign> getCampaignsWithOutOwerrideTime(final List<Campaign> _campaigns) {
-        final List<Campaign> campaignsWithOutOwerrideTime = new ArrayList<>(_campaigns);
-        for (Campaign campaign : campaignsWithOutOwerrideTime) {
-            if (!campaign.overrideTime.isEmpty()) {
-                campaignsWithOutOwerrideTime.remove(campaign);
+        final List<Campaign> campaignsToRemove = new ArrayList<>();
+
+        final ArrayList<Campaign> campaignsWithoutOverrideTime = new ArrayList<>(_campaigns);
+        for (final Campaign campaign : campaignsWithoutOverrideTime) {
+            if (!campaign.hasOverrideTime()) {
+                campaignsToRemove.add(campaign);
             }
         }
-        return campaignsWithOutOwerrideTime;
+
+        for (final Campaign campaign : campaignsToRemove) {
+            campaignsWithoutOverrideTime.remove(campaign);
+        }
+
+        return campaignsWithoutOverrideTime;
     }
 
     private void turnOff() {
