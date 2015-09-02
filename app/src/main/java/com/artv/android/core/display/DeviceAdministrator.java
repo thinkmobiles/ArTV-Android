@@ -39,40 +39,44 @@ public final class DeviceAdministrator {
 
     public void initAdmin(final Activity _activity) {
         initObjects(_activity);
-        if (!devicePolicyManager.isAdminActive(adminComponent)) {
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-            _activity.startActivityForResult(intent, REQUEST_ENABLE);
-        }
+        Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+        intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+        _activity.startActivityForResult(intent, REQUEST_ENABLE);
     }
 
-    public boolean isAdmin() {
-        return adminComponent != null && devicePolicyManager != null
-                && devicePolicyManager.isAdminActive(adminComponent);
+    public boolean isAdmin(final Context _context) {
+        if (devicePolicyManager == null || adminComponent == null) {
+            initObjects(_context);
+        }
+        return devicePolicyManager.isAdminActive(adminComponent);
     }
 
     public void lockScreen(final Context _context, final long _timeTurnOn) {
-        if (adminComponent != null && devicePolicyManager != null) {
-            if (devicePolicyManager.isAdminActive(adminComponent)) {
-                if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
-                mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
-                Intent i = new Intent(_context, WakeLockService.class);
-                i.putExtra("turn_on", _timeTurnOn);
-                Log.v("onnnnnnnn", String.valueOf(_timeTurnOn));
-                _context.startService(i);
-                devicePolicyManager.lockNow();
-            }
+        if (devicePolicyManager == null || adminComponent == null) {
+            initObjects(_context);
+        }
+        if (devicePolicyManager.isAdminActive(adminComponent)) {
+            if (mMainActivitySleepController != null)
+                mMainActivitySleepController.prepareToSleep();
+            mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
+            Intent i = new Intent(_context, WakeLockService.class);
+            i.putExtra("turn_on", _timeTurnOn);
+            Log.v("onnnnnnnn", String.valueOf(_timeTurnOn));
+            _context.startService(i);
+            devicePolicyManager.lockNow();
         }
     }
 
-    public void lockScreen() {
-        if (adminComponent != null && devicePolicyManager != null) {
-            if (devicePolicyManager.isAdminActive(adminComponent)) {
-                if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
-                mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
+    public void lockScreen(final Context _context) {
+        if (devicePolicyManager == null || adminComponent == null) {
+            initObjects(_context);
+        }
+        if (devicePolicyManager.isAdminActive(adminComponent)) {
+            if (mMainActivitySleepController != null)
+                mMainActivitySleepController.prepareToSleep();
+            mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
 
-                devicePolicyManager.lockNow();
-            }
+            devicePolicyManager.lockNow();
         }
     }
 
