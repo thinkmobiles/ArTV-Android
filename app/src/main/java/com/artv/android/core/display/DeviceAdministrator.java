@@ -8,7 +8,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.artv.android.core.init.InitWorker;
+import com.artv.android.core.state.ArTvState;
+import com.artv.android.core.state.StateWorker;
 import com.artv.android.system.BaseActivity;
+import com.artv.android.system.IMainActivitySleepController;
 
 /**
  * Created by
@@ -21,6 +24,8 @@ public final class DeviceAdministrator {
     private static ComponentName adminComponent;
     private static volatile DeviceAdministrator instance;
     private static InitWorker mInitWorker;
+    private static IMainActivitySleepController mMainActivitySleepController;
+    private static StateWorker mStateWorker;
 
     public DeviceAdministrator(final Activity _activity) {
         mActivity = (BaseActivity) _activity;
@@ -32,6 +37,14 @@ public final class DeviceAdministrator {
             instance = new DeviceAdministrator(_activity);
     }
         return instance;
+    }
+
+    public static void setMainActivitySleepController(final IMainActivitySleepController _controller) {
+        mMainActivitySleepController = _controller;
+    }
+
+    public static void setStateWorker(final StateWorker _worker) {
+        mStateWorker = _worker;
     }
 
     public void initAdmin() {
@@ -65,6 +78,9 @@ public final class DeviceAdministrator {
 //        initObjects(_context);
         if (adminComponent != null && devicePolicyManager != null) {
             if (devicePolicyManager.isAdminActive(adminComponent)) {
+                if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
+                mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
+
                 devicePolicyManager.lockNow();
             }
         }
