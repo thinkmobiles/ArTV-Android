@@ -69,7 +69,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mStateWorker.removeStateChangeListener(this);
     }
 
-    //todo: use it when recreate after sleep (with no fragment)?
     private final boolean hasFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM) != null;
     }
@@ -108,7 +107,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM);
         if (fragment == null) return;
         getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-//        getSupportFragmentManager().executePendingTransactions();
     }
 
     private void getAdminStatusAndHandleAppState() {
