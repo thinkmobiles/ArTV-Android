@@ -2,7 +2,6 @@ package com.artv.android.app.playback;
 
 import android.content.Context;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.artv.android.core.Constants;
@@ -89,12 +88,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         mPlayModeManager.setDayConverter(new DayConverter());
         mCampaigns = mDbWorker.getAllCampaigns();
         //------------------------------------
-        mCampaigns.get(0).startDate = "2015-01-09";
-        mCampaigns.get(1).startDate = "2015-01-09";
-        mCampaigns.get(2).startDate = "2015-01-09";
-        mCampaigns.get(0).endDate = "2015-01-10";
-        mCampaigns.get(1).endDate = "2015-01-10";
-        mCampaigns.get(2).endDate = "2015-01-10";
         mCampaigns.get(0).overrideTime = "";
         mCampaigns.get(1).overrideTime = "";
         //------------------------------------
@@ -118,13 +111,20 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private List<Campaign> getCampaignsWithOutOwerrideTime(final List<Campaign> _campaigns) {
-        final List<Campaign> campaignsWithOutOwerrideTime = new ArrayList<>(_campaigns);
-        for (Campaign campaign : campaignsWithOutOwerrideTime) {
-            if (TextUtils.isEmpty(campaign.overrideTime)) {
-                campaignsWithOutOwerrideTime.remove(campaign);
+        final List<Campaign> campaignsToRemove = new ArrayList<>();
+
+        final ArrayList<Campaign> campaignsWithoutOverrideTime = new ArrayList<>(_campaigns);
+        for (final Campaign campaign : campaignsWithoutOverrideTime) {
+            if (!campaign.hasOverrideTime()) {
+                campaignsToRemove.add(campaign);
             }
         }
-        return campaignsWithOutOwerrideTime;
+
+        for (final Campaign campaign : campaignsToRemove) {
+            campaignsWithoutOverrideTime.remove(campaign);
+        }
+
+        return campaignsWithoutOverrideTime;
     }
 
     private void turnOff() {

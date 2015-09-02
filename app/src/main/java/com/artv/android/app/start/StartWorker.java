@@ -2,16 +2,22 @@ package com.artv.android.app.start;
 
 import com.artv.android.ArTvResult;
 import com.artv.android.core.beacon.BeaconWorker;
+import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
+import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.campaign.ICampaignDownloadListener;
 import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.log.ArTvLogger;
+import com.artv.android.core.model.Campaign;
+import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
 import com.artv.android.database.DbWorker;
 import com.artv.android.system.fragments.splash.ISplashFragmentListener;
+
+import java.util.List;
 
 /**
  * Created by ZOG on 8/10/2015.
@@ -92,8 +98,8 @@ public class StartWorker {
 
             case STATE_APP_START_WITH_CONFIG_INFO:
                 ArTvLogger.printDivider();
-                ArTvLogger.printMessage("Has campaigns to play");
-                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                ArTvLogger.printMessage("Check for new/updated campaigns and messages");
+                doBeacon();
                 break;
         }
     }
@@ -119,9 +125,55 @@ public class StartWorker {
         });
     }
 
+    private final void doBeacon() {
+        mBeaconWorker.doBeacon(beaconCallback);
+    }
+
+    private final ICampaignCallback beaconCallback = new ICampaignCallback() {
+        @Override
+        public final void onFinished(final CampaignResult _result) {
+            if (_result.getSuccess()) {
+                processMsgBoardCampaign(_result.getMsgBoardCampaign());
+                processCampaigns(_result.getCampaigns());
+            } else {
+                ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
+            }
+        }
+    };
+
+    private final void processMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
+        ArTvLogger.printMessage("Messages assigned: " + (_msgBoardCampaign == null ? "No" : "Yes"));
+        mDbWorker.write(_msgBoardCampaign);
+    }
+
+    private final void processCampaigns(final List<Campaign> _campaigns) {
+        ArTvLogger.printMessage("Need update campaigns: " + (_campaigns.isEmpty() ? "No" : "Yes"));
+        if (_campaigns.isEmpty()) {
+            mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+        } else {
+            mCampaignWorker.loadCampaigns(_campaigns, updateLoadListener);
+        }
+    }
+
+    private final ICampaignDownloadListener updateLoadListener = new ICampaignDownloadListener() {
+        @Override
+        public final void onCampaignDownloadFinished(final ArTvResult _result) {
+            if (_result.getSuccess()) {
+                ArTvLogger.printMessage("Campaigns updated successfully");
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+            } else {
+                ArTvLogger.printMessage("Error updating campaigns");
+            }
+        }
+
+        @Override
+        public final void onPercentLoaded(final double _percent) {
+            mSplashFragmentListener.onPercentLoaded(_percent);
+        }
+    };
+
     public final void cancel() {
         ArTvLogger.printMessage("Cancel downloading campaign...");
-        ArTvLogger.printDivider();
         mCampaignWorker.cancelLoading();
     }
 

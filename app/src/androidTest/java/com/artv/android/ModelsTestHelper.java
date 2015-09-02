@@ -1,4 +1,4 @@
-package com.artv.android.database;
+package com.artv.android;
 
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -10,9 +10,9 @@ import java.util.ArrayList;
 /**
  * Created by ZOG on 8/18/2015.
  */
-abstract class DbTestHelper {
+public abstract class ModelsTestHelper {
 
-    protected static final Asset buildAsset1() {
+    public static final Asset buildAsset1() {
         final Asset asset1 = new Asset();
         asset1.name = null;
         asset1.url = null;
@@ -21,7 +21,7 @@ abstract class DbTestHelper {
         return asset1;
     }
 
-    protected static final Asset buildAsset2() {
+    public static final Asset buildAsset2() {
         final Asset asset2 = new Asset();
         asset2.name = "asset2";
         asset2.url = "asset2/asset2";
@@ -30,7 +30,7 @@ abstract class DbTestHelper {
         return asset2;
     }
 
-    protected static final Asset buildAsset3() {
+    public static final Asset buildAsset3() {
         final Asset asset3 = new Asset();
         asset3.name = "asset3";
         asset3.url = "asset3/asset3";
@@ -39,7 +39,7 @@ abstract class DbTestHelper {
         return asset3;
     }
 
-    protected static final Campaign buildCampaign1() {
+    public static final Campaign buildCampaign1() {
         final Campaign campaign1 = new Campaign();
         campaign1.campaignId = 1;
         campaign1.crcVersion = "1";
@@ -52,7 +52,7 @@ abstract class DbTestHelper {
         return campaign1;
     }
 
-    protected static final Campaign buildCampaign2() {
+    public static final Campaign buildCampaign2() {
         final Campaign campaign2 = new Campaign();
         campaign2.campaignId = 2;
         campaign2.crcVersion = "2";
@@ -65,7 +65,7 @@ abstract class DbTestHelper {
         return campaign2;
     }
 
-    protected static final Campaign buildCampaign3() {
+    public static final Campaign buildCampaign3() {
         final Campaign campaign3 = new Campaign();
         campaign3.campaignId = 3;
         campaign3.crcVersion = "3";
@@ -78,7 +78,7 @@ abstract class DbTestHelper {
         return campaign3;
     }
 
-    protected static final MsgBoardCampaign buildMsgBoardCampaign1() {
+    public static final MsgBoardCampaign buildMsgBoardCampaign1() {
         final MsgBoardCampaign msg = new MsgBoardCampaign();
         msg.msgBoardId = 1;
         msg.crcVersion = "1";
@@ -92,7 +92,7 @@ abstract class DbTestHelper {
         return msg;
     }
 
-    protected static final MsgBoardCampaign buildMsgBoardCampaign2() {
+    public static final MsgBoardCampaign buildMsgBoardCampaign2() {
         final MsgBoardCampaign msg = new MsgBoardCampaign();
         msg.msgBoardId = 2;
         msg.crcVersion = "2";
@@ -106,7 +106,7 @@ abstract class DbTestHelper {
         return msg;
     }
 
-    protected static final Message buildMessage(final int _seed) {
+    public static final Message buildMessage(final int _seed) {
         final Message message = new Message();
         message.position = _seed + "";
         message.sequence = _seed;

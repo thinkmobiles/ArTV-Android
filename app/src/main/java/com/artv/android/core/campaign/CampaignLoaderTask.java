@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +43,11 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
 
     public final void setCampaignDownloadListener(final ICampaignDownloadListener _listener) {
         mCampaignDownloadListener = _listener;
+    }
+
+    @Override
+    protected final void onPreExecute() {
+        CampaignHelper.removeInvalidItems(mCampaigns);
     }
 
     @Override

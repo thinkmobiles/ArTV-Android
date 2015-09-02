@@ -14,9 +14,9 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import static com.artv.android.database.DbTestHelper.buildAsset1;
-import static com.artv.android.database.DbTestHelper.buildAsset2;
-import static com.artv.android.database.DbTestHelper.buildAsset3;
+import static com.artv.android.ModelsTestHelper.buildAsset1;
+import static com.artv.android.ModelsTestHelper.buildAsset2;
+import static com.artv.android.ModelsTestHelper.buildAsset3;
 
 /**
  * Created by ZOG on 8/17/2015.

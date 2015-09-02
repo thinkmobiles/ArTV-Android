@@ -22,6 +22,11 @@ public final class Asset {
     @Element(name = "Sequence", required = false)
     public Integer sequence;
 
+    public final boolean isValid() {
+        return name != null && !name.isEmpty() &&
+                url != null && !url.isEmpty();
+    }
+
     public final int getAssetId() {
         return Math.abs(hashCode());
     }
@@ -48,5 +53,10 @@ public final class Asset {
         result = 31 * result + (duration != null ? duration.hashCode() : 0);
         result = 31 * result + (sequence != null ? sequence.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public final String toString() {
+        return "name: " + name + ", url: " + url;
     }
 }
