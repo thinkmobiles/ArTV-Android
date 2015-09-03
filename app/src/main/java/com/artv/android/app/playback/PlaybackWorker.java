@@ -155,15 +155,18 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         if (!mAssetStack.isEmpty()) {
             Asset asset = mAssetStack.pop();
             mCurrentAssetPlayingId = asset.getAssetId();
+
             if (isVideoFormat(asset.url)) {
                 mPlaybackController.playLocalVideo(Constants.PATH + asset.url);
-                Log.v("video", "Playing video" + asset.name + ", sequence: " + asset.sequence + ", url: <" + asset.url + ">");
+                ArTvLogger.printMessage("Playing video " + asset.name + ", " + "path: " + asset.url);
+
             } else if (isPictureFormat(asset.url)) {
                 playPicture(asset);
-                Log.v("video", "Playing picture" + asset.name + ", sequence: " + asset.sequence + ", url: <" + asset.url + ">");
+                ArTvLogger.printMessage("Playing picture " + asset.name + ", " + "path: " + asset.url);
+
             } else if (UrlHelper.isYoutubeUrl(asset.url)) {
                 mPlaybackController.playYoutubeLink(asset.url);
-                Log.v("video", "Playing youtube" + asset.name + ", sequence: " + asset.sequence + ", url: <" + asset.url + ">");
+                ArTvLogger.printMessage("Playing youtube " + asset.name + ", " + "url: " + asset.url);
             }
         } else {
             checkCampaigns(mPlayModeManager, mCampaigns);
