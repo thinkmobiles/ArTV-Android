@@ -98,13 +98,12 @@ public final class BeaconScheduler {
         @Override
         public final void onFinished(final CampaignResult _result) {
             if (!_result.getSuccess()) {
-                ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
                 startWithDelay(TimeUnit.SECONDS.toMillis(Constants.TIME_API_RECALL));
                 return;
             }
 
-            ArTvLogger.printMessage("Campaigns to update: " + _result.getCampaigns().size());
-            ArTvLogger.printMessage("MsgBoard to update: " + (_result.getMsgBoardCampaign() != null));
+            ArTvLogger.printMessage("Need update campaigns: " + (_result.getCampaigns().isEmpty() ? "No" : "Yes"));
+            ArTvLogger.printMessage("Messages assigned: " + (_result.getMsgBoardCampaign() == null ? "No" : "Yes"));
 
             processMsgBoardCampaign(_result.getMsgBoardCampaign());
 

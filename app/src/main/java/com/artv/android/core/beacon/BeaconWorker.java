@@ -68,7 +68,7 @@ public class BeaconWorker implements IConfigInfoListener {
                 final CampaignResult.Builder builder = new CampaignResult.Builder();
 
                 if (_respObj.errorNumber == 0) {
-                    ArTvLogger.printMessage(_respObj.apiType + " : success");
+                    ArTvLogger.printMessage(_respObj.apiType + ": OK");
                     builder.setSuccess(true).setCampaigns(_respObj.getCampaigns()).setMsgBoardCampaign(_respObj.getMsgBoardCampaign());
                 } else {
                     ArTvLogger.printMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);

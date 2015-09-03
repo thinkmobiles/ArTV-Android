@@ -3,6 +3,7 @@ package com.artv.android.system.fragments.playback;
 import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,10 @@ import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.display.TurnOffWorker;
+import com.artv.android.core.log.ArTvLogger;
+import com.artv.android.core.log.ILogger;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -31,7 +35,7 @@ import java.io.FileNotFoundException;
 /**
  * Created by Misha on 6/30/2015.
  */
-public final class PlaybackFragment extends BaseFragment implements IPlaybackController, IMessageController {
+public final class PlaybackFragment extends BaseFragment implements IPlaybackController, IMessageController, ILogger {
 
     private RelativeLayout rlPlayContainer;
     private RelativeLayout rlVideo;
@@ -44,12 +48,15 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private RelativeLayout rlBottomContainer;
     private TextView tvRightText;
     private TextView tvBottomText;
+    private TextView tvLog;
 
     private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
     private MessageWorker mMessageWorker;
     private BeaconScheduler mBeaconScheduler;
     private TurnOffWorker mTurnOffWorker;
+
+    private ConfigInfo mConfigInfo;
 
     private YoutubeVideoFragment mFragment;
 
@@ -67,6 +74,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
         mBeaconScheduler = getApplicationLogic().getBeaconScheduler();
         mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
+
+        mConfigInfo = getApplicationLogic().getConfigInfoWorker().getConfigInfo();
     }
 
     @Override
@@ -74,6 +83,7 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         final View view = _inflater.inflate(R.layout.fragment_playback, _container, false);
 
         findViews(view);
+        prepareViews();
         prepareVideoViews();
 
         return view;
@@ -91,6 +101,12 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         rlBottomContainer = (RelativeLayout) _view.findViewById(R.id.rlBottomContainer_FP);
         tvRightText = (TextView) _view.findViewById(R.id.tvRightText_FP);
         tvBottomText = (TextView) _view.findViewById(R.id.tvBottomText_FP);
+        tvLog = (TextView) _view.findViewById(R.id.tvLog_FP);
+    }
+
+    private final void prepareViews() {
+        tvLog.setVisibility(mConfigInfo.getShowDebugInfo() ? View.VISIBLE : View.GONE);
+        tvLog.setMovementMethod(new ScrollingMovementMethod());
     }
 
     private final void prepareVideoViews() {
@@ -133,8 +149,15 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     }
 
     @Override
+    public final void onStart() {
+        super.onStart();
+        ArTvLogger.addLogger(this);
+    }
+
+    @Override
     public final void onStop() {
         super.onStop();
+        ArTvLogger.removeLogger(this);
         mPlaybackWorker.stopPlayback();
         mMessageWorker.stopMessages();
         mBeaconScheduler.stopSchedule();
@@ -243,5 +266,15 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     @Override
     public final void showBottomMessage(final String _message) {
         tvBottomText.setText(_message);
+    }
+
+    @Override
+    public final void printMessage(final String _message) {
+        printMessage(true, _message);
+    }
+
+    @Override
+    public final void printMessage(boolean _fromNewLine, String _message) {
+        tvLog.append((_fromNewLine ? "\n " : "") + _message);
     }
 }
