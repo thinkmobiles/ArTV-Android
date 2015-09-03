@@ -45,8 +45,6 @@
             </intent-filter>
         </receiver>
 
-        <!--<service android:name=".core.display.WakeLockService" />-->
-
     </application>
 
 </manifest>
