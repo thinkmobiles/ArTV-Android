@@ -22,4 +22,6 @@ public interface DbWorker {
 
     long write(final MsgBoardCampaign _msgBoardCampaign);
     MsgBoardCampaign getMsgBoardCampaign();
+
+    void drop();
 }

@@ -293,6 +293,11 @@ public final class DbManager implements DbWorker {
         }
     }
 
+    @Override
+    public final void drop() {
+        dropDatabase();
+    }
+
     protected final List<Message> getAllMessages() {
         try {
             openReadableDb();

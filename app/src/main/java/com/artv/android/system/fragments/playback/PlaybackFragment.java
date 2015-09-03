@@ -5,6 +5,9 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +27,7 @@ import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.log.ILogger;
+import com.artv.android.database.DbWorker;
 import com.artv.android.system.fragments.BaseFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
@@ -58,11 +62,15 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     private ConfigInfo mConfigInfo;
 
+    private DbWorker mDbWorker;
+
     private YoutubeVideoFragment mFragment;
 
     @Override
     public final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
+
+        setHasOptionsMenu(true);
 
         mPlaybackWorker = getApplicationLogic().getPlaybackWorker();
         mPlaybackWorker.setPlaybackController(this);
@@ -76,6 +84,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
 
         mConfigInfo = getApplicationLogic().getConfigInfoWorker().getConfigInfo();
+
+        mDbWorker = getApplicationLogic().getDbWorker();
     }
 
     @Override
@@ -161,6 +171,32 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         mPlaybackWorker.stopPlayback();
         mMessageWorker.stopMessages();
         mBeaconScheduler.stopSchedule();
+    }
+
+    @Override
+    public final void onCreateOptionsMenu(final Menu _menu, final MenuInflater _inflater) {
+        _inflater.inflate(R.menu.menu_main, _menu);
+    }
+
+    @Override
+    public final boolean onOptionsItemSelected(final MenuItem _item) {
+        switch (_item.getItemId()) {
+            case R.id.stopAllAndClearDb_MM:
+                onClickStopAllAndClearDb();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(_item);
+    }
+
+    private final void onClickStopAllAndClearDb() {
+        ArTvLogger.removeLogger(this);
+        mPlaybackWorker.stopPlayback();
+        mMessageWorker.stopMessages();
+        mBeaconScheduler.stopSchedule();
+        mTurnOffWorker.cancel();
+        mDbWorker.drop();
+        getActivity().finish();
     }
 
     //region playing assets
