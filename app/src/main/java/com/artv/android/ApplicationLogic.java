@@ -114,7 +114,6 @@ public final class ApplicationLogic {
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
         mStartWorker.setTurnOffWorker(mTurnOffWorker);
-        mDeviceAdministrator.setInitWorker(mInitWorker);
         mDeviceAdministrator.setStateWorker(mStateWorker);
     }
 

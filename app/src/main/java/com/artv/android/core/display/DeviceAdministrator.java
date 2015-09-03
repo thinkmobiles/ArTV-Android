@@ -21,7 +21,6 @@ public final class DeviceAdministrator {
     private static final int REQUEST_ENABLE = 0;
     private DevicePolicyManager devicePolicyManager;
     private ComponentName adminComponent;
-    private InitWorker mInitWorker;
     private IMainActivitySleepController mMainActivitySleepController;
     private StateWorker mStateWorker;
     private Context mContext;
@@ -37,10 +36,6 @@ public final class DeviceAdministrator {
 
     public void setStateWorker(final StateWorker _worker) {
         mStateWorker = _worker;
-    }
-
-    public void setInitWorker(final InitWorker _initWorker) {
-        mInitWorker = _initWorker;
     }
 
     public void initAdmin(final Activity _activity) {

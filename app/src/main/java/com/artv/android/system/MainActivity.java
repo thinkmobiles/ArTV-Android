@@ -91,7 +91,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
-                getApplicationLogic().getTurnOffWorker().turnOff();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
                 break;
         }

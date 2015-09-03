@@ -13,13 +13,10 @@ import com.artv.android.system.ArTvApplication;
  */
 public class AlarmTurnOffReceiver extends BroadcastReceiver {
 
-    private ArTvApplication application;
-    private DeviceAdministrator mDeviceAdministrator;
-
     @Override
     public void onReceive(Context arg0, Intent arg1) {
-        application = (ArTvApplication) arg0.getApplicationContext();
-        mDeviceAdministrator = application.getApplicationLogic().getDeviceAdministrator();
+        ArTvApplication application = (ArTvApplication) arg0.getApplicationContext();
+        DeviceAdministrator mDeviceAdministrator = application.getApplicationLogic().getDeviceAdministrator();
         Log.v("wake", "off");
         Log.v("onAlarmOff", String.valueOf(arg1.getLongExtra("on", 0)));
         if (arg1.getLongExtra("on", 0) > 0) {
