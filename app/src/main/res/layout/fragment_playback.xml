@@ -40,8 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/rlBottomContainer_FP"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
+        android:layout_above="@+id/tvLog_FP">
 
         <ImageView
             android:layout_width="match_parent"
@@ -64,8 +63,7 @@
         android:layout_height="match_parent"
         android:id="@+id/rlRightContainer_FP"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/rlBottomContainer_FP"
-        android:visibility="gone">
+        android:layout_above="@+id/rlBottomContainer_FP">
 
         <ImageView
             android:layout_width="match_parent"
@@ -83,5 +81,12 @@
             android:layout_centerInParent="true" />
 
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/tvLog_FP"
+        android:layout_alignParentBottom="true"
+        style="@style/TextLog" />
 
 </RelativeLayout>

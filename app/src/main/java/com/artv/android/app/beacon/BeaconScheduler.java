@@ -98,7 +98,6 @@ public final class BeaconScheduler {
         @Override
         public final void onFinished(final CampaignResult _result) {
             if (!_result.getSuccess()) {
-                ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
                 startWithDelay(TimeUnit.SECONDS.toMillis(Constants.TIME_API_RECALL));
                 return;
             }
