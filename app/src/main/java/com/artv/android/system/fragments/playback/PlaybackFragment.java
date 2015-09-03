@@ -170,7 +170,6 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         ArTvLogger.removeLogger(this);
         mPlaybackWorker.stopPlayback();
         mMessageWorker.stopMessages();
-        mBeaconScheduler.stopSchedule();
     }
 
     @Override
