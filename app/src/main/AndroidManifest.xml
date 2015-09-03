@@ -28,12 +28,10 @@
             android:value="c780c398ef112570ef7e76b9ccdd38ed942e3e92" />
 
         <receiver
-            android:name=".core.display.AlarmTurnOnReceiver"
-            android:process=":remote" />
+            android:name=".core.display.AlarmTurnOnReceiver"/>
 
         <receiver
-            android:name=".core.display.AlarmTurnOffReceiver"
-            android:process=":remote" />
+            android:name=".core.display.AlarmTurnOffReceiver"/>
 
         <receiver
             android:name=".core.display.Darclass"
