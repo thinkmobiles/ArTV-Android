@@ -38,6 +38,8 @@ public final class TurnOffWorker {
         ArTvLogger.printMessage(String.format("Off time %s, on time %s",
                 mDeviceConfig.turnOffDisp, mDeviceConfig.turnOnDisp));
 
+        if (!mDeviceConfig.hasTurnOnOffTime()) return;
+
         long timeOffInMills = getTurnTimeInMills(mDeviceConfig.turnOffDisp);
         long timeOnInMills = getTurnTimeInMills(mDeviceConfig.turnOnDisp);
         startAlarmToTurnOffDevice(timeOffInMills, timeOnInMills);

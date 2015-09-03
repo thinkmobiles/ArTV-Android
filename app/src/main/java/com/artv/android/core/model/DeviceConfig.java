@@ -1,7 +1,10 @@
 package com.artv.android.core.model;
 
+import android.text.TextUtils;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import org.w3c.dom.Text;
 
 /**
  * Created by ZOG on 7/8/2015.
@@ -39,5 +42,9 @@ public final class DeviceConfig {
 
     @Element(name = "DevGroup", required = false)
     public int devGroup;
+
+    public final boolean hasTurnOnOffTime() {
+        return !TextUtils.isEmpty(turnOnDisp) && !TextUtils.isEmpty(turnOffDisp);
+    }
 
 }
