@@ -63,6 +63,7 @@ public final class ApplicationLogic {
         mTvStatus = new TvStatus();
         mDeviceAdministrator = new DeviceAdministrator(mContext);
         mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
+        mDeviceAdministrator.setTurnOffWorker(mTurnOffWorker);
 
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setContext(mContext);

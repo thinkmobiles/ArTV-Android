@@ -5,12 +5,8 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
-import com.artv.android.system.BaseActivity;
 import com.artv.android.system.IMainActivitySleepController;
 
 /**
@@ -24,6 +20,7 @@ public final class DeviceAdministrator {
     private IMainActivitySleepController mMainActivitySleepController;
     private StateWorker mStateWorker;
     private Context mContext;
+    private TurnOffWorker mTurnOffWorker;
 
     public DeviceAdministrator (final Context _context) {
         mContext = _context;
@@ -38,6 +35,10 @@ public final class DeviceAdministrator {
         mStateWorker = _worker;
     }
 
+    public void setTurnOffWorker(final TurnOffWorker _turnOffWorker) {
+        this.mTurnOffWorker = _turnOffWorker;
+    }
+
     public void initAdmin(final Activity _activity) {
             Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
             intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
@@ -49,24 +50,10 @@ public final class DeviceAdministrator {
     }
 
     public void lockScreen(final long _timeTurnOn) {
-            if (devicePolicyManager.isAdminActive(adminComponent)) {
                 if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
                 mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
-                Intent i = new Intent(mContext, WakeLockService.class);
-                i.putExtra("turn_on", _timeTurnOn);
-                Log.v("onnnnnnnn", String.valueOf(_timeTurnOn));
-                mContext.startService(i);
+                mTurnOffWorker.turnOn(_timeTurnOn);
                 devicePolicyManager.lockNow();
-            }
-    }
-
-    public void lockScreen() {
-            if (devicePolicyManager.isAdminActive(adminComponent)) {
-                if (mMainActivitySleepController != null) mMainActivitySleepController.prepareToSleep();
-                mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
-
-                devicePolicyManager.lockNow();
-            }
     }
 
     private void initObjects(final Context _context) {
