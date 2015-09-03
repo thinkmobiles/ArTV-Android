@@ -45,6 +45,13 @@ public final class TurnOffWorker {
         startAlarmToTurnOffDevice(timeOffInMills, timeOnInMills);
     }
 
+    public void turnOff(final long _timeOffInMills, final long _timeOnInMills) {
+        ArTvLogger.printMessage("Turn on/off logic activated");
+        ArTvLogger.printMessage(String.format("Off time %s, on time %s",
+                mDeviceConfig.turnOffDisp, mDeviceConfig.turnOnDisp));
+        startAlarmToTurnOffDevice(_timeOffInMills, _timeOnInMills);
+    }
+
     public void turnOn(final long _onTime) {
         startAlarmToTurnOnDevice(_onTime);
     }
@@ -70,7 +77,7 @@ public final class TurnOffWorker {
         return calNow.getTimeInMillis();
     }
 
-    private long getTurnTimeInMills(final String _timeToTurnOff) {
+    public long getTurnTimeInMills(final String _timeToTurnOff) {
         if (mPlayModeManager != null) {
             return getCurrentDayInMills() + mPlayModeManager.getTimeInMills(mPlayModeManager.getTimeFromString(_timeToTurnOff));
         } else
@@ -79,7 +86,6 @@ public final class TurnOffWorker {
 
     private void startAlarmToTurnOnDevice(final long _timeTurnOn) {
         Calendar calendar = Calendar.getInstance();
-        calendar.getTimeInMillis();
         long timeOn = _timeTurnOn - calendar.getTimeInMillis();
         if (timeOn < 0) {
             timeOn = _timeTurnOn + (24 * 3600 * 1000) - calendar.getTimeInMillis();
@@ -96,7 +102,6 @@ public final class TurnOffWorker {
 
     private void startAlarmToTurnOffDevice(final long _timeTurnOff, final long _timeTurnOn) {
         Calendar calendar = Calendar.getInstance();
-        calendar.getTimeInMillis();
         long timeOff = _timeTurnOff - calendar.getTimeInMillis();
         if (timeOff < 0) {
             timeOff = _timeTurnOff + (24 * 3600 * 1000) - calendar.getTimeInMillis();

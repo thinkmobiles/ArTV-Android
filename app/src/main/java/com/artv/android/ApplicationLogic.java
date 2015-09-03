@@ -62,12 +62,14 @@ public final class ApplicationLogic {
         mPlayModeManager = new PlayModeManager();
         mTvStatus = new TvStatus();
         mDeviceAdministrator = new DeviceAdministrator(mContext);
+        mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
 
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setContext(mContext);
         mPlaybackWorker.setDbWorker(mDbWorker);
         mPlaybackWorker.setPlayModeManager(mPlayModeManager);
         mPlaybackWorker.setTvStatus(mTvStatus);
+        mPlaybackWorker.setTurnOffWorker(mTurnOffWorker);
 
         mMessageWorker = new MessageWorker();
         mMessageWorker.setDbWorker(mDbWorker);
@@ -104,8 +106,6 @@ public final class ApplicationLogic {
         mConfigInfoWorker.addConfigInfoListener(mInitWorker);
 
         mInitWorker.setApiWorker(mApiWorker);
-
-        mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
 
         mStartWorker = new StartWorker();
         mStartWorker.setInitWorker(mInitWorker);
