@@ -212,9 +212,21 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         setImageVisibility(true);
         setVideoVisibility(false);
 
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 8;
+        int scale = 8;
         try {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(_path), null, options);
+            final Size imgSize = new Size(options.outWidth, options.outHeight);
+            final Size containerSize = new Size(rlPlayContainer.getWidth(), rlPlayContainer.getHeight());
+            scale = PictureHelper.getScale(containerSize, imgSize);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = scale;
             ivImage.setImageBitmap(BitmapFactory.decodeStream(new FileInputStream(_path), null, options));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
