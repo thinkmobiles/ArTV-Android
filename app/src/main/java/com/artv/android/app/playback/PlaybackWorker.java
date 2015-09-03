@@ -9,6 +9,7 @@ import com.artv.android.core.UrlHelper;
 import com.artv.android.core.date.DayConverter;
 import com.artv.android.core.display.AlarmAlertWakeLock;
 import com.artv.android.core.display.DeviceAdministrator;
+import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.display.TvStatus;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
@@ -42,6 +43,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private Runnable mRunnableThread;
     private DeviceAdministrator mDeviceAdministrator;
     private Handler mHandler = new Handler();
+    private TurnOffWorker mTurnOffWorker;
 
     public final void setPlaybackController(final IPlaybackController _controller) {
         mPlaybackController = _controller;
@@ -83,6 +85,10 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         this.mDeviceAdministrator = _deviceAdministrator;
     }
 
+    public void setTurnOffWorker(TurnOffWorker mTurnOffWorker) {
+        this.mTurnOffWorker = mTurnOffWorker;
+    }
+
     public final void startPlayback() {
         ArTvLogger.printMessage("Started playback");
         mCampaigns = mDbWorker.getAllCampaigns();
@@ -94,16 +100,25 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private void checkCampaigns(final PlayModeManager _playModeManager, final List<Campaign> _campaigns) {
         final List<Campaign> campaignsPlayToday = _playModeManager.campainsToPlayToday(_campaigns);
         if (getCampaignsWithOutOwerrideTime(campaignsPlayToday).isEmpty()) {
-            hasPlayCampaignInCurrentTime(campaignsPlayToday, _playModeManager);
-            turnOff();
+            turnOff(_playModeManager, campaignsPlayToday);
         } else {
             prepareStackToPlay(_playModeManager, campaignsPlayToday);
             play();
         }
     }
 
+    private void turnOff(final PlayModeManager _playModeManager, final List<Campaign> _campaignsPlayToday) {
+        Campaign campaign = hasCampaignWithOverrideTime(_campaignsPlayToday, _playModeManager);
+        if (campaign != null) {
+            mDeviceAdministrator.lockScreen(mTurnOffWorker.getTurnTimeInMills(campaign.overrideTime));
+        }
+    }
+
     private void prepareStackToPlay(final PlayModeManager _playModeManager, final List<Campaign> _campaignsPlayToday) {
-        hasPlayCampaignInCurrentTime(_campaignsPlayToday, _playModeManager);
+        Campaign campaign = hasCampaignWithOverrideTime(_campaignsPlayToday, _playModeManager);
+        if (campaign != null) {
+            startCheckTimeDelay(campaign, timeToPlayOverrideCampaign(campaign, _playModeManager));
+        }
         mAssetStack = getStackAssetsAllCampaigns(getCampaignsWithOutOwerrideTime(_campaignsPlayToday));
     }
 
@@ -124,17 +139,12 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         return campaignsWithoutOverrideTime;
     }
 
-    private void turnOff() {
-        setTvStatusOff(true);
-        mDeviceAdministrator.lockScreen();
-    }
-
     public final void stopPlayback() {
         mCurrentCampaignId = 0;
         mCurrentAssetPlayingId = 0;
-//        if (mHandlerPostPlay != null && mRunnableThread != null) {
-//            mHandlerPostPlay.removeCallbacks(mRunnableThread);
-//        }
+        if (mHandlerPostPlay != null && mRunnableThread != null) {
+            mHandlerPostPlay.removeCallbacks(mRunnableThread);
+        }
         if (mHandler != null) {
             mHandler.removeCallbacks(mRunnable);
         }
@@ -204,7 +214,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         playNextAsset(_asset);
     }
 
-    private void hasPlayCampaignInCurrentTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
+    private Campaign hasCampaignWithOverrideTime(final List<Campaign> _campaigns, final PlayModeManager _playModeManager) {
         Date owerrideTime;
         Date currentTime = _playModeManager.getCurrentDate();
         long currentTimeInMills = _playModeManager.getTimeInMills(currentTime);
@@ -215,10 +225,19 @@ public final class PlaybackWorker implements IVideoCompletionListener {
                 owerrideTime = _playModeManager.getTimeFromString(campaign.overrideTime);
                 owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
                 if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
-                    startCheckTimeDelay(campaign, owerrideTimeInMills - currentTimeInMills);
+                    return campaign;
                 }
             }
         }
+        return null;
+    }
+
+    private long timeToPlayOverrideCampaign(final Campaign _campaign, final PlayModeManager _playModeManager) {
+        Date owerrideTime = _playModeManager.getTimeFromString(_campaign.overrideTime);
+        Date currentTime = _playModeManager.getCurrentDate();
+        long currentTimeInMills = _playModeManager.getTimeInMills(currentTime);
+        long owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
+        return owerrideTimeInMills - currentTimeInMills;
     }
 
     public void startCheckTimeDelay(final Campaign _campaign, final long _timeDelay) {
