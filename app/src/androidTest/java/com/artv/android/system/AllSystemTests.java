@@ -1,5 +1,8 @@
 package com.artv.android.system;
 
+import com.artv.android.system.fragments.playback.PictureTest;
+import com.artv.android.system.play.AssetsStackTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -8,6 +11,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
+        PictureTest.class,
         MainActivityTest.class,
         SpHelperTest.class
 })
