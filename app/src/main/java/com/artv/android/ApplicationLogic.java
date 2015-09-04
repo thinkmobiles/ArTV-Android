@@ -14,7 +14,6 @@ import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.date.DateWorker;
 import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.display.TurnOffWorker;
-import com.artv.android.core.display.TvStatus;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.state.ArTvState;
 import com.artv.android.core.state.StateWorker;
@@ -40,14 +39,13 @@ public final class ApplicationLogic {
     private DbWorker mDbWorker;
     private DateWorker mDateWorker;
     private PlayModeManager mPlayModeManager;
+    private DeviceAdministrator mDeviceAdministrator;
 
     private TurnOffWorker mTurnOffWorker;
     private StartWorker mStartWorker;
     private PlaybackWorker mPlaybackWorker;
     private MessageWorker mMessageWorker;
     private BeaconScheduler mBeaconScheduler;
-    private TvStatus mTvStatus;
-    private DeviceAdministrator mDeviceAdministrator;
 
     public ApplicationLogic(final Context _context) {
         mContext = _context;
@@ -60,7 +58,6 @@ public final class ApplicationLogic {
 
         mDbWorker = DbManager.getInstance(mContext);
         mPlayModeManager = new PlayModeManager();
-        mTvStatus = new TvStatus();
         mDeviceAdministrator = new DeviceAdministrator(mContext);
         mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
         mDeviceAdministrator.setTurnOffWorker(mTurnOffWorker);
@@ -69,7 +66,6 @@ public final class ApplicationLogic {
         mPlaybackWorker.setContext(mContext);
         mPlaybackWorker.setDbWorker(mDbWorker);
         mPlaybackWorker.setPlayModeManager(mPlayModeManager);
-        mPlaybackWorker.setTvStatus(mTvStatus);
         mPlaybackWorker.setTurnOffWorker(mTurnOffWorker);
 
         mMessageWorker = new MessageWorker();
@@ -175,6 +171,7 @@ public final class ApplicationLogic {
         } else {
             mStateWorker.setState(ArTvState.STATE_APP_START_WITH_CONFIG_INFO);
         }
+        mStateWorker.notifyStateChangeListeners();
     }
 
 }

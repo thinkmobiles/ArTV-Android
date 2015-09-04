@@ -113,6 +113,7 @@ public class StartWorker {
                 if (_result.getSuccess()) {
                     ArTvLogger.printMessage("Initial campaign download success");
                     mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                    mStateWorker.notifyStateChangeListeners();
                 } else {
                     ArTvLogger.printMessage("Initial campaign download failed, reason: " + _result.getMessage());
                 }
@@ -138,6 +139,7 @@ public class StartWorker {
             } else {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
                 mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                mStateWorker.notifyStateChangeListeners();
             }
         }
     };
@@ -151,6 +153,7 @@ public class StartWorker {
         ArTvLogger.printMessage("Need update campaigns: " + (_campaigns.isEmpty() ? "No" : "Yes"));
         if (_campaigns.isEmpty()) {
             mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+            mStateWorker.notifyStateChangeListeners();
         } else {
             mCampaignWorker.loadCampaigns(_campaigns, updateLoadListener);
         }
@@ -162,6 +165,7 @@ public class StartWorker {
             if (_result.getSuccess()) {
                 ArTvLogger.printMessage("Campaigns updated successfully");
                 mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                mStateWorker.notifyStateChangeListeners();
             } else {
                 ArTvLogger.printMessage("Error updating campaigns");
             }

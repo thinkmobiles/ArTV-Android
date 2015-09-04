@@ -43,6 +43,7 @@ public final class TurnOffWorker {
 
         long timeOffInMills = getTurnTimeInMills(mDeviceConfig.turnOffDisp);
         long timeOnInMills = getTurnTimeInMills(mDeviceConfig.turnOnDisp);
+
         startAlarmToTurnOffDevice(timeOffInMills, timeOnInMills);
     }
 

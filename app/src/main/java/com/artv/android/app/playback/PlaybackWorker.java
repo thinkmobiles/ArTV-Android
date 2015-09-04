@@ -10,7 +10,6 @@ import com.artv.android.core.date.DayConverter;
 import com.artv.android.core.display.AlarmAlertWakeLock;
 import com.artv.android.core.display.DeviceAdministrator;
 import com.artv.android.core.display.TurnOffWorker;
-import com.artv.android.core.display.TvStatus;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
@@ -38,7 +37,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private Stack<Asset> mAssetStack;
     private int mCurrentCampaignId;
     private int mCurrentAssetPlayingId;
-    private TvStatus mTvStatus;
     private Handler mHandlerPostPlay = new Handler();
     private Runnable mRunnableThread;
     private DeviceAdministrator mDeviceAdministrator;
@@ -59,10 +57,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     public void setPlayModeManager(PlayModeManager mPlayModeManager) {
         this.mPlayModeManager = mPlayModeManager;
-    }
-
-    public void setTvStatus(TvStatus _tvStatus) {
-        this.mTvStatus = _tvStatus;
     }
 
     public final IVideoCompletionListener getVideoCompletionListener() {
@@ -252,7 +246,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
             @Override
             public void run() {
                 Log.d("runTest", "runTest");
-                mTvStatus.setTurnStatusOff(false);
                 AlarmAlertWakeLock.acquire(mContext);
                 mAssetStack = getStackAssets(assets);
                 mPlaybackController.stopPlaying();
@@ -306,10 +299,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
             return getStackAssets(assets);
         }
         return null;
-    }
-
-    private void setTvStatusOff(final boolean _off) {
-        mTvStatus.setTurnStatusOff(_off);
     }
 
 }

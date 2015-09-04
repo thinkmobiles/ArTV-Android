@@ -13,7 +13,7 @@ import com.artv.android.core.UrlHelper;
 import com.artv.android.core.api.ApiConst;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.ConfigInfoWorker;
-import com.artv.android.system.IMainActivityProceedListener;
+import com.artv.android.system.activities.main.IMainActivityProceedListener;
 
 /**
  * Created by Misha on 6/30/2015.

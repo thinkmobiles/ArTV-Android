@@ -2,7 +2,6 @@ package com.artv.android.core.campaign;
 
 import android.support.test.runner.AndroidJUnit4;
 
-import com.artv.android.ModelsTestHelper;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 
@@ -11,12 +10,15 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import static com.artv.android.ModelsTestHelper.*;
+import static com.artv.android.ModelsTestHelper.buildAsset1;
+import static com.artv.android.ModelsTestHelper.buildAsset2;
+import static com.artv.android.ModelsTestHelper.buildAsset3;
+import static com.artv.android.ModelsTestHelper.buildCampaign1;
+import static com.artv.android.ModelsTestHelper.buildCampaign2;
+import static com.artv.android.ModelsTestHelper.buildCampaign3;
 
 /**
  * Created by ZOG on 9/2/2015.

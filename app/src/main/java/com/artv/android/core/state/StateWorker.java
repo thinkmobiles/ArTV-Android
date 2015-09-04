@@ -28,7 +28,7 @@ public class StateWorker {
         return mStateChangeListeners.remove(_listener);
     }
 
-    private final void notifyStateChangeListeners() {
+    public final void notifyStateChangeListeners() {
         for (final IArTvStateChangeListener listener : mStateChangeListeners) {
             listener.onArTvStateChanged();
         }
@@ -36,7 +36,6 @@ public class StateWorker {
 
     public final void setState(final ArTvState _state) {
         mState = _state;
-        notifyStateChangeListeners();
     }
 
 }

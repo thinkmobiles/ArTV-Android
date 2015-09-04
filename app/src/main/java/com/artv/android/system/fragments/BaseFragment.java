@@ -3,7 +3,7 @@ package com.artv.android.system.fragments;
 import android.os.Bundle;
 
 import com.artv.android.ApplicationLogic;
-import com.artv.android.system.BaseActivity;
+import com.artv.android.system.activities.BaseActivity;
 
 /**
  * Created by ZOG on 7/7/2015.

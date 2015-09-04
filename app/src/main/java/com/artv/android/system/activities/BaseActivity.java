@@ -1,8 +1,9 @@
-package com.artv.android.system;
+package com.artv.android.system.activities;
 
 import android.support.v4.app.FragmentActivity;
 
 import com.artv.android.ApplicationLogic;
+import com.artv.android.system.ArTvApplication;
 
 /**
  * Created by ZOG on 7/7/2015.

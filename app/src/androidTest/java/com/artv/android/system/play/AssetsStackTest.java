@@ -14,7 +14,6 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import static com.artv.android.system.play.CampaignAssetHelper.buildAsset1;
 import static com.artv.android.system.play.CampaignAssetHelper.buildAsset2;

@@ -6,6 +6,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.artv.android.R;
 import com.artv.android.core.state.ArTvState;
+import com.artv.android.system.activities.main.MainActivity;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 
 import junit.framework.Assert;

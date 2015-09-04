@@ -1,4 +1,4 @@
-package com.artv.android.system;
+package com.artv.android.system.activities.main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,14 +11,17 @@ import com.artv.android.R;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.AlarmAlertWakeLock;
 import com.artv.android.core.display.DeviceAdministrator;
+import com.artv.android.core.display.DisplayState;
+import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.state.IArTvStateChangeListener;
 import com.artv.android.core.state.StateWorker;
+import com.artv.android.system.activities.BaseActivity;
 import com.artv.android.system.fragments.ConfigInfoFragment;
 import com.artv.android.system.fragments.playback.PlaybackFragment;
 import com.artv.android.system.fragments.splash.SplashScreenFragment;
 
 public class MainActivity extends BaseActivity implements IArTvStateChangeListener,
-        IMainActivityProceedListener, IMainActivitySleepController {
+        IMainActivityProceedListener {
     private static final int REQUEST_ENABLE = 0;
     private FrameLayout mFragmentContainer;
 
@@ -39,8 +42,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mFragmentContainer = (FrameLayout) findViewById(R.id.flFragmentContainer_AM);
 
         //don't replace existing fragment when recreating
-        if (_savedInstanceState == null || !hasFragment()) getAdminStatusAndHandleAppState();
-//        if (_savedInstanceState == null || !hasFragment()) handleAppState();
+        if (_savedInstanceState == null) getAdminStatusAndHandleAppState();
     }
 
     private final void initLogic() {
@@ -52,25 +54,24 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     @Override
     protected final void onStart() {
         super.onStart();
+        ArTvLogger.printMessage("MainActivity.onStart()");
         mStateWorker.addStateChangeListener(this);
-        mDeviceAdministrator.setMainActivitySleepController(this);
+        handleDisplayState();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        ArTvLogger.printMessage("MainActivity.onPause()");
         AlarmAlertWakeLock.release();
     }
 
     @Override
     protected final void onStop() {
         super.onStop();
+        ArTvLogger.printMessage("MainActivity.onStop()");
         mStateWorker.removeStateChangeListener(this);
-        mDeviceAdministrator.setMainActivitySleepController(null);
-    }
-
-    private final boolean hasFragment() {
-        return getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM) != null;
+        handleDisplayState();
     }
 
     @Override
@@ -99,13 +100,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     @Override
     public final void proceedToSplashFragment() {
         getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new SplashScreenFragment()).commit();
-    }
-
-    @Override
-    public final void prepareToSleep() {
-        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM);
-        if (fragment == null) return;
-        getSupportFragmentManager().beginTransaction().remove(fragment).commit();
     }
 
     private void getAdminStatusAndHandleAppState() {
@@ -157,4 +151,20 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 })
                 .show();
     }
+
+    private final void removeFragment() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flFragmentContainer_AM);
+        if (fragment == null) return;
+        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+    }
+
+    private final void handleDisplayState() {
+        final DisplayState state = mDeviceAdministrator.getDisplayState();
+        switch (state) {
+            case STATE_TURNING_ON: handleAppState(); break;
+            case STATE_TURNING_OFF: removeFragment(); break;
+        }
+        mDeviceAdministrator.resetDisplayStateToNormal();
+    }
+
 }
