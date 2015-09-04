@@ -16,10 +16,10 @@
         android:layout_marginBottom="@dimen/main_distance" />
 
     <ImageView
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ivLogo_FSS"
-        style="@style/LogoImage"
+        style="@style/Logo"
         android:layout_centerInParent="true" />
 
     <TextView

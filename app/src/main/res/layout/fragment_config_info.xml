@@ -3,22 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
-    android:paddingBottom="@dimen/cis_padding_bottom"
-    android:paddingTop="@dimen/cis_padding_top">
+    android:paddingBottom="@dimen/cis_padding_bottom">
 
-    <ImageView
-        android:id="@+id/ivLogo_FCI"
-        style="@style/LogoImage"
-        android:layout_width="@dimen/cis_logo_width"
+    <FrameLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/llInput_FCI"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/ivLogo_FCI"
+            style="@style/SmallLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/llInput_FCI">
 
         <RelativeLayout
             android:id="@+id/rlDevice_FCI"

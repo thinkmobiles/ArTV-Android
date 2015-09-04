@@ -13,10 +13,7 @@
     <color name="button_bg_pressed">#443A77FC</color>
     <dimen name="button_height">30dp</dimen>
 
-
-    <dimen name="cis_padding_top">10dp</dimen>
     <dimen name="cis_padding_bottom">30dp</dimen>
-    <dimen name="cis_logo_width">200dp</dimen>
 
     <dimen name="cis_edit_text_height">35dp</dimen>
     <dimen name="cis_edit_text_padding_horizontal">3dp</dimen>
@@ -41,8 +38,13 @@
         <item name="android:padding">@dimen/main_distance</item>
     </style>
 
-    <style name="LogoImage">
+    <style name="Logo">
         <item name="android:src">@drawable/logo</item>
+        <item name="android:adjustViewBounds">true</item>
+    </style>
+
+    <style name="SmallLogo">
+        <item name="android:src">@drawable/small_logo</item>
         <item name="android:adjustViewBounds">true</item>
     </style>
 
