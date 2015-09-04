@@ -9,7 +9,8 @@
         android:layout_height="match_parent"
         android:id="@+id/rlPlayContainer_FP"
         android:layout_above="@+id/rlBottomContainer_FP"
-        android:layout_toLeftOf="@+id/rlRightContainer_FP">
+        android:layout_toLeftOf="@+id/rlRightContainer_FP"
+        android:layout_below="@+id/tvLog_FP">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,33 +39,12 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/rlBottomContainer_FP"
-        android:layout_above="@+id/tvLog_FP">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/ivBottomBg_FP"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/tvBottomText_FP"
-            android:layout_centerInParent="true" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:id="@+id/rlRightContainer_FP"
         android:layout_alignParentRight="true"
-        android:layout_above="@+id/rlBottomContainer_FP">
+        android:layout_above="@+id/rlBottomContainer_FP"
+        android:layout_below="@+id/tvLog_FP">
 
         <ImageView
             android:layout_width="match_parent"
@@ -83,11 +63,33 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/rlBottomContainer_FP"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/ivBottomBg_FP"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/tvBottomText_FP"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:id="@+id/tvLog_FP"
-        android:layout_alignParentBottom="true"
-        style="@style/TextLog" />
+        style="@style/TextLog"
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>
