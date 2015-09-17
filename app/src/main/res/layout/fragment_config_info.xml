@@ -63,7 +63,7 @@
                 android:id="@+id/tvMasterDeviceIp_FCI"
                 style="@style/TextSmall"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/cis_edit_text_height"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/etDeviceId_FCI"
                 android:layout_marginRight="@dimen/main_distance"
                 android:layout_toLeftOf="@+id/etMasterDeviceIp_FCI"
@@ -160,10 +160,10 @@
                 style="@style/TextMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/cis_edit_text_height"
-                android:layout_alignRight="@+id/etPassword_FCI"
                 android:layout_below="@+id/etPassword_FCI"
                 android:checked="false"
-                android:text="@string/show_debug_info" />
+                android:text="@string/show_debug_info"
+                android:layout_marginLeft="@dimen/main_distance" />
 
         </RelativeLayout>
     </LinearLayout>
