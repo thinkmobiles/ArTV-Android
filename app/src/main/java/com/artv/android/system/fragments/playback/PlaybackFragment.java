@@ -1,6 +1,5 @@
 package com.artv.android.system.fragments.playback;
 
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -17,14 +16,13 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.artv.android.R;
-import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.IMessageController;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.IPlaybackController;
 import com.artv.android.app.playback.IVideoCompletionListener;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.app.playback_loop.PlaybackLoopController;
 import com.artv.android.core.config_info.ConfigInfo;
-import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.log.ILogger;
 import com.artv.android.database.DbWorker;
@@ -33,7 +31,6 @@ import com.artv.android.system.fragments.youtube.YoutubeVideoFragment;
 import com.artv.android.system.fragments.youtube.YoutubeVideoListener;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 /**
@@ -54,11 +51,12 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     private TextView tvBottomText;
     private TextView tvLog;
 
-    private PlaybackWorker mPlaybackWorker;
     private IVideoCompletionListener mVideoCompletionListener;
+
+    private PlaybackLoopController mPlaybackLoopController;
+
+    private PlaybackWorker mPlaybackWorker;
     private MessageWorker mMessageWorker;
-    private BeaconScheduler mBeaconScheduler;
-    private TurnOffWorker mTurnOffWorker;
 
     private ConfigInfo mConfigInfo;
 
@@ -74,18 +72,16 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
         mPlaybackWorker = getApplicationLogic().getPlaybackWorker();
         mPlaybackWorker.setPlaybackController(this);
-        mPlaybackWorker.setDeviceAdministrator(getApplicationLogic().getDeviceAdministrator());
         mVideoCompletionListener = mPlaybackWorker.getVideoCompletionListener();
 
         mMessageWorker = getApplicationLogic().getMessageWorker();
         mMessageWorker.setMessageController(this);
 
-        mBeaconScheduler = getApplicationLogic().getBeaconScheduler();
-        mTurnOffWorker = getApplicationLogic().getTurnOffWorker();
-
         mConfigInfo = getApplicationLogic().getConfigInfoWorker().getConfigInfo();
 
         mDbWorker = getApplicationLogic().getDbWorker();
+
+        mPlaybackLoopController = getApplicationLogic().getPlaybackLoopController();
     }
 
     @Override
@@ -150,26 +146,21 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     @Override
     public final void onActivityCreated(final Bundle _savedInstanceState) {
         super.onActivityCreated(_savedInstanceState);
-        if (_savedInstanceState == null) {
-            mPlaybackWorker.startPlayback();
-            mMessageWorker.playMessages();
-            mBeaconScheduler.startSchedule();
-            mTurnOffWorker.turnOff();
-        }
+        if (_savedInstanceState == null) mPlaybackLoopController.start();
     }
 
     @Override
     public final void onStart() {
         super.onStart();
         ArTvLogger.addLogger(this);
+        mPlaybackLoopController.attachUi();
     }
 
     @Override
     public final void onStop() {
         super.onStop();
         ArTvLogger.removeLogger(this);
-        mPlaybackWorker.stopPlayback();
-        mMessageWorker.stopMessages();
+        mPlaybackLoopController.detachUi();
     }
 
     @Override
@@ -183,6 +174,10 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
             case R.id.stopAllAndClearDb_MM:
                 onClickStopAllAndClearDb();
                 return true;
+
+            case R.id.stopAll_MM:
+                onClickStopAll();
+                return true;
         }
 
         return super.onOptionsItemSelected(_item);
@@ -190,11 +185,14 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
 
     private final void onClickStopAllAndClearDb() {
         ArTvLogger.removeLogger(this);
-        mPlaybackWorker.stopPlayback();
-        mMessageWorker.stopMessages();
-        mBeaconScheduler.stopSchedule();
-        mTurnOffWorker.cancel();
+        mPlaybackLoopController.stop();
         mDbWorker.drop();
+        getActivity().finish();
+    }
+
+    private final void onClickStopAll() {
+        ArTvLogger.removeLogger(this);
+        mPlaybackLoopController.stop();
         getActivity().finish();
     }
 
@@ -313,4 +311,5 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public final void printMessage(boolean _fromNewLine, String _message) {
         tvLog.append((_fromNewLine ? "\n " : "") + _message);
     }
+
 }

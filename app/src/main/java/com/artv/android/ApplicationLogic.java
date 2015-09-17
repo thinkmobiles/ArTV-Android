@@ -6,6 +6,7 @@ import com.artv.android.app.beacon.BeaconScheduler;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlayModeManager;
 import com.artv.android.app.playback.PlaybackWorker;
+import com.artv.android.app.playback_loop.PlaybackLoopController;
 import com.artv.android.app.start.StartWorker;
 import com.artv.android.core.api.ApiWorker;
 import com.artv.android.core.beacon.BeaconWorker;
@@ -47,6 +48,8 @@ public final class ApplicationLogic {
     private MessageWorker mMessageWorker;
     private BeaconScheduler mBeaconScheduler;
 
+    private PlaybackLoopController mPlaybackLoopController;
+
     public ApplicationLogic(final Context _context) {
         mContext = _context;
 
@@ -58,15 +61,17 @@ public final class ApplicationLogic {
 
         mDbWorker = DbManager.getInstance(mContext);
         mPlayModeManager = new PlayModeManager();
-        mDeviceAdministrator = new DeviceAdministrator(mContext);
         mTurnOffWorker = new TurnOffWorker(mContext, mPlayModeManager);
+        mDeviceAdministrator = new DeviceAdministrator(mContext);
         mDeviceAdministrator.setTurnOffWorker(mTurnOffWorker);
+        mDeviceAdministrator.setStateWorker(mStateWorker);
 
         mPlaybackWorker = new PlaybackWorker();
         mPlaybackWorker.setContext(mContext);
         mPlaybackWorker.setDbWorker(mDbWorker);
         mPlaybackWorker.setPlayModeManager(mPlayModeManager);
         mPlaybackWorker.setTurnOffWorker(mTurnOffWorker);
+        mPlaybackWorker.setDeviceAdministrator(mDeviceAdministrator);
 
         mMessageWorker = new MessageWorker();
         mMessageWorker.setDbWorker(mDbWorker);
@@ -111,7 +116,12 @@ public final class ApplicationLogic {
         mStartWorker.setBeaconWorker(mBeaconWorker);
         mStartWorker.setDbWorker(mDbWorker);
         mStartWorker.setTurnOffWorker(mTurnOffWorker);
-        mDeviceAdministrator.setStateWorker(mStateWorker);
+
+        mPlaybackLoopController = new PlaybackLoopController();
+        mPlaybackLoopController.setBeaconScheduler(mBeaconScheduler);
+        mPlaybackLoopController.setTurnOffWorker(mTurnOffWorker);
+        mPlaybackLoopController.setPlaybackWorker(mPlaybackWorker);
+        mPlaybackLoopController.setMessageWorker(mMessageWorker);
     }
 
     public final ConfigInfoWorker getConfigInfoWorker() {
@@ -156,6 +166,10 @@ public final class ApplicationLogic {
 
     public DeviceAdministrator getDeviceAdministrator() {
         return mDeviceAdministrator;
+    }
+
+    public final PlaybackLoopController getPlaybackLoopController() {
+        return mPlaybackLoopController;
     }
 
     /**

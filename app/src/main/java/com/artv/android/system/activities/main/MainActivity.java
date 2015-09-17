@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.artv.android.R;
+import com.artv.android.app.playback_loop.PlaybackLoopController;
 import com.artv.android.core.config_info.ConfigInfoWorker;
 import com.artv.android.core.display.AlarmAlertWakeLock;
 import com.artv.android.core.display.DeviceAdministrator;
@@ -29,6 +30,8 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     private ConfigInfoWorker mConfigInfoWorker;
     private DeviceAdministrator mDeviceAdministrator;
 
+    private PlaybackLoopController mPlaybackLoopController;
+
     @Override
     protected final void onCreate(final Bundle _savedInstanceState) {
         super.onCreate(_savedInstanceState);
@@ -49,6 +52,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
         mStateWorker = getApplicationLogic().getStateWorker();
         mConfigInfoWorker = getApplicationLogic().getConfigInfoWorker();
         mDeviceAdministrator = getApplicationLogic().getDeviceAdministrator();
+        mPlaybackLoopController = getApplicationLogic().getPlaybackLoopController();
     }
 
     @Override
@@ -75,6 +79,13 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     @Override
+    public final void onBackPressed() {
+        if (mPlaybackLoopController.isLooping()) mPlaybackLoopController.stop();
+
+        super.onBackPressed();
+    }
+
+    @Override
     public final void onArTvStateChanged() {
         handleAppState();
     }
@@ -92,6 +103,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
+                mPlaybackLoopController.start();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
                 break;
         }
