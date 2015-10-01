@@ -6,8 +6,6 @@ import com.artv.android.core.api.WebRequestCallback;
 import com.artv.android.core.api.api_model.ErrorResponseObject;
 import com.artv.android.core.api.api_model.request.BeaconRequestObject;
 import com.artv.android.core.api.api_model.response.BeaconResponseObject;
-import com.artv.android.core.campaign.CampaignResult;
-import com.artv.android.core.campaign.ICampaignCallback;
 import com.artv.android.core.config_info.ConfigInfo;
 import com.artv.android.core.config_info.IConfigInfoListener;
 import com.artv.android.core.date.DateWorker;
@@ -55,7 +53,7 @@ public class BeaconWorker implements IConfigInfoListener {
         mConfigInfo = _configInfo;
     }
 
-    public final void doBeacon(final ICampaignCallback _callback) {
+    public final void doBeacon(final IBeaconCallback _callback) {
         final BeaconRequestObject requestObject = new BeaconRequestObject.Builder()
                 .setToken(mInitData.getToken())
                 .setTagID(mConfigInfo.getDeviceId())
@@ -65,11 +63,13 @@ public class BeaconWorker implements IConfigInfoListener {
         mApiWorker.doBeacon(requestObject, new WebRequestCallback<BeaconResponseObject>() {
             @Override
             public final void onSuccess(final BeaconResponseObject _respObj) {
-                final CampaignResult.Builder builder = new CampaignResult.Builder();
+                final BeaconResult.Builder builder = new BeaconResult.Builder();
 
                 if (_respObj.errorNumber == 0) {
                     ArTvLogger.printMessage(_respObj.apiType + ": OK");
-                    builder.setSuccess(true).setCampaigns(_respObj.getCampaigns()).setMsgBoardCampaign(_respObj.getMsgBoardCampaign());
+                    builder.setSuccess(true).setCampaigns(_respObj.campaigns)
+                            .setDeletedCampaignIds(_respObj.deletedCampaigns)
+                            .setMsgBoardCampaign(_respObj.msgBoardCampaign);
                 } else {
                     ArTvLogger.printMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);
                     builder.setSuccess(false).setMessage(_respObj.apiType + "#" + _respObj.errorNumber + ", " +_respObj.errorDescription);
@@ -82,7 +82,7 @@ public class BeaconWorker implements IConfigInfoListener {
             public final void onFailure(final ErrorResponseObject _errorResp) {
                 ArTvLogger.printMessage(_errorResp.apiType + " : " + _errorResp.error);
 
-                _callback.onFinished(new CampaignResult.Builder()
+                _callback.onFinished(new BeaconResult.Builder()
                         .setSuccess(false)
                         .setMessage(_errorResp.apiType.name() + " " + _errorResp.error)
                         .build());
@@ -97,8 +97,7 @@ public class BeaconWorker implements IConfigInfoListener {
         beacon.currentCampaign = mPlaybackWorker.getCurrentCampaignId();
         beacon.currentAsset = mPlaybackWorker.getCurrentAssetPlayingId();
         beacon.campaigns = new ArrayList<>(mDbWorker.getAllCampaigns());
-        beacon.mMessageBoardCampaigns = new ArrayList<>();
-        beacon.mMessageBoardCampaigns.add(mDbWorker.getMsgBoardCampaign());
+        beacon.msgBoardCampaign = mDbWorker.getMsgBoardCampaign();
         beacon.errorLog = "All ok";
         return beacon;
     }

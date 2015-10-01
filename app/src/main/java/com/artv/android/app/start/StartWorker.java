@@ -1,7 +1,9 @@
 package com.artv.android.app.start;
 
 import com.artv.android.ArTvResult;
+import com.artv.android.core.beacon.BeaconResult;
 import com.artv.android.core.beacon.BeaconWorker;
+import com.artv.android.core.beacon.IBeaconCallback;
 import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.campaign.ICampaignCallback;
@@ -10,6 +12,7 @@ import com.artv.android.core.display.TurnOffWorker;
 import com.artv.android.core.init.IInitCallback;
 import com.artv.android.core.init.InitWorker;
 import com.artv.android.core.log.ArTvLogger;
+import com.artv.android.core.model.Beacon;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.MsgBoardCampaign;
 import com.artv.android.core.state.ArTvState;
@@ -130,16 +133,14 @@ public class StartWorker {
         mBeaconWorker.doBeacon(beaconCallback);
     }
 
-    private final ICampaignCallback beaconCallback = new ICampaignCallback() {
+    private final IBeaconCallback beaconCallback = new IBeaconCallback() {
         @Override
-        public final void onFinished(final CampaignResult _result) {
+        public final void onFinished(final BeaconResult _result) {
             if (_result.getSuccess()) {
                 processMsgBoardCampaign(_result.getMsgBoardCampaign());
-                processCampaigns(_result.getCampaigns());
+                processCampaigns(_result.getDeletedCampaignIds(), _result.getCampaigns());
             } else {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
-                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
-                mStateWorker.notifyStateChangeListeners();
             }
         }
     };
@@ -149,8 +150,14 @@ public class StartWorker {
         mDbWorker.write(_msgBoardCampaign);
     }
 
-    private final void processCampaigns(final List<Campaign> _campaigns) {
-        ArTvLogger.printMessage("Need update campaigns: " + (_campaigns.isEmpty() ? "No" : "Yes"));
+    private final void processCampaigns(final List<Integer> deletedCampaignIds, final List<Campaign> _campaigns) {
+        ArTvLogger.printMessage("Need update campaigns: " + ((deletedCampaignIds.isEmpty() || _campaigns.isEmpty()) ? "No" : "Yes"));
+        if (!deletedCampaignIds.isEmpty()) {
+            for (final Integer id : deletedCampaignIds) {
+                mDbWorker.deleteCampaign(id);
+            }
+        }
+
         if (_campaigns.isEmpty()) {
             mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
             mStateWorker.notifyStateChangeListeners();

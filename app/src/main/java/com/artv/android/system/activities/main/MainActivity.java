@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
     }
 
     @Override
-    protected void onPause() {
+    protected final void onPause() {
         super.onPause();
         ArTvLogger.printMessage("MainActivity.onPause()");
         AlarmAlertWakeLock.release();

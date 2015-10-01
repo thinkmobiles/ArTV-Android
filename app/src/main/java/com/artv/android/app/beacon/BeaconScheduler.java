@@ -6,7 +6,9 @@ import com.artv.android.ArTvResult;
 import com.artv.android.app.message.MessageWorker;
 import com.artv.android.app.playback.PlaybackWorker;
 import com.artv.android.core.Constants;
+import com.artv.android.core.beacon.BeaconResult;
 import com.artv.android.core.beacon.BeaconWorker;
+import com.artv.android.core.beacon.IBeaconCallback;
 import com.artv.android.core.campaign.CampaignResult;
 import com.artv.android.core.campaign.CampaignWorker;
 import com.artv.android.core.campaign.ICampaignCallback;
@@ -94,36 +96,40 @@ public final class BeaconScheduler {
         }
     };
 
-    private final ICampaignCallback mBeaconCallback = new ICampaignCallback() {
+    private final IBeaconCallback mBeaconCallback = new IBeaconCallback() {
         @Override
-        public final void onFinished(final CampaignResult _result) {
+        public final void onFinished(final BeaconResult _result) {
             if (!_result.getSuccess()) {
                 startWithDelay(TimeUnit.SECONDS.toMillis(Constants.TIME_API_RECALL));
                 return;
             }
 
-            ArTvLogger.printMessage("Need update campaigns: " + (_result.getCampaigns().isEmpty() ? "No" : "Yes"));
-            ArTvLogger.printMessage("Messages assigned: " + (_result.getMsgBoardCampaign() == null ? "No" : "Yes"));
+            ArTvLogger.printMessage("Need update campaigns: " + (_result.needProcessCampaigns() ? "Yes" : "No"));
+            ArTvLogger.printMessage("Messages assigned: " + (_result.needProcessMessages() ? "Yes" : "No"));
 
-            processMsgBoardCampaign(_result.getMsgBoardCampaign());
+            if (_result.needProcessMessages()) processMsgBoardCampaign(_result.getMsgBoardCampaign());
 
-            if (_result.getCampaigns().isEmpty()) {
-                startWithDelay(TimeUnit.MINUTES.toMillis(mGlobalConfig.getServerBeaconInterval()));
+            if (_result.needProcessCampaigns()) {
+                processCampaigns(_result.getDeletedCampaignIds(), _result.getCampaigns());
             } else {
-                processCampaigns(_result.getCampaigns());
+                startWithDelay(TimeUnit.MINUTES.toMillis(mGlobalConfig.getServerBeaconInterval()));
             }
         }
     };
 
     private final void processMsgBoardCampaign(final MsgBoardCampaign _msgBoardCampaign) {
-        if (_msgBoardCampaign != null) {
-            mDbWorker.write(_msgBoardCampaign);
-            mMessageWorker.stopMessages();
-            mMessageWorker.playMessages();
-        }
+        mDbWorker.write(_msgBoardCampaign);
+        mMessageWorker.stopMessages();
+        mMessageWorker.playMessages();
     }
 
-    private final void processCampaigns(final List<Campaign> _campaigns) {
+    private final void processCampaigns(final List<Integer> deletedCampaignIds, final List<Campaign> _campaigns) {
+        if (!deletedCampaignIds.isEmpty()) {
+            for (final Integer id : deletedCampaignIds) {
+                mDbWorker.deleteCampaign(id);
+            }
+        }
+
         mCampaignWorker.loadCampaigns(_campaigns, mCampaignDownloadListener);
     }
 

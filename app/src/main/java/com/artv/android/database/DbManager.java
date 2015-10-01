@@ -192,6 +192,19 @@ public final class DbManager implements DbWorker {
     }
 
     @Override
+    public final boolean deleteCampaign(int _campaignId) {
+        try {
+            openWritableDb();
+            final DBCampaignDao campaignDao = daoSession.getDBCampaignDao();
+            campaignDao.deleteByKey((long) _campaignId);
+            return true;
+        } finally {
+            daoSession.clear();
+            return false;
+        }
+    }
+
+    @Override
     public final List<Campaign> getAllCampaigns() {
         try {
             openReadableDb();

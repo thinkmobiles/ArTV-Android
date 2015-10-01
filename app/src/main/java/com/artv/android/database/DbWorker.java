@@ -17,6 +17,7 @@ public interface DbWorker {
 
     long write(final Campaign _campaign);
     boolean contains(final Campaign _campaign);
+    boolean deleteCampaign(final int _campaignId);
     List<Campaign> getAllCampaigns();
     Campaign getCampaignById(final int _campaignId);
 

@@ -27,8 +27,8 @@ public final class Beacon {
     @ElementList(name = "Campaigns")
     public List<Campaign> campaigns;
 
-    @ElementList(name = "MessageBoardCampaigns", required = false)
-    public List<MsgBoardCampaign> mMessageBoardCampaigns;
+    @Element(name = "MsgBoardCampaign", required = false)
+    public MsgBoardCampaign msgBoardCampaign;
 
     @Element(name = "ErrorLog")
     public String errorLog = "";

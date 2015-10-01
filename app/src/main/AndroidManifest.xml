@@ -25,7 +25,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="c780c398ef112570ef7e76b9ccdd38ed942e3e92" />
+            android:value="00e47ac9dfdb1f5f9a30c9eb23c712b8fc1dc001" />
 
         <receiver
             android:name=".core.display.AlarmTurnOnReceiver"/>
