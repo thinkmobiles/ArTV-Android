@@ -16,6 +16,8 @@ import com.artv.android.core.model.Campaign;
 import com.artv.android.core.model.GlobalConfig;
 import com.artv.android.database.DbWorker;
 
+import junit.framework.Assert;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,7 +36,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     private IPlaybackController mPlaybackController;
     private PlayModeManager mPlayModeManager;
     private List<Campaign> mCampaigns;
-    private Stack<Asset> mAssetStack;
+    private Stack<Asset> mAssetStack = new Stack<>();
     private int mCurrentCampaignId;
     private int mCurrentAssetPlayingId;
     private Handler mHandlerPostPlay = new Handler();
@@ -123,9 +125,11 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         for (final Campaign campaign : campaignsWithoutOverrideTime) {
             if (campaign.hasOverrideTime()) {
                 campaignsToRemove.add(campaign);
+                break;
             }
         }
 
+        Assert.assertTrue("Must be 0 or 1", campaignsToRemove.size() < 2);
         for (final Campaign campaign : campaignsToRemove) {
             campaignsWithoutOverrideTime.remove(campaign);
         }
@@ -156,6 +160,8 @@ public final class PlaybackWorker implements IVideoCompletionListener {
     }
 
     private void play() {
+        if (mAssetStack == null) return;
+
         if (!mAssetStack.isEmpty()) {
             Asset asset = mAssetStack.pop();
             mCurrentAssetPlayingId = asset.getAssetId();
@@ -218,7 +224,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         long owerrideTimeInMills;
 
         for (Campaign campaign : _campaigns) {
-            if (campaign.overrideTime != null && !campaign.overrideTime.isEmpty()) {
+            if (campaign.hasOverrideTime()) {
                 owerrideTime = _playModeManager.getTimeFromString(campaign.overrideTime);
                 owerrideTimeInMills = _playModeManager.getTimeInMills(owerrideTime);
                 if (owerrideTimeInMills != 0 && owerrideTimeInMills > currentTimeInMills) {
