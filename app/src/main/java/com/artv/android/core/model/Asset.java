@@ -31,6 +31,10 @@ public final class Asset {
         return Math.abs(hashCode());
     }
 
+    public Integer getSequence() {
+        return sequence;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
