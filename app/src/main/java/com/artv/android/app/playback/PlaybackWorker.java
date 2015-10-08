@@ -156,6 +156,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
     @Override
     public final void onVideoCompleted() {
+        ArTvLogger.printMessage("onVideoCompleted");
         play();
     }
 

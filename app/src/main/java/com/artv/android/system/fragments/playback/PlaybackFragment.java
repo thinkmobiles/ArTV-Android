@@ -126,8 +126,8 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
         vvVideoPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public final void onCompletion(final MediaPlayer _mp) {
-                mVideoCompletionListener.onVideoCompleted();
                 vvVideoPlayer.stopPlayback();
+                mVideoCompletionListener.onVideoCompleted();
             }
         });
 
@@ -201,7 +201,6 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public final void playLocalVideo(final String _path) {
         setImageVisibility(false);
         setVideoVisibility(true);
-        vvVideoPlayer.setVisibility(View.VISIBLE);
         vvVideoPlayer.setVideoPath(_path);
     }
 
@@ -233,7 +232,6 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public final void playYoutubeLink(final String _url) {
         setVideoVisibility(false);
         setImageVisibility(false);
-        vvVideoPlayer.setVisibility(View.GONE);
         mFragment = YoutubeVideoFragment.newInstance(_url);
         mFragment.setYoutubeVideoListener(new YoutubeVideoListener() {
             @Override
@@ -254,7 +252,6 @@ public final class PlaybackFragment extends BaseFragment implements IPlaybackCon
     public void stopPlaying() {
         if(vvVideoPlayer != null && vvVideoPlayer.isPlaying()) {
             vvVideoPlayer.stopPlayback();
-            vvVideoPlayer.setVisibility(View.GONE);
         } else if (mFragment != null) {
             getChildFragmentManager().beginTransaction().remove(mFragment).commitAllowingStateLoss();
             mFragment = null;

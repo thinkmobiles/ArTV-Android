@@ -103,7 +103,6 @@ public class MainActivity extends BaseActivity implements IArTvStateChangeListen
                 break;
 
             case STATE_PLAY_MODE:
-                mPlaybackLoopController.start();
                 getSupportFragmentManager().beginTransaction().replace(R.id.flFragmentContainer_AM, new PlaybackFragment()).commit();
                 break;
         }

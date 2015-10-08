@@ -141,6 +141,8 @@ public class StartWorker {
                 processCampaigns(_result.getDeletedCampaignIds(), _result.getCampaigns());
             } else {
                 ArTvLogger.printMessage("Beacon failed, reason: " + _result.getMessage());
+                mStateWorker.setState(ArTvState.STATE_PLAY_MODE);
+                mStateWorker.notifyStateChangeListeners();
             }
         }
     };
