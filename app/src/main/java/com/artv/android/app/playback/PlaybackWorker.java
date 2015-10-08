@@ -89,7 +89,6 @@ public final class PlaybackWorker implements IVideoCompletionListener {
         ArTvLogger.printMessage("Started playback");
         mCampaigns = mDbWorker.getAllCampaigns();
         mPlayModeManager.setDayConverter(new DayConverter());
-        mCampaigns = mDbWorker.getAllCampaigns();
         checkCampaigns(mPlayModeManager, mCampaigns);
     }
 
@@ -165,7 +164,7 @@ public final class PlaybackWorker implements IVideoCompletionListener {
 
         if (!mAssetStack.isEmpty()) {
             Asset asset = mAssetStack.pop();
-            mCurrentAssetPlayingId = asset.getAssetId();
+            mCurrentAssetPlayingId = asset.getSequence();
 
             if (isVideoFormat(asset.url)) {
                 mPlaybackController.playLocalVideo(Constants.PATH + asset.url);
