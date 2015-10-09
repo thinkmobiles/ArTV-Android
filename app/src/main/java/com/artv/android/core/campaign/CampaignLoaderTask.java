@@ -9,8 +9,7 @@ import com.artv.android.core.log.ArTvLogger;
 import com.artv.android.core.model.Asset;
 import com.artv.android.core.model.Campaign;
 import com.artv.android.database.DbWorker;
-
-import org.apache.http.client.methods.HttpGet;
+import com.squareup.okhttp.internal.http.HttpMethod;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -135,7 +133,7 @@ public final class CampaignLoaderTask extends AsyncTask<Void, Void, ArTvResult> 
 
             final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(10000);
-            conn.setRequestMethod(HttpGet.METHOD_NAME);
+            conn.setRequestMethod("GET");
 
             final int respCode = conn.getResponseCode();
 
